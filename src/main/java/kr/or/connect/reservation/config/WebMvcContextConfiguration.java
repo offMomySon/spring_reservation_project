@@ -56,14 +56,13 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
 		return internalResourceViewResolver;
 	}
 
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) 
-    {
-        converters.add(new MappingJackson2HttpMessageConverter(customObjectMapper())); 
-    }
-    
-    public ObjectMapper customObjectMapper() {
-        return new CustomObjectMapper();
-    }
-	
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		converters.add(new MappingJackson2HttpMessageConverter(customObjectMapper()));
+	}
+
+	public ObjectMapper customObjectMapper() {
+		return new CustomObjectMapper();
+	}
+
 }
