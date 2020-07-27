@@ -2852,6 +2852,14 @@ button {
     vertical-align: top
 }
 
+.item_dsc{
+    width:30px;
+    padding:0 5px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
 .section_my .wrap_mylist .list_cards .card .card_body .middle .card_detail .price_summary {
     margin-top: 9px;
     border-top: 1px solid #f2f2f2
