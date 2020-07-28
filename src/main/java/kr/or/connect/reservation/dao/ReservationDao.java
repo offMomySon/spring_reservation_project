@@ -29,36 +29,68 @@ public class ReservationDao {
 	private SimpleJdbcInsert reservationInfoPriceInsert;
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
-	private RowMapper<ReservationResponse> rsvMapper = BeanPropertyRowMapper.newInstance(ReservationResponse.class);
+	private RowMapper<ReservationResponse> rsvResponseMapper = BeanPropertyRowMapper.newInstance(ReservationResponse.class);
+	private RowMapper<ReservationRequest> rsvRequestMapper = BeanPropertyRowMapper.newInstance(ReservationRequest.class);
+	private RowMapper<Price> priceMapper = BeanPropertyRowMapper.newInstance(Price.class);
 	private RowMapper<Ticket> ticketMapper = BeanPropertyRowMapper.newInstance(Ticket.class);
-	
+
 	public ReservationDao(DataSource dataSource) {
-		reservationInfoInsert = new SimpleJdbcInsert(dataSource).withTableName("reservation_info").usingGeneratedKeyColumns("id");
-		reservationInfoPriceInsert = new SimpleJdbcInsert(dataSource).withTableName("reservation_info_price").usingGeneratedKeyColumns("id");
+		reservationInfoInsert = new SimpleJdbcInsert(dataSource).withTableName("reservation_info")
+				.usingGeneratedKeyColumns("id");
+		reservationInfoPriceInsert = new SimpleJdbcInsert(dataSource).withTableName("reservation_info_price")
+				.usingGeneratedKeyColumns("id");
 		jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
-	
+
 	public Long insertRservationInfo(ReservationRequest reservationRequest) {
 		SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(reservationRequest);
 		return reservationInfoInsert.executeAndReturnKey(parameterSource).longValue();
+	}
+
+	public ReservationRequest selectRsvInfoAtId(Long rsvId) {
+		Map<String, Long> paramMap = new HashMap();
+		paramMap.put("rsvId", rsvId);
+
+		return jdbcTemplate.queryForObject(SELECT_RSV_INFO_AT_RSVID, paramMap, rsvRequestMapper);
+	}
+	
+	public List<Price> selectPriceAtRsvId(Long rsvId) {
+		Map<String, Long> paramMap = new HashMap();
+		paramMap.put("rsvId", rsvId);
+
+		return jdbcTemplate.query(SELECT_PRICE_AT_RSVID, paramMap, priceMapper);
 	}
 	
 	public Long insertReservationInfoPrice(Price price) {
 		SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(price);
 		return reservationInfoPriceInsert.executeAndReturnKey(parameterSource).longValue();
 	}
-	
-	public List<ReservationResponse> selectAllAtEmail(String email){
+
+	public List<ReservationResponse> selectAtEmail(String email) {
 		Map<String, String> paramMap = new HashMap();
 		paramMap.put("email", email);
-		
-		return jdbcTemplate.query(SELECT_ALL_AT_EMAIL, paramMap, rsvMapper);
+
+		return jdbcTemplate.query(SELECT_ALL_AT_EMAIL, paramMap, rsvResponseMapper);
 	}
-	
-	public List<Ticket> selectTicketAtRsvInfoId(Long rsvInfoId){
+
+	public List<Ticket> selectTicketAtRsvInfoId(Long rsvInfoId) {
 		Map<String, Long> paramMap = new HashMap();
 		paramMap.put("rsvInfoId", rsvInfoId);
-		
+
 		return jdbcTemplate.query(SELECT_ALL_TICKET_AT_RSVINFOID, paramMap, ticketMapper);
+	}
+
+	public int deleteRsvInfoByRsvId(Long rsvId) {
+		Map<String, Long> paramMap = new HashMap();
+		paramMap.put("rsvId", rsvId);
+
+		return jdbcTemplate.update(DELETE_RSV_INFO_AT_RSVID, paramMap);
+	}
+
+	public int deleteRsvInfoPriceByRsvId(Long rsvInfoId) {
+		Map<String, Long> paramMap = new HashMap();
+		paramMap.put("rsvInfoId", rsvInfoId);
+
+		return jdbcTemplate.update(DELETE_RSV_INFO_PRICE_AT_RSVID, paramMap);
 	}
 }

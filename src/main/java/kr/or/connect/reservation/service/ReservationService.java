@@ -9,4 +9,6 @@ public interface ReservationService {
 	public ReservationRequest addReservation(ReservationRequest reservation);
 
 	public List<ReservationResponse> getReservation(String email);
+	
+	public ReservationRequest deleteReservation(Long reservationId);
 }

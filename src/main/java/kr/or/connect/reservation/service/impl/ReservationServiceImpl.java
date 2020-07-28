@@ -37,10 +37,12 @@ public class ReservationServiceImpl implements ReservationService {
 		return reservationRequest;
 	}
 
+	
+	
 	@Override
 	public List<ReservationResponse> getReservation(String email) {
 
-		List<ReservationResponse> responseList = rsvDao.selectAllAtEmail(email);
+		List<ReservationResponse> responseList = rsvDao.selectAtEmail(email);
 
 		for (ReservationResponse rsvResponse : responseList) {
 			rsvResponse.setDisplayInfo(displayInfoDao.selectDisplayInfo(rsvResponse.getDisplayInfoId()));
@@ -48,6 +50,32 @@ public class ReservationServiceImpl implements ReservationService {
 		}
 
 		return responseList;
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public ReservationRequest deleteReservation(Long reservationId) {
+		ReservationRequest rsvRequest;
+	
+		rsvRequest = rsvDao.selectRsvInfoAtId(reservationId);
+		if(rsvRequest == null) {
+			return null;
+		}
+		
+		rsvRequest.setPrices(rsvDao.selectPriceAtRsvId(reservationId));
+		if(rsvRequest.getPrices() == null) {
+			return null;
+		}
+		
+		if(rsvDao.deleteRsvInfoPriceByRsvId(reservationId) == 0) {
+			return null;
+		}
+		
+		if(rsvDao.deleteRsvInfoByRsvId(reservationId)== 0) {
+			return null;
+		}
+		
+		return rsvRequest;
 	}
 
 	private long calTotalPrice(Long rsvInfoId) {
