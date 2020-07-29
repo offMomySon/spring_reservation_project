@@ -11,6 +11,6 @@ public class ReservationSql {
 			+ "join product_price as pp on pp.id = rip.product_price_id " + "where reservation_info_id = :rsvInfoId";
 	
 	public final static String DELETE_RSV_INFO_PRICE_AT_RSVID = "DELETE FROM reservation_info_price WHERE reservation_info_id = :rsvInfoId";
-	
-	public final static String DELETE_RSV_INFO_AT_RSVID = "DELETE FROM reservation_info WHERE id = :rsvId";
+
+	public final static String UPDATE_RSV_INFO_AT_RSVID = "UPDATE reservation_info set cancel_flag = true WHERE id = :rsvId";
 }

@@ -80,11 +80,11 @@ public class ReservationDao {
 		return jdbcTemplate.query(SELECT_ALL_TICKET_AT_RSVINFOID, paramMap, ticketMapper);
 	}
 
-	public int deleteRsvInfoByRsvId(Long rsvId) {
+	public int cancleRsvAtId(Long rsvId) {
 		Map<String, Long> paramMap = new HashMap();
 		paramMap.put("rsvId", rsvId);
 
-		return jdbcTemplate.update(DELETE_RSV_INFO_AT_RSVID, paramMap);
+		return jdbcTemplate.update(UPDATE_RSV_INFO_AT_RSVID, paramMap);
 	}
 
 	public int deleteRsvInfoPriceByRsvId(Long rsvInfoId) {

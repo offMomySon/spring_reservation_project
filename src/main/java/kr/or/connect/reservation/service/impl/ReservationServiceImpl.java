@@ -37,8 +37,6 @@ public class ReservationServiceImpl implements ReservationService {
 		return reservationRequest;
 	}
 
-	
-	
 	@Override
 	public List<ReservationResponse> getReservation(String email) {
 
@@ -56,25 +54,21 @@ public class ReservationServiceImpl implements ReservationService {
 	@Transactional(readOnly = false)
 	public ReservationRequest deleteReservation(Long reservationId) {
 		ReservationRequest rsvRequest;
-	
+
+		if (rsvDao.cancleRsvAtId(reservationId) == 0) {
+			return null;
+		}
+
 		rsvRequest = rsvDao.selectRsvInfoAtId(reservationId);
-		if(rsvRequest == null) {
+		if (rsvRequest == null) {
 			return null;
 		}
-		
+
 		rsvRequest.setPrices(rsvDao.selectPriceAtRsvId(reservationId));
-		if(rsvRequest.getPrices() == null) {
+		if (rsvRequest.getPrices() == null) {
 			return null;
 		}
-		
-		if(rsvDao.deleteRsvInfoPriceByRsvId(reservationId) == 0) {
-			return null;
-		}
-		
-		if(rsvDao.deleteRsvInfoByRsvId(reservationId)== 0) {
-			return null;
-		}
-		
+
 		return rsvRequest;
 	}
 
