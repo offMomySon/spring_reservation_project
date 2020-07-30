@@ -16,6 +16,7 @@ class Builder{
         console.log(JSON.stringify(buildIns.rsvInfo));
 
         buildIns.makePage();
+        buildIns.addCBtoCancleBtn();
 
         return buildIns;
     }
@@ -73,6 +74,61 @@ class Builder{
 
         return ticketInfoFactory(rsvInfo);
     }
+
+    addCBtoCancleBtn(){
+        let allCancleBtn = document.querySelectorAll('.btn');
+
+        Array.from(allCancleBtn).forEach((elm)=>{
+            elm.addEventListener('click',this.cancleTicketIfNeeded.bind(this));
+        });
+    }
+
+    async cancleTicketIfNeeded(evt){
+        evt.preventDefault();
+
+        const message = "취소하시겠습니까?";
+        let result = window.confirm(message);
+        if( result === false ){
+            return;
+        }
+
+        let requestResult = null;
+        let rsvId = parseInt(evt.currentTarget.dataset.ticketId);
+        try{
+            requestResult = await this.requestRsvCancle(rsvId);
+        }
+        catch(err){
+            console.log(err);
+            requestResult = false;
+        }
+
+        if(requestResult){
+            document.querySelector('.card.used.cancel').appendChild(document.querySelector('#rsv_'+rsvId)); 
+        }
+    }
+
+    requestRsvCancle(rsvId){
+        return new Promise( (resolve) =>{
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.addEventListener("load",()=>{
+                if(httpRequest.status != 200){
+                    resolve(false);
+                }
+
+                if( JSON.parse(httpRequest.responseText).prices <= 0){
+                    resolve(false);
+                }
+                
+                resolve(true);
+            });
+            httpRequest.addEventListener("error",()=>{
+                throw new Error("404");
+            });
+            
+            httpRequest.open('PUT', Builder.RSVINFOURL +`/${rsvId}`);
+            httpRequest.send();
+        })
+    }
 }
 
 Handlebars.registerHelper('RsvId', (rsvId) => {
@@ -91,12 +147,12 @@ Handlebars.registerHelper('Price', (price) => {
     return `${localePrice}`;
 });
 
-Handlebars.registerHelper('CancleBtn', (cancelYn) => {
-    if(cancelYn  === false){
+Handlebars.registerHelper('CancleBtn', (rsvId, cancelYn) => {
+    if(cancelYn  === true){
         return "";
     }
 
-    return `<div class="booking_cancel"> <button class="btn"><span>취소</span></button> </div>`;
+    return `<div class="booking_cancel"> <button class="btn" data-ticket-id="${rsvId}"><span>취소</span></button> </div>`;
 });
 
 // summary board class 생성.

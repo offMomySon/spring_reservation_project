@@ -10,5 +10,6 @@ public interface ReservationService {
 
 	public List<ReservationResponse> getReservation(String email);
 	
-	public ReservationRequest deleteReservation(Long reservationId);
+
+	public ReservationRequest cancleReservation(Long reservationId);
 }

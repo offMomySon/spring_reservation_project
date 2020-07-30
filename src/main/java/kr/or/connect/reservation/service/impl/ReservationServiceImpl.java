@@ -52,7 +52,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public ReservationRequest deleteReservation(Long reservationId) {
+	public ReservationRequest cancleReservation(Long reservationId) {
 		ReservationRequest rsvRequest;
 
 		if (rsvDao.cancleRsvAtId(reservationId) == 0) {

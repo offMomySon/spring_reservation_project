@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import kr.or.connect.reservation.dto.ReservationRequest;
 import kr.or.connect.reservation.dto.ReservationResponse;
@@ -45,8 +47,14 @@ public class ReservationApiController {
 	}
 	
 	@PutMapping(path = "/{reservationId}")
-	public ReservationRequest deleteBook(@PathVariable Long reservationId) {
-		return rsvService.deleteReservation(reservationId);
+	public ReservationRequest cancleBook(@PathVariable Long reservationId) {
+		ReservationRequest result = rsvService.cancleReservation(reservationId);
+		
+		if(result == null) {
+			new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+		}
+
+		return rsvService.cancleReservation(reservationId);
 	}
 	
 	
