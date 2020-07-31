@@ -1,7 +1,6 @@
 package kr.or.connect.reservation.objmapper;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

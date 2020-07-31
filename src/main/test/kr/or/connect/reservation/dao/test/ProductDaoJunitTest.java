@@ -1,7 +1,5 @@
 package kr.or.connect.reservation.dao.test;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import kr.or.connect.reservation.config.ApplicationConfig;
-import kr.or.connect.reservation.config.DBConfig;
 import kr.or.connect.reservation.dao.ProductDao;
 import kr.or.connect.reservation.dto.Product;
 

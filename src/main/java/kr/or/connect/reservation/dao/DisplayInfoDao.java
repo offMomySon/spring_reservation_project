@@ -1,9 +1,7 @@
 package kr.or.connect.reservation.dao;
 
 import static kr.or.connect.reservation.sql.DisplayInfoSql.*;
-import static kr.or.connect.reservation.sql.ProductSql.*;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

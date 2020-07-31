@@ -3,10 +3,6 @@ package kr.or.connect.reservation.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import kr.or.connect.reservation.objmapper.CustomDateSerializer;
-
 public class Comment {
 
 	private Long commentId;

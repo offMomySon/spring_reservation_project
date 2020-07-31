@@ -1,7 +1,5 @@
 package kr.or.connect.reservation.dao;
 
-import static kr.or.connect.reservation.sql.DisplayInfoSql.SELECT_PRODUCT_IMAGE;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

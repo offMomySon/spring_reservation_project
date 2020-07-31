@@ -2,7 +2,6 @@ package kr.or.connect.reservation.objmapper;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 

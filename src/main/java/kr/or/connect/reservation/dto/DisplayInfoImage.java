@@ -2,10 +2,6 @@ package kr.or.connect.reservation.dto;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import kr.or.connect.reservation.objmapper.CustomDateSerializer;
-
 public class DisplayInfoImage {
 	private long displayInfoImageId;
 	private long displayInfoId;
