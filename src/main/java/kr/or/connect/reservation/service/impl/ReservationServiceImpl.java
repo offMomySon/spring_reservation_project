@@ -3,10 +3,13 @@ package kr.or.connect.reservation.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.or.connect.reservation.controller.ReservationApiController;
 import kr.or.connect.reservation.dao.DisplayInfoDao;
 import kr.or.connect.reservation.dao.ReservationDao;
 import kr.or.connect.reservation.dto.Price;
@@ -17,6 +20,8 @@ import kr.or.connect.reservation.service.ReservationService;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
+	private static final Logger logger = LoggerFactory.getLogger(ReservationServiceImpl.class);
+	
 	@Autowired
 	private ReservationDao rsvDao;
 	@Autowired
@@ -29,6 +34,8 @@ public class ReservationServiceImpl implements ReservationService {
 		reservationRequest.setCreateDate(date);
 		reservationRequest.setModifyDate(date);
 		reservationRequest.setCancelFlag(false);
+		logger.info("Fill reservationReqst's blank value");
+		
 		Long rsvId = rsvDao.insertRservationInfo(reservationRequest);
 		reservationRequest.setReservationInfoId(rsvId);
 
@@ -46,6 +53,7 @@ public class ReservationServiceImpl implements ReservationService {
 			rsvResponse.setDisplayInfo(displayInfoDao.selectDisplayInfo(rsvResponse.getDisplayInfoId()));
 			rsvResponse.setTotalPrice(calTotalPrice(rsvResponse.getReservationInfoId()));
 		}
+		logger.info("success to set, displayInfo, total price to each Reservation Info");
 
 		return responseList;
 	}

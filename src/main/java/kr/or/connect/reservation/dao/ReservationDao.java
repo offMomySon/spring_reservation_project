@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -20,9 +22,12 @@ import kr.or.connect.reservation.dto.Price;
 import kr.or.connect.reservation.dto.ReservationRequest;
 import kr.or.connect.reservation.dto.ReservationResponse;
 import kr.or.connect.reservation.dto.Ticket;
+import kr.or.connect.reservation.service.impl.ReservationServiceImpl;
 
 @Repository
 public class ReservationDao {
+	private static final Logger logger = LoggerFactory.getLogger(ReservationDao.class);
+	
 	private SimpleJdbcInsert reservationInfoInsert;
 	private SimpleJdbcInsert reservationInfoPriceInsert;
 	private NamedParameterJdbcTemplate jdbcTemplate;
@@ -41,6 +46,8 @@ public class ReservationDao {
 	}
 
 	public Long insertRservationInfo(ReservationRequest reservationRequest) {
+		logger.info("insert RservationInfo = {}", reservationRequest);
+
 		SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(reservationRequest);
 		return reservationInfoInsert.executeAndReturnKey(parameterSource).longValue();
 	}
@@ -65,6 +72,8 @@ public class ReservationDao {
 	}
 
 	public List<ReservationResponse> selectAtEmail(String email) {
+		logger.info("select Email = {}", email);
+
 		Map<String, String> paramMap = new HashMap();
 		paramMap.put("email", email);
 
@@ -79,6 +88,8 @@ public class ReservationDao {
 	}
 
 	public int cancleRsvAtId(Long rsvId) {
+		logger.info("cancel reservation Id = {}", rsvId);
+
 		Map<String, Long> paramMap = new HashMap();
 		paramMap.put("rsvId", rsvId);
 

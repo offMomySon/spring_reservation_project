@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,16 +27,20 @@ import kr.or.connect.reservation.service.ReservationService;
 @RestController
 @RequestMapping(path = "/api/reservations")
 public class ReservationApiController {
+	private static final Logger logger = LoggerFactory.getLogger(ReservationApiController.class);
+	
 	@Autowired
 	private ReservationService rsvService;
 
 	@PostMapping
 	public ReservationRequest postBook(@RequestBody ReservationRequest reservation) {
+		logger.debug("POST. ReservationRequest = {}.", reservation);
 		return rsvService.addReservation(reservation);
 	}
 	
 	@GetMapping
 	public Map<String, Object> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session){
+		logger.debug("GET. reservationEmail = {}.", reservationEmail);
 		List<ReservationResponse> responseList = rsvService.getReservation(reservationEmail);
 		
 		Map<String, Object> rsvMap = new HashMap();
@@ -48,10 +54,15 @@ public class ReservationApiController {
 	
 	@PutMapping(path = "/{reservationId}")
 	public ReservationRequest cancleBook(@PathVariable Long reservationId) {
+		logger.debug("PUT. reservationId = {}.", reservationId);
 		ReservationRequest result = rsvService.cancleReservation(reservationId);
 		
 		if(result == null) {
-			new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+			try {
+				new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+			} catch (Exception e) {
+				logger.debug("Fail to get reservation FROM reservationId = {}", reservationId, e);
+			}
 		}
 
 		return rsvService.cancleReservation(reservationId);
@@ -60,9 +71,11 @@ public class ReservationApiController {
 	
 	public void storeEmailInfoIfNeeded(List<ReservationResponse> responseList, HttpSession session, String reservationEmail) {
 		if (responseList.isEmpty()) {
+			logger.debug("responseList = {}, reservation not exist. Do not store Email in session.", responseList);
 			return;
 		}
 		session.setAttribute("rsvEmail", reservationEmail);
+		logger.debug("responseList = {}, Email has reservation. Store Email in session.", responseList);
 	}
 }
 
