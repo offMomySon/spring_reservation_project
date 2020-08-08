@@ -165,4 +165,12 @@ public class Product {
 		this.category = category;
 	}
 
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", description=" + description + ", content=" + content + ", event=" + event
+				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", reservationInfos=" + reservationInfos
+				+ ", productPrices=" + productPrices + ", rsvUserComments=" + rsvUserComments + ", promotions="
+				+ promotions + ", productImages=" + productImages + ", displayInfos=" + displayInfos + ", category="
+				+ category + "]";
+	}
 }

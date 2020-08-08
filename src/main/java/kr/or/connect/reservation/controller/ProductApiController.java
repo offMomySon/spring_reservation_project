@@ -1,15 +1,19 @@
 package kr.or.connect.reservation.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.or.connect.reservation.model.Product;
+import kr.or.connect.reservation.repository.ProductRepository;
 import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ProductService;
 
@@ -20,6 +24,8 @@ public class ProductApiController {
 	private ProductService productService;
 	@Autowired
 	private DisplayInfoService displayInfoService;
+	@Autowired
+	private ProductRepository rep;
 
 	@GetMapping
 	public Map<String, Object> getProduct(@RequestParam(defaultValue = "0") long categoryId,
@@ -44,5 +50,14 @@ public class ProductApiController {
 		map.put("productPrices", displayInfoService.getProductPriceList(displayInfoId));
 
 		return map;
+	}
+	
+	@GetMapping(path = "/test}")
+	public List<Product> test() {
+		
+		List<Product> tt = (List<Product>) rep.findAll(PageRequest.of(0, 5));
+		System.out.println(tt);
+		
+		return tt;
 	}
 }
