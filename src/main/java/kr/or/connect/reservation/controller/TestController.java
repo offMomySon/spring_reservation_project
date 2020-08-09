@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,16 +23,24 @@ import kr.or.connect.reservation.service.ProductService;
 @RestController
 @RequestMapping(path = "/api/test")
 public class TestController {
-
+	private static final Logger logger = LoggerFactory.getLogger(CategoryApiController.class);
+	
 	@Autowired
 	private ProductRepository rep;
 
 	@GetMapping
-	public List<Product> test() {
+	public Map<String,Object> test() {
+		logger.info("enter test()");
 		
+		Map<String,Object> map = new HashMap<>();
 		List<Product> products = rep.findAllbyId( (long)1);
-		System.out.println(products);
+		map.put("tt", products);
 		
-		return products;
+		logger.info("Print List!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		for(int i =0; i< products.size(); i++) {
+			logger.info("idx:{}, content:{}",i, products.get(i).getContent());
+		}
+		
+		return map;
 	}
 }
