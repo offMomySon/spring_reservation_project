@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.or.connect.reservation.model.Product;
 
-@Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
 //		@Query("SELECT pr FROM Product pr"
