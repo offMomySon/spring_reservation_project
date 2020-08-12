@@ -25,6 +25,9 @@ public class DisplayInfo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@Column(name = "product_id")
+	private Long productId;
+
 	@Column(name = "opening_hours")
 	private String openingHours;
 
@@ -131,38 +134,10 @@ public class DisplayInfo {
 		this.modifyDate = modifyDate;
 	}
 
-	@OneToMany(mappedBy = "displayInfo", cascade = CascadeType.ALL)
-	private List<ReservationInfo> reservationInfos = new ArrayList<>();
-
-	@OneToMany(mappedBy = "displayInfo", cascade = CascadeType.ALL)
-	private List<DisplayInfoImage> displayInfoImages = new ArrayList<>();
-
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product product;
-
-	public List<ReservationInfo> getReservationInfos() {
-		return reservationInfos;
+	@Override
+	public String toString() {
+		return "DisplayInfo [id=" + id + ", productId=" + productId + ", openingHours=" + openingHours + ", placeName="
+				+ placeName + ", placeLot=" + placeLot + ", placeStreet=" + placeStreet + ", tel=" + tel + ", homepage="
+				+ homepage + ", email=" + email + "]";
 	}
-
-	public void setReservationInfos(List<ReservationInfo> reservationInfos) {
-		this.reservationInfos = reservationInfos;
-	}
-
-	public List<DisplayInfoImage> getDisplayInfoImages() {
-		return displayInfoImages;
-	}
-
-	public void setDisplayInfoImages(List<DisplayInfoImage> displayInfoImages) {
-		this.displayInfoImages = displayInfoImages;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
 }

@@ -1,8 +1,10 @@
 package kr.or.connect.reservation.sql;
 
 public class ProductSql {
-	public static final String SELECT_COUNT = "select count(*) from product as pr join display_info as di on pr.id = di.product_id";
-	public static final String SELECT_COUNT_SPECIFIC_CATEGORY_PRODUCT = "select count(*) from product as pr join display_info as di on pr.id = di.product_id where pr.category_id = :categoryId";
+	public static final String SELECT_COUNT = 
+			"select count(*) from product as pr join display_info as di on pr.id = di.product_id";
+	public static final String SELECT_COUNT_SPECIFIC_CATEGORY_PRODUCT =
+			"select count(*) from product as pr join display_info as di on pr.id = di.product_id where pr.category_id = :categoryId";
 	public static final String SELECT_ALL_PRODUCT =
 			"select "
 			+ "di.id as display_info_id, "

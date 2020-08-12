@@ -1,8 +1,8 @@
 package kr.or.connect.reservation.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -87,76 +87,18 @@ public class Product {
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
 	}
-//
-//	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//	private List<ReservationInfo> reservationInfos = new ArrayList<>();
-//
-//	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//	private List<ProductPrice> productPrices = new ArrayList<>();
-//
-//	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//	private List<ReservationUserComment> rsvUserComments = new ArrayList<>();
-//
-//	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//	private List<Promotion> promotions = new ArrayList<>();
-//
-//	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//	private List<ProductImage> productImages = new ArrayList<>();
-//
-//	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-//	private List<DisplayInfo> displayInfos = new ArrayList<>();
 
-	@ManyToOne(targetEntity = Category.class, fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<ProductImage> productImages = new HashSet<>();
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<DisplayInfo> displayInfos = new HashSet<>();
+
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Category.class)
 	@JoinColumn(name = "category_id")
 	private Category category;
-//
-//	public List<ReservationInfo> getReservationInfos() {
-//		return reservationInfos;
-//	}
-//
-//	public void setReservationInfos(List<ReservationInfo> reservationInfos) {
-//		this.reservationInfos = reservationInfos;
-//	}
-//
-//	public List<ProductPrice> getProductPrices() {
-//		return productPrices;
-//	}
-//
-//	public void setProductPrices(List<ProductPrice> productPrices) {
-//		this.productPrices = productPrices;
-//	}
-//
-//	public List<ReservationUserComment> getRsvUserComments() {
-//		return rsvUserComments;
-//	}
-//
-//	public void setRsvUserComments(List<ReservationUserComment> rsvUserComments) {
-//		this.rsvUserComments = rsvUserComments;
-//	}
-//
-//	public List<Promotion> getPromotions() {
-//		return promotions;
-//	}
-//
-//	public void setPromotions(List<Promotion> promotions) {
-//		this.promotions = promotions;
-//	}
-//
-//	public List<ProductImage> getProductImages() {
-//		return productImages;
-//	}
-//
-//	public void setProductImages(List<ProductImage> productImages) {
-//		this.productImages = productImages;
-//	}
-//
-//	public List<DisplayInfo> getDisplayInfos() {
-//		return displayInfos;
-//	}
-//
-//	public void setDisplayInfos(List<DisplayInfo> displayInfos) {
-//		this.displayInfos = displayInfos;
-//	}
 
 	public Category getCategory() {
 		return category;
@@ -168,9 +110,9 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product" + description;
+		return "ProductRs [id=" + id + ", description=" + description + ", content=" + content + ", event=" + event
+				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", displayInfos=" + displayInfos
+				+ ", category=" + category + "]";
 	}
-
-	
 
 }

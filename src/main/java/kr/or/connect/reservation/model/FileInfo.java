@@ -98,37 +98,11 @@ public class FileInfo {
 		this.modifyDate = modifyDate;
 	}
 
-	@OneToMany(mappedBy = "fileInfo", cascade = CascadeType.ALL)
-	private List<ProductImage> productImages = new ArrayList<>();
-
-	@OneToMany(mappedBy = "fileInfo", cascade = CascadeType.ALL)
-	private List<ReservationUserCommentImage> reservationUserCommentImages = new ArrayList<>();
-
-	@OneToMany(mappedBy = "fileInfo", cascade = CascadeType.ALL)
-	private List<DisplayInfoImage> displayInfoImages = new ArrayList<>();
-
-	public List<ProductImage> getProductImages() {
-		return productImages;
-	}
-
-	public void setProductImages(List<ProductImage> productImages) {
-		this.productImages = productImages;
-	}
-
-	public List<ReservationUserCommentImage> getReservationUserCommentImages() {
-		return reservationUserCommentImages;
-	}
-
-	public void setReservationUserCommentImages(List<ReservationUserCommentImage> reservationUserCommentImages) {
-		this.reservationUserCommentImages = reservationUserCommentImages;
-	}
-
-	public List<DisplayInfoImage> getDisplayInfoImages() {
-		return displayInfoImages;
-	}
-
-	public void setDisplayInfoImages(List<DisplayInfoImage> displayInfoImages) {
-		this.displayInfoImages = displayInfoImages;
+	@Override
+	public String toString() {
+		return "FileInfo [id=" + id + ", fileName=" + fileName + ", saveFileName=" + saveFileName + ", contentType="
+				+ contentType + ", deleteFlag=" + deleteFlag + ", createDate=" + createDate + ", modifyDate="
+				+ modifyDate + "]";
 	}
 
 }

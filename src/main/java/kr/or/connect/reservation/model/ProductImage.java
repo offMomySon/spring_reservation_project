@@ -2,6 +2,7 @@ package kr.or.connect.reservation.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,10 +17,20 @@ public class ProductImage {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	private Long product_id;
+	
 	private String type;
 
 	public Long getId() {
 		return id;
+	}
+
+	public Long getProduct_id() {
+		return product_id;
+	}
+
+	public void setProduct_id(Long product_id) {
+		this.product_id = product_id;
 	}
 
 	public void setId(Long id) {
@@ -34,21 +45,9 @@ public class ProductImage {
 		this.type = type;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product product;
-
-	@ManyToOne
-	@JoinColumn(name = "file_info_id")
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = FileInfo.class)
+	@JoinColumn(name = "file_id")
 	private FileInfo fileInfo;
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
 
 	public FileInfo getFileInfo() {
 		return fileInfo;

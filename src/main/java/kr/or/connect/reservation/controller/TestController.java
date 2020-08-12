@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import kr.or.connect.reservation.dto.ProductRs;
 import kr.or.connect.reservation.model.Category;
 import kr.or.connect.reservation.model.Product;
 import kr.or.connect.reservation.repository.ProductRepository;
@@ -35,26 +35,8 @@ public class TestController {
 	private static final Logger logger = LoggerFactory.getLogger(ReservationApiController.class);
 
 	@Autowired
-	private ProductRepository rep;
-	@Autowired
 	private TestCategoryRepository categoryRep;
 
-	@GetMapping
-	public Map<String,Object> test() {
-		logger.info("enter test()");
-		
-		Map<String,Object> map = new HashMap<>();
-		List<Product> products = rep.findAllbyId( (long)1);
-		map.put("tt", products);
-		
-		logger.info("Print List!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		for(int i =0; i< products.size(); i++) {
-			logger.info("idx:{}, content:{}",i, products.get(i).getContent());
-		}
-		
-		return map;
-	}
-	
 	@PostMapping("/category/insert")
 	public void catecoryInsert(@RequestBody Category category) {
 		Category testCategory = categoryRep.save(category);
@@ -86,5 +68,4 @@ public class TestController {
 		categoryRep.deleteById(id);
 		logger.debug("delete suc");
 	}
-	
 }

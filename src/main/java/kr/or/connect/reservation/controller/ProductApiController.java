@@ -24,8 +24,6 @@ public class ProductApiController {
 	private ProductService productService;
 	@Autowired
 	private DisplayInfoService displayInfoService;
-	@Autowired
-	private ProductRepository rep;
 
 	@GetMapping
 	public Map<String, Object> getProduct(@RequestParam(defaultValue = "0") long categoryId,
@@ -50,14 +48,5 @@ public class ProductApiController {
 		map.put("productPrices", displayInfoService.getProductPriceList(displayInfoId));
 
 		return map;
-	}
-	
-	@GetMapping(path = "/test}")
-	public List<Product> test() {
-		
-		List<Product> tt = (List<Product>) rep.findAll(PageRequest.of(0, 5));
-		System.out.println(tt);
-		
-		return tt;
 	}
 }
