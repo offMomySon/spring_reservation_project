@@ -17,20 +17,13 @@ public class ProductImage {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private Long product_id;
+	@Column(name = "product_id")
+	private Long productId;
 	
 	private String type;
 
 	public Long getId() {
 		return id;
-	}
-
-	public Long getProduct_id() {
-		return product_id;
-	}
-
-	public void setProduct_id(Long product_id) {
-		this.product_id = product_id;
 	}
 
 	public void setId(Long id) {

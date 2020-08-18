@@ -2,7 +2,7 @@ package kr.or.connect.reservation.dto;
 
 import java.util.Date;
 
-public class CommentImage {
+public class CommentImageRs {
 	private Long imageId;
 	private Long reservationInfoId;
 	private Long reservationUserCommentId;
@@ -14,10 +14,10 @@ public class CommentImage {
 	private Date createDate;
 	private Date modifyDate;
 
-	public CommentImage() {
+	public CommentImageRs() {
 	}
 
-	public CommentImage(Long imageId, Long reservationInfoId, Long reservationUserCommentId, Long fileId,
+	public CommentImageRs(Long imageId, Long reservationInfoId, Long reservationUserCommentId, Long fileId,
 			String fileName, String saveFileName, String contentType, Boolean deleteFlag, Date createDate,
 			Date modifyDate) {
 		super();
@@ -32,6 +32,8 @@ public class CommentImage {
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
 	}
+
+
 
 	public Long getImageId() {
 		return imageId;
@@ -115,7 +117,7 @@ public class CommentImage {
 
 	@Override
 	public String toString() {
-		return "CommentImage [imageId=" + imageId + ", reservationInfoId=" + reservationInfoId
+		return "CommentImageRs [imageId=" + imageId + ", reservationInfoId=" + reservationInfoId
 				+ ", reservationUserCommentId=" + reservationUserCommentId + ", fileId=" + fileId + ", fileName="
 				+ fileName + ", saveFileName=" + saveFileName + ", contentType=" + contentType + ", deleteFlag="
 				+ deleteFlag + ", createDate=" + createDate + ", modifyDate=" + modifyDate + "]";

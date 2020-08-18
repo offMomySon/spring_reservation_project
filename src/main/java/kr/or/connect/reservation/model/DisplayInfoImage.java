@@ -1,5 +1,6 @@
 package kr.or.connect.reservation.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,9 @@ public class DisplayInfoImage {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@Column(name="display_info_id")
+	private Long displayInfoId;
+	
 	public Long getId() {
 		return id;
 	}
@@ -24,12 +28,8 @@ public class DisplayInfoImage {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "file_info_id")
+	@JoinColumn(name = "file_id")
 	private FileInfo fileInfo;
-
-	@ManyToOne
-	@JoinColumn(name = "display_info_id")
-	private DisplayInfo displayInfo;
 
 	public FileInfo getFileInfo() {
 		return fileInfo;
@@ -38,13 +38,4 @@ public class DisplayInfoImage {
 	public void setFileInfo(FileInfo fileInfo) {
 		this.fileInfo = fileInfo;
 	}
-
-	public DisplayInfo getDisplayInfo() {
-		return displayInfo;
-	}
-
-	public void setDisplayInfo(DisplayInfo displayInfo) {
-		this.displayInfo = displayInfo;
-	}
-
 }

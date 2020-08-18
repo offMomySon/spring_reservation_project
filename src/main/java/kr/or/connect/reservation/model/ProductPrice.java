@@ -26,6 +26,9 @@ public class ProductPrice {
 	@Column(name = "id")
 	private long id;
 
+	@Column(name = "product_id")
+	private long productId;
+
 	@Column(name = "price_type_name")
 	private String priceTypeName;
 
@@ -43,12 +46,35 @@ public class ProductPrice {
 	@Column(name = "modify_date")
 	private Date modifyDate;
 
+	public ProductPrice() {
+	}
+
+	public ProductPrice(long id, long productId, String priceTypeName, Long price, Double discountRate, Date createDate,
+			Date modifyDate) {
+		super();
+		this.id = id;
+		this.productId = productId;
+		this.priceTypeName = priceTypeName;
+		this.price = price;
+		this.discountRate = discountRate;
+		this.createDate = createDate;
+		this.modifyDate = modifyDate;
+	}
+
 	public long getId() {
 		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(long productId) {
+		this.productId = productId;
 	}
 
 	public String getPriceTypeName() {
@@ -90,28 +116,4 @@ public class ProductPrice {
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
 	}
-
-	@OneToMany(mappedBy = "productPrice", cascade = CascadeType.ALL)
-	private List<ReservationInfoPrice> reservationInfoPrices = new ArrayList<>();
-
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product product;
-
-	public List<ReservationInfoPrice> getReservationInfoPrices() {
-		return reservationInfoPrices;
-	}
-
-	public void setReservationInfoPrices(List<ReservationInfoPrice> reservationInfoPrices) {
-		this.reservationInfoPrices = reservationInfoPrices;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
 }

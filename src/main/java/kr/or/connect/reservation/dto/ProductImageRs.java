@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import kr.or.connect.reservation.objmapper.CustomDateSerializer;
 
-public class ProductImage {
+public class ProductImageRs {
 	private long productId;
 	private long productImageId;
 	private String type;
@@ -18,10 +18,10 @@ public class ProductImage {
 	private Date createDate;
 	private Date modifyDate;
 
-	public ProductImage() {
+	public ProductImageRs() {
 	}
-
-	public ProductImage(long productId, long productImageId, String type, long fileInfoId, String fileName,
+	
+	public ProductImageRs(long productId, long productImageId, String type, long fileInfoId, String fileName,
 			String saveFileName, String contentType, Boolean deleteFlag, Date createDate, Date modifyDate) {
 		super();
 		this.productId = productId;
@@ -118,7 +118,7 @@ public class ProductImage {
 
 	@Override
 	public String toString() {
-		return "ProductImage [productId=" + productId + ", productImageId=" + productImageId + ", type=" + type
+		return "ProductImageRs [productId=" + productId + ", productImageId=" + productImageId + ", type=" + type
 				+ ", fileInfoId=" + fileInfoId + ", fileName=" + fileName + ", saveFileName=" + saveFileName
 				+ ", contentType=" + contentType + ", deleteFlag=" + deleteFlag + ", createDate=" + createDate
 				+ ", modifyDate=" + modifyDate + "]";

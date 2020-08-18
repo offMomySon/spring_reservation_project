@@ -1,17 +1,17 @@
 package kr.or.connect.reservation.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -113,61 +113,16 @@ public class ReservationInfo {
 		this.modifyDate = modifyDate;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product product;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "reservation_info_id")
+	private Set<ReservationUserComment> userComments = new HashSet<>();
 
-	@ManyToOne
-	@JoinColumn(name = "display_info_id")
-	private DisplayInfo displayInfo;
-
-	@OneToMany(mappedBy = "reservationInfo", cascade = CascadeType.ALL)
-	private List<ReservationInfoPrice> reservationInfoPrices = new ArrayList<>();
-
-	@OneToMany(mappedBy = "reservationInfo", cascade = CascadeType.ALL)
-	private List<ReservationUserComment> userComments = new ArrayList<>();
-
-	@OneToMany(mappedBy = "reservationInfo", cascade = CascadeType.ALL)
-	private List<ReservationUserCommentImage> reservationUserCommentImages = new ArrayList<>();
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public DisplayInfo getDisplayInfo() {
-		return displayInfo;
-	}
-
-	public void setDisplayInfo(DisplayInfo displayInfo) {
-		this.displayInfo = displayInfo;
-	}
-
-	public List<ReservationInfoPrice> getReservationInfoPrices() {
-		return reservationInfoPrices;
-	}
-
-	public void setReservationInfoPrices(List<ReservationInfoPrice> reservationInfoPrices) {
-		this.reservationInfoPrices = reservationInfoPrices;
-	}
-
-	public List<ReservationUserComment> getUserComments() {
+	public Set<ReservationUserComment> getUserComments() {
 		return userComments;
 	}
 
-	public void setUserComments(List<ReservationUserComment> userComments) {
+	public void setUserComments(Set<ReservationUserComment> userComments) {
 		this.userComments = userComments;
-	}
-
-	public List<ReservationUserCommentImage> getReservationUserCommentImages() {
-		return reservationUserCommentImages;
-	}
-
-	public void setReservationUserCommentImages(List<ReservationUserCommentImage> reservationUserCommentImages) {
-		this.reservationUserCommentImages = reservationUserCommentImages;
 	}
 
 }

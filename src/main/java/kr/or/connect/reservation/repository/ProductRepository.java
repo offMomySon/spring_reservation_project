@@ -2,9 +2,13 @@ package kr.or.connect.reservation.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import kr.or.connect.reservation.dto.DisplayInfoRs;
 import kr.or.connect.reservation.dto.ProductRs;
 import kr.or.connect.reservation.model.Product;
 
@@ -55,5 +59,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 				+ "JOIN pr.category ca "
 				+ "WHERE ca.id = ?1")
 		long countWithCategoryId(Long categoryId);
-
 }

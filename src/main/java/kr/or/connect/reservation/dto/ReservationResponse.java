@@ -19,7 +19,7 @@ public class ReservationResponse {
 	private Date createDate;
 	private Date modifyDate;
 	private List<Price> prices;
-	private DisplayInfo displayInfo;
+	private DisplayInfoRs displayInfoRs;
 	private Long totalPrice;
 
 	public ReservationResponse() {
@@ -27,7 +27,7 @@ public class ReservationResponse {
 
 	public ReservationResponse(long reservationInfoId, long productId, long displayInfoId, String reservationName,
 			String reservationTel, String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate,
-			Date modifyDate, List<Price> prices, DisplayInfo displayInfo, Long totalPrice) {
+			Date modifyDate, List<Price> prices, DisplayInfoRs displayInfoRs, Long totalPrice) {
 		super();
 		this.reservationInfoId = reservationInfoId;
 		this.productId = productId;
@@ -40,7 +40,7 @@ public class ReservationResponse {
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
 		this.prices = prices;
-		this.displayInfo = displayInfo;
+		this.displayInfoRs = displayInfoRs;
 		this.totalPrice = totalPrice;
 	}
 
@@ -140,12 +140,12 @@ public class ReservationResponse {
 		this.prices = prices;
 	}
 
-	public DisplayInfo getDisplayInfo() {
-		return displayInfo;
+	public DisplayInfoRs getDisplayInfo() {
+		return displayInfoRs;
 	}
 
-	public void setDisplayInfo(DisplayInfo displayInfo) {
-		this.displayInfo = displayInfo;
+	public void setDisplayInfo(DisplayInfoRs displayInfoRs) {
+		this.displayInfoRs = displayInfoRs;
 	}
 
 	@Override
@@ -154,6 +154,6 @@ public class ReservationResponse {
 				+ ", displayInfoId=" + displayInfoId + ", reservationName=" + reservationName + ", reservationTel="
 				+ reservationTel + ", reservationEmail=" + reservationEmail + ", reservationDate=" + reservationDate
 				+ ", cancelFlag=" + cancelFlag + ", createDate=" + createDate + ", modifyDate=" + modifyDate
-				+ ", prices=" + prices + ", displayInfo=" + displayInfo + ", totalPrice=" + totalPrice + "]";
+				+ ", prices=" + prices + ", displayInfoRs=" + displayInfoRs + ", totalPrice=" + totalPrice + "]";
 	}
 }

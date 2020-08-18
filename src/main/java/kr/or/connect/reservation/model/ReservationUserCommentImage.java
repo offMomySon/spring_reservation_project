@@ -1,5 +1,6 @@
 package kr.or.connect.reservation.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,19 +15,17 @@ public class ReservationUserCommentImage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	@Column(name = "reservation_info_id")
+	private String reservationInfoId;
+
+	@Column(name = "reservation_user_comment_id")
+	private String reservationUserCommentId;
 
 	@ManyToOne
-	@JoinColumn(name = "reservation_user_comment_id")
-	private ReservationUserComment reservationUserComment;
-
-	@ManyToOne
-	@JoinColumn(name = "reservation_info_id")
-	private ReservationInfo reservationInfo;
-
-	@ManyToOne
-	@JoinColumn(name = "file_info_id")
+	@JoinColumn(name = "file_id")
 	private FileInfo fileInfo;
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -35,20 +34,20 @@ public class ReservationUserCommentImage {
 		this.id = id;
 	}
 
-	public ReservationUserComment getReservationUserComment() {
-		return reservationUserComment;
+	public String getReservationInfoId() {
+		return reservationInfoId;
 	}
 
-	public void setReservationUserComment(ReservationUserComment reservationUserComment) {
-		this.reservationUserComment = reservationUserComment;
+	public void setReservationInfoId(String reservationInfoId) {
+		this.reservationInfoId = reservationInfoId;
 	}
 
-	public ReservationInfo getReservationInfo() {
-		return reservationInfo;
+	public String getReservationUserCommentId() {
+		return reservationUserCommentId;
 	}
 
-	public void setReservationInfo(ReservationInfo reservationInfo) {
-		this.reservationInfo = reservationInfo;
+	public void setReservationUserCommentId(String reservationUserCommentId) {
+		this.reservationUserCommentId = reservationUserCommentId;
 	}
 
 	public FileInfo getFileInfo() {

@@ -95,7 +95,19 @@ public class Product {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Set<DisplayInfo> displayInfos = new HashSet<>();
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<ReservationInfo> reservationInfos = new HashSet<>();
 
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<ReservationUserComment> reservationUserComments = new HashSet<>();
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<ProductPrice> productPrices = new HashSet<>();
+	
 	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Category.class)
 	@JoinColumn(name = "category_id")
 	private Category category;
