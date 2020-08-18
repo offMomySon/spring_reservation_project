@@ -9,7 +9,7 @@ import kr.or.connect.reservation.model.Category;
 
 public interface TestCategoryRepository extends JpaRepository<Category, Long> {
 	
-//	Optional<Category> findById(Long id);
+//	Optional<CategoryRs> findById(Long id);
 	Category findByName(String name);
 	
 }
