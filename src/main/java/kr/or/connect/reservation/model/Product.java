@@ -88,27 +88,27 @@ public class Product {
 		this.modifyDate = modifyDate;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Set<ProductImage> productImages = new HashSet<>();
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Set<DisplayInfo> displayInfos = new HashSet<>();
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Set<ReservationInfo> reservationInfos = new HashSet<>();
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Set<ReservationUserComment> reservationUserComments = new HashSet<>();
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Set<ProductPrice> productPrices = new HashSet<>();
 	
-	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Category.class)
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Category.class)
 	@JoinColumn(name = "category_id")
 	private Category category;
 

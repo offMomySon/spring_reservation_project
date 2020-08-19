@@ -38,7 +38,7 @@ public class ProductImage {
 		this.type = type;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER, targetEntity = FileInfo.class)
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = FileInfo.class)
 	@JoinColumn(name = "file_id")
 	private FileInfo fileInfo;
 
