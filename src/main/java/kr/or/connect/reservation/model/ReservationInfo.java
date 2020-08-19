@@ -113,7 +113,7 @@ public class ReservationInfo {
 		this.modifyDate = modifyDate;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "reservation_info_id")
 	private Set<ReservationUserComment> userComments = new HashSet<>();
 

@@ -137,7 +137,7 @@ public class DisplayInfo {
 		this.modifyDate = modifyDate;
 	}
 	
-	@OneToMany(fetch= FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "display_info_id")
 	private Set<DisplayInfoImage> displayinfoImages = new HashSet<>();
 
