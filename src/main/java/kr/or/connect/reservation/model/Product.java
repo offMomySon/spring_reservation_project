@@ -108,6 +108,10 @@ public class Product {
 	@JoinColumn(name = "product_id")
 	private Set<ProductPrice> productPrices = new HashSet<>();
 	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<Promotion> promotions = new HashSet<>();
+	
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Category.class)
 	@JoinColumn(name = "category_id")
 	private Category category;
