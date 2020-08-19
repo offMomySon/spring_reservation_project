@@ -1,5 +1,6 @@
 package kr.or.connect.reservation.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,9 @@ public class Promotion {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@Column(name = "product_id")
+	private Long productId;
+
 	public Long getId() {
 		return id;
 	}
@@ -23,16 +27,22 @@ public class Promotion {
 		this.id = id;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "product_id ")
-	private Product product;
-
-	public Product getProduct() {
-		return product;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
+	public Promotion(Long id, Long productId) {
+		super();
+		this.id = id;
+		this.productId = productId;
+	}
+
+	@Override
+	public String toString() {
+		return "Promotion [id=" + id + ", productId=" + productId + "]";
+	}
 }
