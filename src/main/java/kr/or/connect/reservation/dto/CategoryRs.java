@@ -1,15 +1,15 @@
 package kr.or.connect.reservation.dto;
 
-public class Category {
+public class CategoryRs {
 	private long id;
 	private String name;
-	private int count;
+	private long count;
 
-	public Category() {
+	public CategoryRs() {
 		super();
 	}
 
-	public Category(long id, String name, int count) {
+	public CategoryRs(long id, String name, long count) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -32,17 +32,17 @@ public class Category {
 		this.name = name;
 	}
 
-	public int getCount() {
+	public long getCount() {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(long count) {
 		this.count = count;
 	}
 
 	@Override
 	public String toString() {
-		return "Category [categoryID=" + id + ", categoryName=" + name + ", categoryCount=" + count + "]";
+		return "CategoryRs [categoryID=" + id + ", categoryName=" + name + ", categoryCount=" + count + "]";
 	}
 
 }

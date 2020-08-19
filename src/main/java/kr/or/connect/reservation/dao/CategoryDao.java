@@ -12,18 +12,18 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import kr.or.connect.reservation.dto.Category;
+import kr.or.connect.reservation.dto.CategoryRs;
 
 @Repository
 public class CategoryDao {
 	private NamedParameterJdbcTemplate jdbc;
-	private RowMapper<Category> rowMapper = BeanPropertyRowMapper.newInstance(Category.class);
+	private RowMapper<CategoryRs> rowMapper = BeanPropertyRowMapper.newInstance(CategoryRs.class);
 
 	public CategoryDao(DataSource dataSource) {
 		jdbc = new NamedParameterJdbcTemplate(dataSource);
 	}
 
-	public List<Category> selectAll() {
+	public List<CategoryRs> selectAll() {
 		try {
 			return jdbc.query(SELECT_ALL_WITH_COUNT, Collections.emptyMap(), rowMapper);
 		} catch (EmptyResultDataAccessException e) {
