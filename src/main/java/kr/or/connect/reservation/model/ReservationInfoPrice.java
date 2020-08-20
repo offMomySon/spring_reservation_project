@@ -16,10 +16,13 @@ import kr.or.connect.reservation.model.ProductPrice;
 public class ReservationInfoPrice {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 
+	@Column(name = "reservation_info_id")
+	private Long reservationInfoId;
+	
 	@Column(name = "count")
 	private Long count;
 
@@ -29,6 +32,14 @@ public class ReservationInfoPrice {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getReservationInfoId() {
+		return reservationInfoId;
+	}
+
+	public void setReservationInfoId(Long reservationInfoId) {
+		this.reservationInfoId = reservationInfoId;
 	}
 
 	public Long getCount() {
@@ -43,10 +54,6 @@ public class ReservationInfoPrice {
 	@JoinColumn(name = "product_price_id")
 	private ProductPrice productPrice;
 
-	@ManyToOne
-	@JoinColumn(name = "reservation_info_id")
-	private ReservationInfo reservationInfo;
-
 	public ProductPrice getProductPrice() {
 		return productPrice;
 	}
@@ -55,12 +62,12 @@ public class ReservationInfoPrice {
 		this.productPrice = productPrice;
 	}
 
-	public ReservationInfo getReservationInfo() {
-		return reservationInfo;
-	}
-
-	public void setReservationInfo(ReservationInfo reservationInfo) {
-		this.reservationInfo = reservationInfo;
+	public ReservationInfoPrice(Long id, Long reservationInfoId, Long count, ProductPrice productPrice) {
+		super();
+		this.id = id;
+		this.reservationInfoId = reservationInfoId;
+		this.count = count;
+		this.productPrice = productPrice;
 	}
 
 }

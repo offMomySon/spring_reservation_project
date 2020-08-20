@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import kr.or.connect.reservation.dto.ReservationRequest;
-import kr.or.connect.reservation.dto.ReservationResponse;
+import kr.or.connect.reservation.dto.ReservationRequestRs;
+import kr.or.connect.reservation.dto.ReservationResponseRs;
 import kr.or.connect.reservation.service.ReservationService;
 
 @RestController
@@ -33,17 +33,17 @@ public class ReservationApiController {
 	private ReservationService rsvService;
 
 	@PostMapping
-	public ReservationRequest postBook(@RequestBody ReservationRequest reservation) {
-		logger.debug("POST. ReservationRequest = {}.", reservation);
+	public ReservationRequestRs postBook(@RequestBody ReservationRequestRs reservation) {
+		logger.debug("POST. ReservationRequestRs = {}.", reservation);
 		return rsvService.addReservation(reservation);
 	}
 	
 	@GetMapping
 	public Map<String, Object> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session){
 		logger.debug("GET. reservationEmail = {}.", reservationEmail);
-		List<ReservationResponse> responseList = rsvService.getReservation(reservationEmail);
+		List<ReservationResponseRs> responseList = rsvService.getReservation(reservationEmail);
 		
-		Map<String, Object> rsvMap = new HashMap();
+		Map<String, Object> rsvMap = new HashMap<>();
 		rsvMap.put("reservations", responseList);
 		rsvMap.put("size", responseList.size());
 		
@@ -53,9 +53,9 @@ public class ReservationApiController {
 	}
 	
 	@PutMapping(path = "/{reservationId}")
-	public ReservationRequest cancleBook(@PathVariable Long reservationId) {
+	public ReservationRequestRs cancleBook(@PathVariable Long reservationId) {
 		logger.debug("PUT. reservationId = {}.", reservationId);
-		ReservationRequest result = rsvService.cancleReservation(reservationId);
+		ReservationRequestRs result = rsvService.cancleReservation(reservationId);
 		
 		if(result == null) {
 			try {
@@ -65,11 +65,11 @@ public class ReservationApiController {
 			}
 		}
 
-		return rsvService.cancleReservation(reservationId);
+		return result;
 	}
 	
 	
-	public void storeEmailInfoIfNeeded(List<ReservationResponse> responseList, HttpSession session, String reservationEmail) {
+	public void storeEmailInfoIfNeeded(List<ReservationResponseRs> responseList, HttpSession session, String reservationEmail) {
 		if (responseList.isEmpty()) {
 			logger.debug("responseList = {}, reservation not exist. Do not store Email in session.", responseList);
 			return;

@@ -3,11 +3,9 @@ package kr.or.connect.reservation.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import kr.or.connect.reservation.dao.DisplayInfoDao;
 import kr.or.connect.reservation.dto.CommentRs;
 import kr.or.connect.reservation.dto.CommentImageRs;
 import kr.or.connect.reservation.dto.DisplayInfoRs;
@@ -19,9 +17,6 @@ import kr.or.connect.reservation.service.DisplayInfoService;
 
 @Service
 public class DisplayInfoServiceImpl implements DisplayInfoService {
-
-	@Autowired
-	private DisplayInfoDao displayInfoDao;
 	
 	@Autowired
 	private DisplayInfoRepository displayInfoRep;

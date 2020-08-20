@@ -22,8 +22,14 @@ import javax.persistence.TemporalType;
 public class ReservationInfo {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(name = "product_id")
+	private Long productId;
+
+	@Column(name = "display_info_id")
+	private Long displayInfoId;
 
 	@Column(name = "reservation_name")
 	private String reservationName;
@@ -48,6 +54,26 @@ public class ReservationInfo {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "modify_date")
 	private Date modifyDate;
+
+	public ReservationInfo() {
+	}
+
+	public ReservationInfo(Long id, Long productId, Long displayInfoId, String reservationName, String reservationTel,
+			String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate, Date modifyDate) {
+		super();
+		this.id = id;
+		this.productId = productId;
+		this.displayInfoId = displayInfoId;
+		this.reservationName = reservationName;
+		this.reservationTel = reservationTel;
+		this.reservationEmail = reservationEmail;
+
+		this.reservationDate = reservationDate;
+		this.cancelFlag = cancelFlag;
+		this.createDate = createDate;
+		this.modifyDate = modifyDate;
+		this.userComments = null;
+	}
 
 	public Long getId() {
 		return id;
@@ -117,6 +143,10 @@ public class ReservationInfo {
 	@JoinColumn(name = "reservation_info_id")
 	private Set<ReservationUserComment> userComments = new HashSet<>();
 
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "reservation_info_id")
+	private Set<ReservationInfoPrice> rsvInfoPrices = new HashSet<>();
+	
 	public Set<ReservationUserComment> getUserComments() {
 		return userComments;
 	}
@@ -125,4 +155,11 @@ public class ReservationInfo {
 		this.userComments = userComments;
 	}
 
+	@Override
+	public String toString() {
+		return "ReservationInfo [id=" + id + ", productId=" + productId + ", displayInfoId=" + displayInfoId
+				+ ", reservationName=" + reservationName + ", reservationTel=" + reservationTel + ", reservationEmail="
+				+ reservationEmail + ", reservationDate=" + reservationDate + ", cancelFlag=" + cancelFlag
+				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", userComments=" + userComments + "]";
+	}
 }
