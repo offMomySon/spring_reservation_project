@@ -1,19 +1,10 @@
 package kr.or.connect.reservation.dto;
 
 import java.util.Date;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import kr.or.connect.reservation.objmapper.RsvDateDeserializer;
-import kr.or.connect.reservation.objmapper.RsvDateSerializer;
-
-public class ReservationRequest {
-
+public class ReservationResponseRs {
 	private long reservationInfoId;
 	private long productId;
 	private long displayInfoId;
@@ -26,14 +17,15 @@ public class ReservationRequest {
 	private Boolean cancelFlag;
 	private Date createDate;
 	private Date modifyDate;
-	private List<Price> prices;
+	private DisplayInfoRs displayInfoRs;
+	private Long totalPrice;
 
-	public ReservationRequest() {
+	public ReservationResponseRs() {
 	}
 
-	public ReservationRequest(long reservationInfoId, long productId, long displayInfoId, String reservationName,
+	public ReservationResponseRs(long reservationInfoId, long productId, long displayInfoId, String reservationName,
 			String reservationTel, String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate,
-			Date modifyDate, List<Price> prices) {
+			Date modifyDate) {
 		super();
 		this.reservationInfoId = reservationInfoId;
 		this.productId = productId;
@@ -45,7 +37,14 @@ public class ReservationRequest {
 		this.cancelFlag = cancelFlag;
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
-		this.prices = prices;
+	}
+
+	public Long getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Long totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
 	public long getReservationInfoId() {
@@ -80,6 +79,14 @@ public class ReservationRequest {
 		this.reservationName = reservationName;
 	}
 
+	public String getReservationTel() {
+		return reservationTel;
+	}
+
+	public void setReservationTel(String reservationTel) {
+		this.reservationTel = reservationTel;
+	}
+
 	public String getReservationEmail() {
 		return reservationEmail;
 	}
@@ -88,24 +95,12 @@ public class ReservationRequest {
 		this.reservationEmail = reservationEmail;
 	}
 
-	@JsonGetter("reservationDate")
-	@JsonSerialize(using = RsvDateSerializer.class)
 	public Date getReservationDate() {
 		return reservationDate;
 	}
 
-	@JsonSetter("reservationYearMonthDay")
-	@JsonDeserialize(using = RsvDateDeserializer.class)
 	public void setReservationDate(Date reservationDate) {
 		this.reservationDate = reservationDate;
-	}
-
-	public String getReservationTel() {
-		return reservationTel;
-	}
-
-	public void setReservationTel(String reservationTel) {
-		this.reservationTel = reservationTel;
 	}
 
 	public Boolean getCancelFlag() {
@@ -132,19 +127,21 @@ public class ReservationRequest {
 		this.modifyDate = modifyDate;
 	}
 
-	public List<Price> getPrices() {
-		return prices;
+	public DisplayInfoRs getDisplayInfo() {
+		return displayInfoRs;
 	}
 
-	public void setPrices(List<Price> prices) {
-		this.prices = prices;
+	public void setDisplayInfo(DisplayInfoRs displayInfoRs) {
+		this.displayInfoRs = displayInfoRs;
 	}
 
 	@Override
 	public String toString() {
-		return "ReservationRequest [reservationInfoId=" + reservationInfoId + ", productId=" + productId + ", displayInfoId="
-				+ displayInfoId + ", reservationName=" + reservationName + ", reservationTel=" + reservationTel
-				+ ", reservationEmail=" + reservationEmail + ", reservationDate=" + reservationDate + ", cancelFlag="
-				+ cancelFlag + ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", prices=" + prices + "]";
+		return "ReservationResponseRs [reservationInfoId=" + reservationInfoId + ", productId=" + productId
+				+ ", displayInfoId=" + displayInfoId + ", reservationName=" + reservationName + ", reservationTel="
+				+ reservationTel + ", reservationEmail=" + reservationEmail + ", reservationDate=" + reservationDate
+				+ ", cancelFlag=" + cancelFlag + ", createDate=" + createDate + ", modifyDate=" + modifyDate
+				+ ", displayInfoRs=" + displayInfoRs + ", totalPrice=" + totalPrice + "]";
 	}
+
 }

@@ -3,9 +3,17 @@ package kr.or.connect.reservation.dto;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ReservationResponse {
+import kr.or.connect.reservation.objmapper.RsvDateDeserializer;
+import kr.or.connect.reservation.objmapper.RsvDateSerializer;
+
+public class ReservationRequestRs {
+
 	private long reservationInfoId;
 	private long productId;
 	private long displayInfoId;
@@ -19,15 +27,29 @@ public class ReservationResponse {
 	private Date createDate;
 	private Date modifyDate;
 	private List<Price> prices;
-	private DisplayInfoRs displayInfoRs;
-	private Long totalPrice;
 
-	public ReservationResponse() {
+	public ReservationRequestRs() {
 	}
 
-	public ReservationResponse(long reservationInfoId, long productId, long displayInfoId, String reservationName,
+	public ReservationRequestRs(long reservationInfoId, long productId, long displayInfoId, String reservationName,
 			String reservationTel, String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate,
-			Date modifyDate, List<Price> prices, DisplayInfoRs displayInfoRs, Long totalPrice) {
+			Date modifyDate) {
+		super();
+		this.reservationInfoId = reservationInfoId;
+		this.productId = productId;
+		this.displayInfoId = displayInfoId;
+		this.reservationName = reservationName;
+		this.reservationTel = reservationTel;
+		this.reservationEmail = reservationEmail;
+		this.reservationDate = reservationDate;
+		this.cancelFlag = cancelFlag;
+		this.createDate = createDate;
+		this.modifyDate = modifyDate;
+	}
+
+	public ReservationRequestRs(long reservationInfoId, long productId, long displayInfoId, String reservationName,
+			String reservationTel, String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate,
+			Date modifyDate, List<Price> prices) {
 		super();
 		this.reservationInfoId = reservationInfoId;
 		this.productId = productId;
@@ -40,16 +62,6 @@ public class ReservationResponse {
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
 		this.prices = prices;
-		this.displayInfoRs = displayInfoRs;
-		this.totalPrice = totalPrice;
-	}
-
-	public Long getTotalPrice() {
-		return totalPrice;
-	}
-
-	public void setTotalPrice(Long totalPrice) {
-		this.totalPrice = totalPrice;
 	}
 
 	public long getReservationInfoId() {
@@ -84,14 +96,6 @@ public class ReservationResponse {
 		this.reservationName = reservationName;
 	}
 
-	public String getReservationTel() {
-		return reservationTel;
-	}
-
-	public void setReservationTel(String reservationTel) {
-		this.reservationTel = reservationTel;
-	}
-
 	public String getReservationEmail() {
 		return reservationEmail;
 	}
@@ -100,12 +104,24 @@ public class ReservationResponse {
 		this.reservationEmail = reservationEmail;
 	}
 
+	@JsonGetter("reservationDate")
+	@JsonSerialize(using = RsvDateSerializer.class)
 	public Date getReservationDate() {
 		return reservationDate;
 	}
 
+	@JsonSetter("reservationYearMonthDay")
+	@JsonDeserialize(using = RsvDateDeserializer.class)
 	public void setReservationDate(Date reservationDate) {
 		this.reservationDate = reservationDate;
+	}
+
+	public String getReservationTel() {
+		return reservationTel;
+	}
+
+	public void setReservationTel(String reservationTel) {
+		this.reservationTel = reservationTel;
 	}
 
 	public Boolean getCancelFlag() {
@@ -140,20 +156,11 @@ public class ReservationResponse {
 		this.prices = prices;
 	}
 
-	public DisplayInfoRs getDisplayInfo() {
-		return displayInfoRs;
-	}
-
-	public void setDisplayInfo(DisplayInfoRs displayInfoRs) {
-		this.displayInfoRs = displayInfoRs;
-	}
-
 	@Override
 	public String toString() {
-		return "ReservationResponse [reservationInfoId=" + reservationInfoId + ", productId=" + productId
-				+ ", displayInfoId=" + displayInfoId + ", reservationName=" + reservationName + ", reservationTel="
-				+ reservationTel + ", reservationEmail=" + reservationEmail + ", reservationDate=" + reservationDate
-				+ ", cancelFlag=" + cancelFlag + ", createDate=" + createDate + ", modifyDate=" + modifyDate
-				+ ", prices=" + prices + ", displayInfoRs=" + displayInfoRs + ", totalPrice=" + totalPrice + "]";
+		return "ReservationRequestRs [reservationInfoId=" + reservationInfoId + ", productId=" + productId + ", displayInfoId="
+				+ displayInfoId + ", reservationName=" + reservationName + ", reservationTel=" + reservationTel
+				+ ", reservationEmail=" + reservationEmail + ", reservationDate=" + reservationDate + ", cancelFlag="
+				+ cancelFlag + ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", prices=" + prices + "]";
 	}
 }
