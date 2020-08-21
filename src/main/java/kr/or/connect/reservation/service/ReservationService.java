@@ -2,14 +2,14 @@ package kr.or.connect.reservation.service;
 
 import java.util.List;
 
-import kr.or.connect.reservation.dto.ReservationRequest;
-import kr.or.connect.reservation.dto.ReservationResponse;
+import kr.or.connect.reservation.dto.ReservationRequestRs;
+import kr.or.connect.reservation.dto.ReservationResponseRs;
 
 public interface ReservationService {
-	public ReservationRequest addReservation(ReservationRequest reservation);
+	public ReservationRequestRs addReservation(ReservationRequestRs reservation);
 
-	public List<ReservationResponse> getReservation(String email);
+	public List<ReservationResponseRs> getReservation(String email);
 	
 
-	public ReservationRequest cancleReservation(Long reservationId);
+	public ReservationRequestRs cancleReservation(Long reservationId);
 }

@@ -14,18 +14,18 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import kr.or.connect.reservation.dto.Product;
+import kr.or.connect.reservation.dto.ProductRs;
 
 @Repository
 public class ProductDao {
 	private NamedParameterJdbcTemplate jdbcTemplate;
-	private RowMapper<Product> rowMapper = BeanPropertyRowMapper.newInstance(Product.class);
+	private RowMapper<ProductRs> rowMapper = BeanPropertyRowMapper.newInstance(ProductRs.class);
 
 	public ProductDao(DataSource dataSource) {
 		jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 
-	public List<Product> selectAll(Long start, Long limit) {
+	public List<ProductRs> selectAll(Long start, Long limit) {
 		Map<String, Long> paramMap = new HashMap<String, Long>();
 		paramMap.put("start", start);
 		paramMap.put("end", limit);
@@ -33,7 +33,7 @@ public class ProductDao {
 		return jdbcTemplate.query(SELECT_ALL_PRODUCT, paramMap, rowMapper);
 	}
 
-	public List<Product> selectAllAtCategory(long categoryId, long start, long limit) {
+	public List<ProductRs> selectAllAtCategory(long categoryId, long start, long limit) {
 		Map<String, Long> paramMap = new HashMap<String, Long>();
 		paramMap.put("start", start);
 		paramMap.put("end", limit);

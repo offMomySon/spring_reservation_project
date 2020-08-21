@@ -2,19 +2,20 @@ package kr.or.connect.reservation.dto;
 
 import java.util.Date;
 
-public class ProductPrice {
+public class ProductPriceRs {
 	private long productPriceId;
 	private long productId;
 	private String priceTypeName;
 	private long price;
-	private long discountRate;
+	private double discountRate;
 	private Date createDate;
 	private Date modifyDate;
 
-	public ProductPrice() {
+	public ProductPriceRs() {
 	}
 
-	public ProductPrice(long productPriceId, long productId, String priceTypeName, long price, long discountRate,
+
+	public ProductPriceRs(long productPriceId, long productId, String priceTypeName, long price, double discountRate,
 			Date createDate, Date modifyDate) {
 		super();
 		this.productPriceId = productPriceId;
@@ -25,6 +26,7 @@ public class ProductPrice {
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
 	}
+
 
 	public long getProductPriceId() {
 		return productPriceId;
@@ -59,11 +61,11 @@ public class ProductPrice {
 	}
 
 	public long getDiscountRate() {
-		return discountRate;
+		return (long)discountRate;
 	}
 
 	public void setDiscountRate(long discountRate) {
-		this.discountRate = discountRate;
+		this.discountRate = (double)discountRate;
 	}
 
 	public Date getCreateDate() {
@@ -84,7 +86,7 @@ public class ProductPrice {
 
 	@Override
 	public String toString() {
-		return "ProductPrice [productPriceId=" + productPriceId + ", productId=" + productId + ", priceTypeName="
+		return "ProductPriceRs [productPriceId=" + productPriceId + ", productId=" + productId + ", priceTypeName="
 				+ priceTypeName + ", price=" + price + ", discountRate=" + discountRate + ", createDate=" + createDate
 				+ ", modifyDate=" + modifyDate + "]";
 	}

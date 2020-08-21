@@ -13,37 +13,37 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import kr.or.connect.reservation.dto.Comment;
-import kr.or.connect.reservation.dto.CommentImage;
-import kr.or.connect.reservation.dto.DisplayInfo;
-import kr.or.connect.reservation.dto.DisplayInfoImage;
-import kr.or.connect.reservation.dto.ProductImage;
-import kr.or.connect.reservation.dto.ProductPrice;
+import kr.or.connect.reservation.dto.CommentRs;
+import kr.or.connect.reservation.dto.CommentImageRs;
+import kr.or.connect.reservation.dto.DisplayInfoRs;
+import kr.or.connect.reservation.dto.DisplayInfoImageRs;
+import kr.or.connect.reservation.dto.ProductImageRs;
+import kr.or.connect.reservation.dto.ProductPriceRs;
 
 @Repository
 public class DisplayInfoDao {
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
-	private RowMapper<DisplayInfo> displayInfoMapper = BeanPropertyRowMapper.newInstance(DisplayInfo.class);
-	private RowMapper<ProductImage> productImageMapper = BeanPropertyRowMapper.newInstance(ProductImage.class);
-	private RowMapper<DisplayInfoImage> displayInfoImagMapper = BeanPropertyRowMapper
-			.newInstance(DisplayInfoImage.class);
-	private RowMapper<ProductPrice> productPriceMapper = BeanPropertyRowMapper.newInstance(ProductPrice.class);
-	private RowMapper<Comment> commentMapper = BeanPropertyRowMapper.newInstance(Comment.class);
-	private RowMapper<CommentImage> commentImageMapper = BeanPropertyRowMapper.newInstance(CommentImage.class);
+	private RowMapper<DisplayInfoRs> displayInfoMapper = BeanPropertyRowMapper.newInstance(DisplayInfoRs.class);
+	private RowMapper<ProductImageRs> productImageMapper = BeanPropertyRowMapper.newInstance(ProductImageRs.class);
+	private RowMapper<DisplayInfoImageRs> displayInfoImagMapper = BeanPropertyRowMapper
+			.newInstance(DisplayInfoImageRs.class);
+	private RowMapper<ProductPriceRs> productPriceMapper = BeanPropertyRowMapper.newInstance(ProductPriceRs.class);
+	private RowMapper<CommentRs> commentMapper = BeanPropertyRowMapper.newInstance(CommentRs.class);
+	private RowMapper<CommentImageRs> commentImageMapper = BeanPropertyRowMapper.newInstance(CommentImageRs.class);
 
 	public DisplayInfoDao(DataSource dataSource) {
 		jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 
-	public DisplayInfo selectDisplayInfo(long displayInfoId) {
+	public DisplayInfoRs selectDisplayInfo(long displayInfoId) {
 		Map<String, Long> paramMap = new HashMap<String, Long>();
 		paramMap.put("displayInfoId", displayInfoId);
 
 		return jdbcTemplate.queryForObject(SELECT_DISPLAY_INFO, paramMap, displayInfoMapper);
 	}
 
-	public List<ProductImage> selectProductImage(long displayInfoId, long limit) {
+	public List<ProductImageRs> selectProductImage(long displayInfoId, long limit) {
 		Map<String, Long> paramMap = new HashMap<String, Long>();
 		paramMap.put("displayInfoId", displayInfoId);
 		paramMap.put("limit", limit);
@@ -51,28 +51,28 @@ public class DisplayInfoDao {
 		return jdbcTemplate.query(SELECT_PRODUCT_IMAGE, paramMap, productImageMapper);
 	}
 
-	public DisplayInfoImage selectDisplayInfoImage(long displayInfoId) {
+	public DisplayInfoImageRs selectDisplayInfoImage(long displayInfoId) {
 		Map<String, Long> paramMap = new HashMap<String, Long>();
 		paramMap.put("displayInfoId", displayInfoId);
 
 		return jdbcTemplate.queryForObject(SELECT_DISPLAY_INFO_IMAGE, paramMap, displayInfoImagMapper);
 	}
 
-	public List<ProductPrice> selectProductPrice(long displayInfoId) {
+	public List<ProductPriceRs> selectProductPrice(long displayInfoId) {
 		Map<String, Long> paramMap = new HashMap<String, Long>();
 		paramMap.put("displayInfoId", displayInfoId);
 
 		return jdbcTemplate.query(SELECT_PRODUCT_PRICE, paramMap, productPriceMapper);
 	}
 
-	public List<Comment> selectComment(long displayInfoId) {
+	public List<CommentRs> selectComment(long displayInfoId) {
 		Map<String, Long> paramMap = new HashMap<String, Long>();
 		paramMap.put("displayInfoId", displayInfoId);
 
 		return jdbcTemplate.query(SELECT_COMMENT, paramMap, commentMapper);
 	}
 
-	public List<CommentImage> selectCommentImage(long userCommnetId) {
+	public List<CommentImageRs> selectCommentImage(long userCommnetId) {
 		Map<String, Long> paramMap = new HashMap<String, Long>();
 		paramMap.put("userCommnetId", userCommnetId);
 
