@@ -2,11 +2,11 @@ package kr.or.connect.reservation.dao.test;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -31,6 +31,7 @@ public class CategoryDaoJunitTest {
 		testCategoryList.add(new CategoryRs(4, "클래식", 10));
 		testCategoryList.add(new CategoryRs(5, "연극", 13));
 
+		
 		List<CategoryRs> acturalCategoryList = categoryDao.selectAll();
 
 		for (int i = 0; i < testCategoryList.size(); i++) {
