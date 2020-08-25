@@ -6,8 +6,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -22,17 +20,20 @@ import kr.or.connect.reservation.dto.Price;
 import kr.or.connect.reservation.dto.ReservationRequestRs;
 import kr.or.connect.reservation.dto.ReservationResponseRs;
 import kr.or.connect.reservation.dto.Ticket;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 public class ReservationDao {
-	private static final Logger logger = LoggerFactory.getLogger(ReservationDao.class);
-	
+
 	private SimpleJdbcInsert reservationInfoInsert;
 	private SimpleJdbcInsert reservationInfoPriceInsert;
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
-	private RowMapper<ReservationResponseRs> rsvResponseMapper = BeanPropertyRowMapper.newInstance(ReservationResponseRs.class);
-	private RowMapper<ReservationRequestRs> rsvRequestMapper = BeanPropertyRowMapper.newInstance(ReservationRequestRs.class);
+	private RowMapper<ReservationResponseRs> rsvResponseMapper = BeanPropertyRowMapper
+			.newInstance(ReservationResponseRs.class);
+	private RowMapper<ReservationRequestRs> rsvRequestMapper = BeanPropertyRowMapper
+			.newInstance(ReservationRequestRs.class);
 	private RowMapper<Price> priceMapper = BeanPropertyRowMapper.newInstance(Price.class);
 	private RowMapper<Ticket> ticketMapper = BeanPropertyRowMapper.newInstance(Ticket.class);
 
@@ -45,7 +46,7 @@ public class ReservationDao {
 	}
 
 	public Long insertRservationInfo(ReservationRequestRs reservationRequestRs) {
-		logger.info("insert RservationInfo = {}", reservationRequestRs);
+		log.info("insert RservationInfo = {}", reservationRequestRs);
 
 		SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(reservationRequestRs);
 		return reservationInfoInsert.executeAndReturnKey(parameterSource).longValue();
@@ -57,21 +58,21 @@ public class ReservationDao {
 
 		return jdbcTemplate.queryForObject(SELECT_RSV_INFO_AT_RSVID, paramMap, rsvRequestMapper);
 	}
-	
+
 	public List<Price> selectPriceAtRsvId(Long rsvId) {
 		Map<String, Long> paramMap = new HashMap();
 		paramMap.put("rsvId", rsvId);
 
 		return jdbcTemplate.query(SELECT_PRICE_AT_RSVID, paramMap, priceMapper);
 	}
-	
+
 	public Long insertReservationInfoPrice(Price price) {
 		SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(price);
 		return reservationInfoPriceInsert.executeAndReturnKey(parameterSource).longValue();
 	}
 
 	public List<ReservationResponseRs> selectAtEmail(String email) {
-		logger.info("select Email = {}", email);
+		log.info("select Email = {}", email);
 
 		Map<String, String> paramMap = new HashMap();
 		paramMap.put("email", email);
@@ -87,7 +88,7 @@ public class ReservationDao {
 	}
 
 	public int cancleRsvAtId(Long rsvId) {
-		logger.info("cancel reservation Id = {}", rsvId);
+		log.info("cancel reservation Id = {}", rsvId);
 
 		Map<String, Long> paramMap = new HashMap();
 		paramMap.put("rsvId", rsvId);
