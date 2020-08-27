@@ -3,8 +3,6 @@ package kr.or.connect.reservation.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +18,11 @@ import kr.or.connect.reservation.repository.ProductPriceRepository;
 import kr.or.connect.reservation.repository.ReservationInfoPriceRepository;
 import kr.or.connect.reservation.repository.ReservationRepository;
 import kr.or.connect.reservation.service.ReservationService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class ReservationServiceImpl implements ReservationService {
-	private static final Logger logger = LoggerFactory.getLogger(ReservationServiceImpl.class);
 
 	@Autowired
 	private ReservationRepository rsvRep;
@@ -39,7 +38,7 @@ public class ReservationServiceImpl implements ReservationService {
 	public ReservationRequestRs addReservation(ReservationRequestRs rsvRequest) {
 		ReservationInfo reservationInfo = makeReservationInfo(rsvRequest);
 
-		logger.info("rsv = {}", reservationInfo);
+		log.info("rsv = {}", reservationInfo);
 
 		reservationInfo = rsvRep.save(reservationInfo);
 
