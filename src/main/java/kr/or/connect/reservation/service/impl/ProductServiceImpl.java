@@ -2,6 +2,8 @@ package kr.or.connect.reservation.service.impl;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductRepository productRep;
-//	private ProductDao poductDao;
 
 	@Override
 	public long getProductCountAtCategory(long categoryId) {
@@ -25,9 +26,10 @@ public class ProductServiceImpl implements ProductService {
 		return productRep.countWithCategoryId(categoryId);
 	}
 
+	@Nonnull
 	@Override
-	public List<ProductRs> getProductListAtCategory(long categoryId, long start) {
-		PageRequest pageRequest = PageRequest.of((int) (start/SELECT_COUNT_LIMIT), (int) SELECT_COUNT_LIMIT);
+	public List<ProductRs> getProductListAtCategory(long categoryId, long startPageNum) {
+		PageRequest pageRequest = PageRequest.of((int) (startPageNum/SELECT_COUNT_LIMIT), (int) SELECT_COUNT_LIMIT);
 
 		if (categoryId == 0) {
 			return productRep.selectWithTypeTH(pageRequest).getContent();

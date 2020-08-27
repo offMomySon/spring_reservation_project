@@ -2,6 +2,8 @@ package kr.or.connect.reservation.repository;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +13,6 @@ import kr.or.connect.reservation.dto.ReservationResponseRs;
 import kr.or.connect.reservation.dto.Ticket;
 import kr.or.connect.reservation.model.ReservationInfo;
 
-
 public interface ReservationRepository  extends JpaRepository<ReservationInfo, Long> {
 
 	@Modifying
@@ -20,6 +21,7 @@ public interface ReservationRepository  extends JpaRepository<ReservationInfo, L
 			+ "WHERE rsvInfo.id = ?1 ")
 	public int cancleRsvAtId(Long rsvId);
 	
+	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.ReservationRequestRs "
 			+ "( "
@@ -38,6 +40,7 @@ public interface ReservationRepository  extends JpaRepository<ReservationInfo, L
 			+ "WHERE rsvInfo.id = ?1 ")
 	public ReservationRequestRs selectAtId(Long reservationId);
 
+	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.ReservationResponseRs "
 			+ "( "
@@ -56,6 +59,7 @@ public interface ReservationRepository  extends JpaRepository<ReservationInfo, L
 			+ "WHERE rsvInfo.reservationEmail = ?1 ")
 	public List<ReservationResponseRs> selectAtEmail(String email);
 
+	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.Ticket "
 			+ "( "

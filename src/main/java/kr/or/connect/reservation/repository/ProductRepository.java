@@ -3,6 +3,8 @@ package kr.or.connect.reservation.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.annotation.Nonnull;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,6 +13,7 @@ import kr.or.connect.reservation.model.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 		
+		@Nonnull
 		@Query("SELECT "
 				+ "new kr.or.connect.reservation.dto.ProductRs "
 				+ "( "
@@ -29,6 +32,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 				+ "WHERE pi.type = 'th' ")
 		Page<ProductRs> selectWithTypeTH(Pageable pageable);
 		
+		@Nonnull
 		@Query("SELECT "
 				+ "new kr.or.connect.reservation.dto.ProductRs "
 				+ "( "

@@ -2,6 +2,8 @@ package kr.or.connect.reservation.service.impl;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,23 +23,26 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
 	@Autowired
 	private DisplayInfoRepository displayInfoRep;
 
-	
+	@Nonnull
 	@Override
 	public DisplayInfoRs getDisplayInfo(long displayInfoId) {
 		return displayInfoRep.selectDisplayInfo(displayInfoId);
 	}
 
+	@Nonnull
 	@Override
 	public List<ProductImageRs> getProductImageList(long displayInfoId) {
-		PageRequest pageRequest = PageRequest.of(0, (int) SELECT_IMAGE_COUNT_LIMIT);
+		PageRequest pageRequest = PageRequest.of(FIRST_PAGE, (int) SELECT_IMAGE_COUNT_LIMIT);
 		return displayInfoRep.selectProductImageList(displayInfoId, pageRequest).getContent();
 	}
 
+	@Nonnull
 	@Override
 	public DisplayInfoImageRs getDisplayInfoImage(long displayInfoId) {
 		return displayInfoRep.selectDisplayInfoImage(displayInfoId);
 	}
 
+	@Nonnull
 	@Override
 	public List<CommentRs> getCommentList(long displayInfoId) {
 		List<CommentRs> commentList = displayInfoRep.selectComment(displayInfoId);
@@ -64,6 +69,7 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
 		return scoreSum / scoreList.size();
 	}
 
+	@Nonnull
 	@Override
 	public List<ProductPriceRs> getProductPriceList(long displayInfoId) {
 		return displayInfoRep.selectProductPrice(displayInfoId);

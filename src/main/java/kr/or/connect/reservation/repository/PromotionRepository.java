@@ -2,6 +2,8 @@ package kr.or.connect.reservation.repository;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -10,6 +12,7 @@ import kr.or.connect.reservation.model.Promotion;
 
 public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
+	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.PromotionRs "
 			+ "( "
@@ -23,5 +26,4 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 			+ "JOIN pi.fileInfo fi "
 			+ "WHERE pi.type = 'th' ")
 	public List<PromotionRs> selectAll();
-	
 }

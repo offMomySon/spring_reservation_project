@@ -2,6 +2,8 @@ package kr.or.connect.reservation.dto;
 
 import java.util.Date;
 
+import javax.annotation.Nonnull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ReservationResponseRs {
@@ -131,7 +133,7 @@ public class ReservationResponseRs {
 		return displayInfoRs;
 	}
 
-	public void setDisplayInfo(DisplayInfoRs displayInfoRs) {
+	public void setDisplayInfo(@Nonnull DisplayInfoRs displayInfoRs) {
 		this.displayInfoRs = displayInfoRs;
 	}
 

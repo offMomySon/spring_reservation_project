@@ -3,6 +3,9 @@ package kr.or.connect.reservation.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,12 +36,14 @@ public class ReservationServiceImpl implements ReservationService {
 	@Autowired
 	private ProductPriceRepository pdPriceRep;
 
+	@Nonnull
 	@Override
 	@Transactional(readOnly = false)
-	public ReservationRequestRs addReservation(ReservationRequestRs rsvRequest) {
+	public ReservationRequestRs addReservation(@Nonnull ReservationRequestRs rsvRequest) {
+		setNewDate(rsvRequest);
 		ReservationInfo reservationInfo = makeReservationInfo(rsvRequest);
 
-		log.info("rsv = {}", reservationInfo);
+		log.debug("rsv = {}", reservationInfo);
 
 		reservationInfo = rsvRep.save(reservationInfo);
 
@@ -47,20 +52,23 @@ public class ReservationServiceImpl implements ReservationService {
 		return rsvRequest;
 	}
 
-	public ReservationInfo makeReservationInfo(ReservationRequestRs rsvRequest) {
+	public void setNewDate(@Nonnull ReservationRequestRs rsvRequest) {
 		Date date = new Date();
 		rsvRequest.setReservationDate(date);
 		rsvRequest.setCreateDate(date);
 		rsvRequest.setModifyDate(date);
 		rsvRequest.setCancelFlag(false);
+	}
 
+	public ReservationInfo makeReservationInfo(ReservationRequestRs rsvRequest) {
 		return new ReservationInfo(null, rsvRequest.getProductId(), rsvRequest.getDisplayInfoId(),
 				rsvRequest.getReservationName(), rsvRequest.getReservationTel(), rsvRequest.getReservationEmail(),
 				rsvRequest.getReservationDate(), false, rsvRequest.getCreateDate(), rsvRequest.getModifyDate());
 	}
 
+	@Nonnull
 	@Override
-	public List<ReservationResponseRs> getReservation(String email) {
+	public List<ReservationResponseRs> getReservation(@Nonnull String email) {
 
 		List<ReservationResponseRs> responseList = rsvRep.selectAtEmail(email);
 
@@ -72,6 +80,7 @@ public class ReservationServiceImpl implements ReservationService {
 		return responseList;
 	}
 
+	@Nonnull
 	@Override
 	@Transactional(readOnly = false)
 	public ReservationRequestRs cancleReservation(Long reservationId) {
@@ -80,14 +89,7 @@ public class ReservationServiceImpl implements ReservationService {
 		}
 
 		ReservationRequestRs rsvRequest = rsvRep.selectAtId(reservationId);
-		if (rsvRequest == null) {
-			return null;
-		}
-
 		rsvRequest.setPrices(rsvPriceRep.selectPriceAtRsvId(reservationId));
-		if (rsvRequest.getPrices() == null) {
-			return null;
-		}
 
 		return rsvRequest;
 	}
@@ -103,7 +105,7 @@ public class ReservationServiceImpl implements ReservationService {
 		return totalPrice;
 	}
 
-	private void insertPriceList(Long rsvId, List<Price> priceList) {
+	private void insertPriceList(Long rsvId, @Nonnull List<Price> priceList) {
 		priceList.removeIf((Price price) -> isPriceCountInvalid(price));
 
 		for (Price price : priceList) {
@@ -114,12 +116,13 @@ public class ReservationServiceImpl implements ReservationService {
 		}
 	}
 
+	@Nonnull
 	public ReservationInfoPrice makeReservationInfoPrice(Long rsvId, Price price) {
 		return new ReservationInfoPrice(null, rsvId, price.getCount(),
 				pdPriceRep.findById(price.getProductPriceId()).get());
 	}
 
-	public Boolean isPriceCountInvalid(Price price) {
+	public Boolean isPriceCountInvalid(@ParametersAreNonnullByDefault Price price) {
 		if (price.getCount() > 0) {
 			return false;
 		}
