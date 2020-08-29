@@ -14,18 +14,24 @@ import kr.or.connect.reservation.dto.DisplayInfoRs;
 import kr.or.connect.reservation.dto.DisplayInfoImageRs;
 import kr.or.connect.reservation.dto.ProductImageRs;
 import kr.or.connect.reservation.dto.ProductPriceRs;
+import kr.or.connect.reservation.exception.DisplayInfoIdNotExistExceiption;
 import kr.or.connect.reservation.repository.DisplayInfoRepository;
 import kr.or.connect.reservation.service.DisplayInfoService;
 
 @Service
 public class DisplayInfoServiceImpl implements DisplayInfoService {
-	
+
 	@Autowired
 	private DisplayInfoRepository displayInfoRep;
 
 	@Nonnull
 	@Override
 	public DisplayInfoRs getDisplayInfo(long displayInfoId) {
+		DisplayInfoRs displayInfoRs = displayInfoRep.selectDisplayInfo(displayInfoId);
+		if (displayInfoRs == null) {
+			throw new DisplayInfoIdNotExistExceiption(displayInfoId);
+		}
+
 		return displayInfoRep.selectDisplayInfo(displayInfoId);
 	}
 
@@ -49,12 +55,14 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
 
 		for (CommentRs commentRs : commentList) {
 			List<CommentImageRs> commentImageRs = displayInfoRep.selectCommentImageList(commentRs.getCommentId());
+
 			commentRs.setCommentImages(commentImageRs);
 		}
 
 		return commentList;
 	}
 
+	@Nonnull
 	@Override
 	public double getAverageScore(long displayInfoId) {
 		double scoreSum = 0;

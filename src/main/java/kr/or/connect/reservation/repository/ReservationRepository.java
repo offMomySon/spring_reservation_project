@@ -21,7 +21,6 @@ public interface ReservationRepository  extends JpaRepository<ReservationInfo, L
 			+ "WHERE rsvInfo.id = ?1 ")
 	public int cancleRsvAtId(Long rsvId);
 	
-	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.ReservationRequestRs "
 			+ "( "

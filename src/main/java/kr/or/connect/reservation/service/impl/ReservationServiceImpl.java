@@ -14,6 +14,8 @@ import kr.or.connect.reservation.dto.Price;
 import kr.or.connect.reservation.dto.ReservationRequestRs;
 import kr.or.connect.reservation.dto.ReservationResponseRs;
 import kr.or.connect.reservation.dto.Ticket;
+import kr.or.connect.reservation.exception.RsvIdNotExistExceiption;
+import kr.or.connect.reservation.exception.RsvRqtPricesNotExistExceiption;
 import kr.or.connect.reservation.model.ReservationInfo;
 import kr.or.connect.reservation.model.ReservationInfoPrice;
 import kr.or.connect.reservation.repository.DisplayInfoRepository;
@@ -40,6 +42,10 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	@Transactional(readOnly = false)
 	public ReservationRequestRs addReservation(@Nonnull ReservationRequestRs rsvRequest) {
+		if(!isReservationRequestRsValid(rsvRequest)) {
+			throw new RsvRqtPricesNotExistExceiption(rsvRequest);
+		}
+		
 		setNewDate(rsvRequest);
 		ReservationInfo reservationInfo = makeReservationInfo(rsvRequest);
 
@@ -52,6 +58,16 @@ public class ReservationServiceImpl implements ReservationService {
 		return rsvRequest;
 	}
 
+	public boolean isReservationRequestRsValid(ReservationRequestRs rsvRequest) {
+		List<Price> priceList = rsvRequest.getPrices();
+		priceList.removeIf((Price price) -> isPriceCountInvalid(price));
+		
+		if(priceList.size() <= 0) {
+			return false;
+		}
+		return true;
+	}
+	
 	public void setNewDate(@Nonnull ReservationRequestRs rsvRequest) {
 		Date date = new Date();
 		rsvRequest.setReservationDate(date);
@@ -85,7 +101,7 @@ public class ReservationServiceImpl implements ReservationService {
 	@Transactional(readOnly = false)
 	public ReservationRequestRs cancleReservation(Long reservationId) {
 		if (rsvRep.cancleRsvAtId(reservationId) == 0) {
-			return null;
+			throw new RsvIdNotExistExceiption(reservationId);
 		}
 
 		ReservationRequestRs rsvRequest = rsvRep.selectAtId(reservationId);
@@ -93,7 +109,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 		return rsvRequest;
 	}
-
+	
 	private long calTotalPrice(Long rsvInfoId) {
 		List<Ticket> ticketList = rsvRep.selectTicketAtRsvInfoId(rsvInfoId);
 		long totalPrice = 0;
@@ -106,8 +122,6 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	private void insertPriceList(Long rsvId, @Nonnull List<Price> priceList) {
-		priceList.removeIf((Price price) -> isPriceCountInvalid(price));
-
 		for (Price price : priceList) {
 			ReservationInfoPrice reservationInfoPrice = makeReservationInfoPrice(rsvId, price);
 			reservationInfoPrice = rsvPriceRep.save(reservationInfoPrice);

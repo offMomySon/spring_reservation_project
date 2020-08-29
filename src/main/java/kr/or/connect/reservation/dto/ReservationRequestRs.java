@@ -114,7 +114,7 @@ public class ReservationRequestRs {
 
 	@JsonSetter("reservationYearMonthDay")
 	@JsonDeserialize(using = RsvDateDeserializer.class)
-	public void setReservationDate(Date reservationDate) {
+	public void setReservationDate(Date reservationDate){
 		this.reservationDate = reservationDate;
 	}
 

@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,9 +34,10 @@ public class ReservationApiController {
 	private ReservationService rsvService;
 
 	@PostMapping
-	public ReservationRequestRs postBook(@RequestBody ReservationRequestRs reservation) {
+	public ResponseEntity<ReservationRequestRs> postBook(@RequestBody ReservationRequestRs reservation) {
 		log.debug("POST. ReservationRequestRs = {}.", reservation);
-		return rsvService.addReservation(reservation);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(rsvService.addReservation(reservation));
 	}
 
 	@GetMapping
@@ -52,11 +55,10 @@ public class ReservationApiController {
 	}
 
 	@PutMapping(path = "/{reservationId}")
-	public ReservationRequestRs cancleBook(@PathVariable Long reservationId) {
+	public ResponseEntity<ReservationRequestRs> cancleBook(@PathVariable Long reservationId) {
 		log.debug("PUT. reservationId = {}.", reservationId);
-		ReservationRequestRs result = rsvService.cancleReservation(reservationId);
 
-		return result;
+		return ResponseEntity.status(HttpStatus.CREATED).body(rsvService.cancleReservation(reservationId));
 	}
 
 	public void storeEmailInfoIfNeeded(@ParametersAreNonnullByDefault List<ReservationResponseRs> responseList,
