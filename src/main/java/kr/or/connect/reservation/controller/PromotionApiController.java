@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.connect.reservation.service.PromotionService;
+import lombok.NonNull;
 
 @RestController
 @RequestMapping(path = "/api/promotions")
 public class PromotionApiController {
 	@Autowired
 	private PromotionService promotionService;
-
+	
 	@GetMapping
 	public Map<String, Object> promotionItems() {
 		Map<String, Object> itemMap = new HashMap<>();

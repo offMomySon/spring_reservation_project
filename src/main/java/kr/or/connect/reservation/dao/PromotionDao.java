@@ -13,18 +13,18 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import kr.or.connect.reservation.dto.Promotion;
+import kr.or.connect.reservation.dto.PromotionRs;
 
 @Repository
 public class PromotionDao {
 	private NamedParameterJdbcTemplate jdbcTemplate;
-	private RowMapper<Promotion> rowMapper = BeanPropertyRowMapper.newInstance(Promotion.class);
+	private RowMapper<PromotionRs> rowMapper = BeanPropertyRowMapper.newInstance(PromotionRs.class);
 
 	public PromotionDao(DataSource dataSource) {
 		jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 
-	public List<Promotion> selectAll() {
+	public List<PromotionRs> selectAll() {
 		try {
 			return jdbcTemplate.query(SELECT_ALL, Collections.emptyMap(), rowMapper);
 		} catch (EmptyResultDataAccessException e) {

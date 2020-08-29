@@ -20,7 +20,7 @@ public class CategoryApiController {
 	public Map<String, Object> getCategoryItems() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("items", categoryService.getCategoryList());
-
+		
 		return map;
 	}
 }

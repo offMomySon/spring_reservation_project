@@ -2,56 +2,72 @@ package kr.or.connect.reservation.service.impl;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import kr.or.connect.reservation.dao.DisplayInfoDao;
-import kr.or.connect.reservation.dto.Comment;
-import kr.or.connect.reservation.dto.CommentImage;
-import kr.or.connect.reservation.dto.DisplayInfo;
-import kr.or.connect.reservation.dto.DisplayInfoImage;
-import kr.or.connect.reservation.dto.ProductImage;
-import kr.or.connect.reservation.dto.ProductPrice;
+import kr.or.connect.reservation.dto.CommentRs;
+import kr.or.connect.reservation.dto.CommentImageRs;
+import kr.or.connect.reservation.dto.DisplayInfoRs;
+import kr.or.connect.reservation.dto.DisplayInfoImageRs;
+import kr.or.connect.reservation.dto.ProductImageRs;
+import kr.or.connect.reservation.dto.ProductPriceRs;
+import kr.or.connect.reservation.exception.DisplayInfoIdNotExistExceiption;
+import kr.or.connect.reservation.repository.DisplayInfoRepository;
 import kr.or.connect.reservation.service.DisplayInfoService;
 
 @Service
 public class DisplayInfoServiceImpl implements DisplayInfoService {
 
 	@Autowired
-	private DisplayInfoDao displayInfoDao;
+	private DisplayInfoRepository displayInfoRep;
 
+	@Nonnull
 	@Override
-	public DisplayInfo getDisplayInfo(long displayInfoId) {
-		return displayInfoDao.selectDisplayInfo(displayInfoId);
+	public DisplayInfoRs getDisplayInfo(long displayInfoId) {
+		DisplayInfoRs displayInfoRs = displayInfoRep.selectDisplayInfo(displayInfoId);
+		if (displayInfoRs == null) {
+			throw new DisplayInfoIdNotExistExceiption(displayInfoId);
+		}
+
+		return displayInfoRep.selectDisplayInfo(displayInfoId);
 	}
 
+	@Nonnull
 	@Override
-	public List<ProductImage> getProductImageList(long displayInfoId) {
-		return displayInfoDao.selectProductImage(displayInfoId, DisplayInfoService.SELECT_IMAGE_COUNT_LIMIT);
+	public List<ProductImageRs> getProductImageList(long displayInfoId) {
+		PageRequest pageRequest = PageRequest.of(FIRST_PAGE, (int) SELECT_IMAGE_COUNT_LIMIT);
+		return displayInfoRep.selectProductImageList(displayInfoId, pageRequest).getContent();
 	}
 
+	@Nonnull
 	@Override
-	public DisplayInfoImage getDisplayInfoImage(long displayInfoId) {
-		return displayInfoDao.selectDisplayInfoImage(displayInfoId);
+	public DisplayInfoImageRs getDisplayInfoImage(long displayInfoId) {
+		return displayInfoRep.selectDisplayInfoImage(displayInfoId);
 	}
 
+	@Nonnull
 	@Override
-	public List<Comment> getCommentList(long displayInfoId) {
-		List<Comment> commentList = displayInfoDao.selectComment(displayInfoId);
+	public List<CommentRs> getCommentList(long displayInfoId) {
+		List<CommentRs> commentList = displayInfoRep.selectComment(displayInfoId);
 
-		for (Comment comment : commentList) {
-			List<CommentImage> commentImage = displayInfoDao.selectCommentImage(comment.getCommentId());
-			comment.setCommentImages(commentImage);
+		for (CommentRs commentRs : commentList) {
+			List<CommentImageRs> commentImageRs = displayInfoRep.selectCommentImageList(commentRs.getCommentId());
+
+			commentRs.setCommentImages(commentImageRs);
 		}
 
 		return commentList;
 	}
 
+	@Nonnull
 	@Override
 	public double getAverageScore(long displayInfoId) {
 		double scoreSum = 0;
 
-		List<Double> scoreList = displayInfoDao.selectScore(displayInfoId);
+		List<Double> scoreList = displayInfoRep.selectScore(displayInfoId);
 		for (Double score : scoreList) {
 			scoreSum += score;
 		}
@@ -61,9 +77,10 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
 		return scoreSum / scoreList.size();
 	}
 
+	@Nonnull
 	@Override
-	public List<ProductPrice> getProductPriceList(long displayInfoId) {
-		return displayInfoDao.selectProductPrice(displayInfoId);
+	public List<ProductPriceRs> getProductPriceList(long displayInfoId) {
+		return displayInfoRep.selectProductPrice(displayInfoId);
 	}
 
 }

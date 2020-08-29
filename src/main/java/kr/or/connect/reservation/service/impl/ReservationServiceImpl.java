@@ -3,85 +3,115 @@ package kr.or.connect.reservation.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.or.connect.reservation.controller.ReservationApiController;
-import kr.or.connect.reservation.dao.DisplayInfoDao;
-import kr.or.connect.reservation.dao.ReservationDao;
 import kr.or.connect.reservation.dto.Price;
-import kr.or.connect.reservation.dto.ReservationRequest;
-import kr.or.connect.reservation.dto.ReservationResponse;
+import kr.or.connect.reservation.dto.ReservationRequestRs;
+import kr.or.connect.reservation.dto.ReservationResponseRs;
 import kr.or.connect.reservation.dto.Ticket;
+import kr.or.connect.reservation.exception.RsvIdNotExistExceiption;
+import kr.or.connect.reservation.exception.RsvRqtPricesNotExistExceiption;
+import kr.or.connect.reservation.model.ReservationInfo;
+import kr.or.connect.reservation.model.ReservationInfoPrice;
+import kr.or.connect.reservation.repository.DisplayInfoRepository;
+import kr.or.connect.reservation.repository.ProductPriceRepository;
+import kr.or.connect.reservation.repository.ReservationInfoPriceRepository;
+import kr.or.connect.reservation.repository.ReservationRepository;
 import kr.or.connect.reservation.service.ReservationService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class ReservationServiceImpl implements ReservationService {
-	private static final Logger logger = LoggerFactory.getLogger(ReservationServiceImpl.class);
-	
-	@Autowired
-	private ReservationDao rsvDao;
-	@Autowired
-	private DisplayInfoDao displayInfoDao;
 
+	@Autowired
+	private ReservationRepository rsvRep;
+	@Autowired
+	private DisplayInfoRepository displayInfoRep;
+	@Autowired
+	private ReservationInfoPriceRepository rsvPriceRep;
+	@Autowired
+	private ProductPriceRepository pdPriceRep;
+
+	@Nonnull
 	@Override
 	@Transactional(readOnly = false)
-	public ReservationRequest addReservation(ReservationRequest reservationRequest) {
-		Date date = new Date();
-		reservationRequest.setCreateDate(date);
-		reservationRequest.setModifyDate(date);
-		reservationRequest.setCancelFlag(false);
-		logger.info("Fill reservationReqst's blank value");
+	public ReservationRequestRs addReservation(@Nonnull ReservationRequestRs rsvRequest) {
+		if(!isReservationRequestRsValid(rsvRequest)) {
+			throw new RsvRqtPricesNotExistExceiption(rsvRequest);
+		}
 		
-		Long rsvId = rsvDao.insertRservationInfo(reservationRequest);
-		reservationRequest.setReservationInfoId(rsvId);
+		setNewDate(rsvRequest);
+		ReservationInfo reservationInfo = makeReservationInfo(rsvRequest);
 
-		addPriceList(rsvId, reservationRequest.getPrices());
+		log.debug("rsv = {}", reservationInfo);
 
-		return reservationRequest;
-	}
+		reservationInfo = rsvRep.save(reservationInfo);
 
-	@Override
-	public List<ReservationResponse> getReservation(String email) {
-
-		List<ReservationResponse> responseList = rsvDao.selectAtEmail(email);
-
-		for (ReservationResponse rsvResponse : responseList) {
-			rsvResponse.setDisplayInfo(displayInfoDao.selectDisplayInfo(rsvResponse.getDisplayInfoId()));
-			rsvResponse.setTotalPrice(calTotalPrice(rsvResponse.getReservationInfoId()));
-		}
-		logger.info("success to set, displayInfo, total price to each Reservation Info");
-
-		return responseList;
-	}
-
-	@Override
-	@Transactional(readOnly = false)
-	public ReservationRequest cancleReservation(Long reservationId) {
-		ReservationRequest rsvRequest;
-
-		if (rsvDao.cancleRsvAtId(reservationId) == 0) {
-			return null;
-		}
-
-		rsvRequest = rsvDao.selectRsvInfoAtId(reservationId);
-		if (rsvRequest == null) {
-			return null;
-		}
-
-		rsvRequest.setPrices(rsvDao.selectPriceAtRsvId(reservationId));
-		if (rsvRequest.getPrices() == null) {
-			return null;
-		}
+		insertPriceList(reservationInfo.getId(), rsvRequest.getPrices());
 
 		return rsvRequest;
 	}
 
+	public boolean isReservationRequestRsValid(ReservationRequestRs rsvRequest) {
+		List<Price> priceList = rsvRequest.getPrices();
+		priceList.removeIf((Price price) -> isPriceCountInvalid(price));
+		
+		if(priceList.size() <= 0) {
+			return false;
+		}
+		return true;
+	}
+	
+	public void setNewDate(@Nonnull ReservationRequestRs rsvRequest) {
+		Date date = new Date();
+		rsvRequest.setReservationDate(date);
+		rsvRequest.setCreateDate(date);
+		rsvRequest.setModifyDate(date);
+		rsvRequest.setCancelFlag(false);
+	}
+
+	public ReservationInfo makeReservationInfo(ReservationRequestRs rsvRequest) {
+		return new ReservationInfo(null, rsvRequest.getProductId(), rsvRequest.getDisplayInfoId(),
+				rsvRequest.getReservationName(), rsvRequest.getReservationTel(), rsvRequest.getReservationEmail(),
+				rsvRequest.getReservationDate(), false, rsvRequest.getCreateDate(), rsvRequest.getModifyDate());
+	}
+
+	@Nonnull
+	@Override
+	public List<ReservationResponseRs> getReservation(@Nonnull String email) {
+
+		List<ReservationResponseRs> responseList = rsvRep.selectAtEmail(email);
+
+		for (ReservationResponseRs rsvResponse : responseList) {
+			rsvResponse.setDisplayInfo(displayInfoRep.selectDisplayInfo(rsvResponse.getDisplayInfoId()));
+			rsvResponse.setTotalPrice(calTotalPrice(rsvResponse.getReservationInfoId()));
+		}
+
+		return responseList;
+	}
+
+	@Nonnull
+	@Override
+	@Transactional(readOnly = false)
+	public ReservationRequestRs cancleReservation(Long reservationId) {
+		if (rsvRep.cancleRsvAtId(reservationId) == 0) {
+			throw new RsvIdNotExistExceiption(reservationId);
+		}
+
+		ReservationRequestRs rsvRequest = rsvRep.selectAtId(reservationId);
+		rsvRequest.setPrices(rsvPriceRep.selectPriceAtRsvId(reservationId));
+
+		return rsvRequest;
+	}
+	
 	private long calTotalPrice(Long rsvInfoId) {
-		List<Ticket> ticketList = rsvDao.selectTicketAtRsvInfoId(rsvInfoId);
+		List<Ticket> ticketList = rsvRep.selectTicketAtRsvInfoId(rsvInfoId);
 		long totalPrice = 0;
 
 		for (Ticket ticket : ticketList) {
@@ -91,17 +121,22 @@ public class ReservationServiceImpl implements ReservationService {
 		return totalPrice;
 	}
 
-	private void addPriceList(Long rsvId, List<Price> priceList) {
-		priceList.removeIf((Price price) -> isPriceCountInvalid(price));
-
+	private void insertPriceList(Long rsvId, @Nonnull List<Price> priceList) {
 		for (Price price : priceList) {
-			price.setReservationInfoId(rsvId);
-			Long rsvPriceId = rsvDao.insertReservationInfoPrice(price);
-			price.setReservationInfoPriceId(rsvPriceId);
+			ReservationInfoPrice reservationInfoPrice = makeReservationInfoPrice(rsvId, price);
+			reservationInfoPrice = rsvPriceRep.save(reservationInfoPrice);
+
+			price.setReservationInfoPriceId(reservationInfoPrice.getId());
 		}
 	}
 
-	public Boolean isPriceCountInvalid(Price price) {
+	@Nonnull
+	public ReservationInfoPrice makeReservationInfoPrice(Long rsvId, Price price) {
+		return new ReservationInfoPrice(null, rsvId, price.getCount(),
+				pdPriceRep.findById(price.getProductPriceId()).get());
+	}
+
+	public Boolean isPriceCountInvalid(@ParametersAreNonnullByDefault Price price) {
 		if (price.getCount() > 0) {
 			return false;
 		}
