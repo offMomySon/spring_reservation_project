@@ -8,9 +8,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @Import({ PersistenceJPAConfig.class })
-@ComponentScan(basePackages = { "kr.or.connect.reservation.dao", "kr.or.connect.reservation.service" })
+@ComponentScan(basePackages = { "kr.or.connect.reservation.dao", "kr.or.connect.reservation.service", "kr.or.connect.reservation.exception" })
 @EntityScan("kr.or.connect.reservation.model")
-@EnableJpaRepositories("kr.or.connect.reservation.repository") 
+@EnableJpaRepositories("kr.or.connect.reservation.repository")
+
 public class ApplicationConfig {
 
 }
