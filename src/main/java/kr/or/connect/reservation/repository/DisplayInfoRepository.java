@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,6 +20,7 @@ import kr.or.connect.reservation.model.DisplayInfo;
 
 public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> {
 
+	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.ProductPriceRs ( "
 			+ "pp.id, "
@@ -35,6 +38,7 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 			+ "ORDER BY pp.id DESC")
 	List<ProductPriceRs> selectProductPrice(long displayInfoId);
 
+	@Nonnull
 	@Query("SELECT "
 			+ "ruc.score "
 			+ "FROM Product pd "
@@ -43,6 +47,7 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 			+ "WHERE di.id = ?1")
 	List<Double> selectScore(long displayInfoId);
 
+	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.CommentImageRs ( "
 			+ "ruci.id, "
@@ -63,6 +68,7 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 			+ "WHERE ruc.id = ?1")
 	List<CommentImageRs> selectCommentImageList(long userCommentId);
 	
+	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.CommentRs "
 			+ "( "
@@ -86,6 +92,7 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 			+ "ORDER BY ruc.id DESC")
 	List<CommentRs> selectComment(long displayInfoId);
 
+	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.DisplayInfoImageRs "
 			+ "( "
@@ -105,6 +112,7 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 			+ "Where di.id = ?1")
 	DisplayInfoImageRs selectDisplayInfoImage(long displayInfoId);
 
+	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.ProductImageRs "
 			+ "( "
@@ -126,30 +134,31 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 			+ "Where type in ('ma', 'et') AND di.id = ?1")
 	Page<ProductImageRs> selectProductImageList(long displayInfoId, Pageable pageable);
 		
-		@Query("SELECT "
-				+ "new kr.or.connect.reservation.dto.DisplayInfoRs "
-				+ "( "
-				+ "pr.id, "
-				+ "ca.id, "
-				+ "di.id, "
-				+ "ca.name, "
-				+ "pr.description, "
-				+ "pr.content, "
-				+ "pr.event, "
-				+ "di.placeName, "
-				+ "di.placeLot, "
-				+ "di.placeStreet, "
-				+ "di.tel, "
-				+ "di.homepage, "
-				+ "di.email, "
-				+ "di.createDate, "
-				+ "di.modifyDate, "
-				+ "di.openingHours "
-				+ ") "
-				+ "FROM Product pr "
-				+ "JOIN pr.displayInfos di "
-				+ "JOIN pr.category ca "
-				+ "Where di.id = ?1")
-		DisplayInfoRs selectDisplayInfo(long displayInfoId);
+	@Nonnull
+	@Query("SELECT "
+			+ "new kr.or.connect.reservation.dto.DisplayInfoRs "
+			+ "( "
+			+ "pr.id, "
+			+ "ca.id, "
+			+ "di.id, "
+			+ "ca.name, "
+			+ "pr.description, "
+			+ "pr.content, "
+			+ "pr.event, "
+			+ "di.placeName, "
+			+ "di.placeLot, "
+			+ "di.placeStreet, "
+			+ "di.tel, "
+			+ "di.homepage, "
+			+ "di.email, "
+			+ "di.createDate, "
+			+ "di.modifyDate, "
+			+ "di.openingHours "
+			+ ") "
+			+ "FROM Product pr "
+			+ "JOIN pr.displayInfos di "
+			+ "JOIN pr.category ca "
+			+ "Where di.id = ?1")
+	DisplayInfoRs selectDisplayInfo(long displayInfoId);
 
 }

@@ -10,7 +10,8 @@ import kr.or.connect.reservation.dto.ProductPriceRs;
 
 public interface DisplayInfoService {
 	public static final long SELECT_IMAGE_COUNT_LIMIT = 2;
-
+	public static final int FIRST_PAGE = 0;
+	
 	public DisplayInfoRs getDisplayInfo(long displayInfoId);
 
 	public List<ProductImageRs> getProductImageList(long displayInfoId);

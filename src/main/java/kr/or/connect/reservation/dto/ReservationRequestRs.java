@@ -3,6 +3,8 @@ package kr.or.connect.reservation.dto;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -152,7 +154,7 @@ public class ReservationRequestRs {
 		return prices;
 	}
 
-	public void setPrices(List<Price> prices) {
+	public void setPrices(@Nonnull List<Price> prices) {
 		this.prices = prices;
 	}
 
