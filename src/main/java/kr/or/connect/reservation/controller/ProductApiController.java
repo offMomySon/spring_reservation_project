@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import kr.or.connect.reservation.dto.ProductRs;
+import kr.or.connect.reservation.exception.CategoryIdNotExistExceiption;
 import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ProductService;
 
@@ -31,19 +32,11 @@ public class ProductApiController {
 		long totalCount;
 		List<ProductRs> items;
 		
-		try {
-			totalCount = productService.getProductCountAtCategory(categoryId);
-			items = productService.getProductListAtCategory(categoryId, start);
-		}
-		catch(NullPointerException nullPointerException) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR", nullPointerException);
-		}
-		catch(Exception e) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error", e);
-		}
+		totalCount = productService.getProductCountAtCategory(categoryId);
+		items = productService.getProductListAtCategory(categoryId, start);
 		
 		if(totalCount == 0 || items.size() == 0) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "that category doesn't have any Product List", null);
+			throw new CategoryIdNotExistExceiption(categoryId);
 		}
 		
 		Map<String, Object> map = new HashMap<>();

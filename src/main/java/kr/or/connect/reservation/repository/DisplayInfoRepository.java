@@ -20,7 +20,6 @@ import kr.or.connect.reservation.model.DisplayInfo;
 
 public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> {
 
-	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.ProductPriceRs ( "
 			+ "pp.id, "
@@ -38,7 +37,6 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 			+ "ORDER BY pp.id DESC")
 	List<ProductPriceRs> selectProductPrice(long displayInfoId);
 
-	@Nonnull
 	@Query("SELECT "
 			+ "ruc.score "
 			+ "FROM Product pd "
@@ -68,7 +66,6 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 			+ "WHERE ruc.id = ?1")
 	List<CommentImageRs> selectCommentImageList(long userCommentId);
 	
-	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.CommentRs "
 			+ "( "
@@ -92,7 +89,6 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 			+ "ORDER BY ruc.id DESC")
 	List<CommentRs> selectComment(long displayInfoId);
 
-	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.DisplayInfoImageRs "
 			+ "( "
@@ -112,7 +108,6 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 			+ "Where di.id = ?1")
 	DisplayInfoImageRs selectDisplayInfoImage(long displayInfoId);
 
-	@Nonnull
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.ProductImageRs "
 			+ "( "
@@ -133,8 +128,7 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 			+ "JOIN pi.fileInfo fi "
 			+ "Where type in ('ma', 'et') AND di.id = ?1")
 	Page<ProductImageRs> selectProductImageList(long displayInfoId, Pageable pageable);
-		
-	@Nonnull
+
 	@Query("SELECT "
 			+ "new kr.or.connect.reservation.dto.DisplayInfoRs "
 			+ "( "
