@@ -42,10 +42,6 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	@Transactional(readOnly = false)
 	public ReservationRequestRs addReservation(@Nonnull ReservationRequestRs rsvRequest) {
-		if(!isReservationRequestRsValid(rsvRequest)) {
-			throw new RsvRqtPricesNotExistExceiption(rsvRequest);
-		}
-		
 		setNewDate(rsvRequest);
 		ReservationInfo reservationInfo = makeReservationInfo(rsvRequest);
 
@@ -58,16 +54,6 @@ public class ReservationServiceImpl implements ReservationService {
 		return rsvRequest;
 	}
 
-	public boolean isReservationRequestRsValid(ReservationRequestRs rsvRequest) {
-		List<Price> priceList = rsvRequest.getPrices();
-		priceList.removeIf((Price price) -> isPriceCountInvalid(price));
-		
-		if(priceList.size() <= 0) {
-			return false;
-		}
-		return true;
-	}
-	
 	public void setNewDate(@Nonnull ReservationRequestRs rsvRequest) {
 		Date date = new Date();
 		rsvRequest.setReservationDate(date);
@@ -101,7 +87,7 @@ public class ReservationServiceImpl implements ReservationService {
 	@Transactional(readOnly = false)
 	public ReservationRequestRs cancleReservation(Long reservationId) {
 		if (rsvRep.cancleRsvAtId(reservationId) == 0) {
-			throw new RsvIdNotExistExceiption(reservationId);
+			return null;
 		}
 
 		ReservationRequestRs rsvRequest = rsvRep.selectAtId(reservationId);
@@ -109,7 +95,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 		return rsvRequest;
 	}
-	
+
 	private long calTotalPrice(Long rsvInfoId) {
 		List<Ticket> ticketList = rsvRep.selectTicketAtRsvInfoId(rsvInfoId);
 		long totalPrice = 0;
@@ -134,12 +120,5 @@ public class ReservationServiceImpl implements ReservationService {
 	public ReservationInfoPrice makeReservationInfoPrice(Long rsvId, Price price) {
 		return new ReservationInfoPrice(null, rsvId, price.getCount(),
 				pdPriceRep.findById(price.getProductPriceId()).get());
-	}
-
-	public Boolean isPriceCountInvalid(@ParametersAreNonnullByDefault Price price) {
-		if (price.getCount() > 0) {
-			return false;
-		}
-		return true;
 	}
 }
