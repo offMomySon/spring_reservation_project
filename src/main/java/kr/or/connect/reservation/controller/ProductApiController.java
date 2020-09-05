@@ -1,5 +1,6 @@
 package kr.or.connect.reservation.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ import kr.or.connect.reservation.dto.ProductRs;
 
 import kr.or.connect.reservation.exception.CategoryIdNotExistExceiption;
 import kr.or.connect.reservation.exception.DisplayInfoIdNotExistExceiption;
-
+import kr.or.connect.reservation.model.Product;
 import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ProductService;
 
@@ -34,15 +35,15 @@ public class ProductApiController {
 	public Map<String, Object> getProduct(@RequestParam(defaultValue = "0") long categoryId,
 			@RequestParam(defaultValue = "0") long start) {
 		long totalCount = productService.getProductCountAtCategory(categoryId);
-		List<ProductRs> items = productService.getProductListAtCategory(categoryId, start);
-
-		if (isNotCategoryIdValid(totalCount, items.size())) {
+		List<ProductRs> productRsList = productService.getProductListAtCategory(categoryId, start);
+		
+		if (isNotCategoryIdValid(totalCount, productRsList.size())) {
 			throw new CategoryIdNotExistExceiption(categoryId);
 		}
-
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("totalCount", totalCount);
-		map.put("items", items);
+		map.put("items", productRsList);
 		return map;
 	}
 

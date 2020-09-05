@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,13 +24,13 @@ public class ReservationInfo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private long id;
 
 	@Column(name = "product_id")
-	private Long productId;
+	private long productId;
 
 	@Column(name = "display_info_id")
-	private Long displayInfoId;
+	private long displayInfoId;
 
 	@Column(name = "reservation_name")
 	private String reservationName;
@@ -58,7 +59,7 @@ public class ReservationInfo {
 	public ReservationInfo() {
 	}
 
-	public ReservationInfo(Long id, Long productId, Long displayInfoId, String reservationName, String reservationTel,
+	public ReservationInfo(long id, long productId, long displayInfoId, String reservationName, String reservationTel,
 			String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate, Date modifyDate) {
 		super();
 		this.id = id;
@@ -75,6 +76,31 @@ public class ReservationInfo {
 		this.userComments = null;
 	}
 
+	public long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(long productId) {
+		this.productId = productId;
+	}
+
+	public long getDisplayInfoId() {
+		return displayInfoId;
+	}
+
+	public void setDisplayInfoId(long displayInfoId) {
+		this.displayInfoId = displayInfoId;
+	}
+
+	@Nonnull
+	public Set<ReservationInfoPrice> getRsvInfoPrices() {
+		return rsvInfoPrices;
+	}
+
+	public void setRsvInfoPrices(@Nonnull Set<ReservationInfoPrice> rsvInfoPrices) {
+		this.rsvInfoPrices = rsvInfoPrices;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -139,19 +165,22 @@ public class ReservationInfo {
 		this.modifyDate = modifyDate;
 	}
 
+	@Nonnull
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "reservation_info_id")
 	private Set<ReservationUserComment> userComments = new HashSet<>();
 
+	@Nonnull
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "reservation_info_id")
 	private Set<ReservationInfoPrice> rsvInfoPrices = new HashSet<>();
 	
+	@Nonnull
 	public Set<ReservationUserComment> getUserComments() {
 		return userComments;
 	}
 
-	public void setUserComments(Set<ReservationUserComment> userComments) {
+	public void setUserComments(@Nonnull Set<ReservationUserComment> userComments) {
 		this.userComments = userComments;
 	}
 

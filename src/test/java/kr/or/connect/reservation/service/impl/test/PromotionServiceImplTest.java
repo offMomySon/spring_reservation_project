@@ -37,8 +37,8 @@ public class PromotionServiceImplTest {
 		promotionRsList.add(new PromotionRs(2, 2, "B"));
 		logger.info("promotionRsList = {}", promotionRsList);
 		
-		when(promotionRep.selectAll()).thenReturn(promotionRsList);
-		logger.info("promotionRep.selectAll() = {}", promotionRep.selectAll());
+//		when(promotionRep.selectAll()).thenReturn(promotionRsList);
+//		logger.info("promotionRep.selectAll() = {}", promotionRep.selectAll());
 		
 		assertThat(promotionRep.selectAll(), is(promotionRsList));
 	}

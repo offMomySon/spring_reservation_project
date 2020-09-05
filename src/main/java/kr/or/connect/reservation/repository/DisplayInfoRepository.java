@@ -17,25 +17,19 @@ import kr.or.connect.reservation.dto.DisplayInfoRs;
 import kr.or.connect.reservation.dto.ProductImageRs;
 import kr.or.connect.reservation.dto.ProductPriceRs;
 import kr.or.connect.reservation.model.DisplayInfo;
+import kr.or.connect.reservation.model.Product;
+import kr.or.connect.reservation.model.ReservationInfo;
 
 public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> {
 
 	@Query("SELECT "
-			+ "new kr.or.connect.reservation.dto.ProductPriceRs ( "
-			+ "pp.id, "
-			+ "pd.id, "
-			+ "pp.priceTypeName, "
-			+ "pp.price, "
-			+ "pp.discountRate, "
-			+ "pp.createDate, "
-			+ "pp.modifyDate "
-			+ " ) "
+			+ "pd "
 			+ "FROM Product pd "
-			+ "JOIN pd.displayInfos di "
-			+ "JOIN pd.productPrices pp "
+			+ "JOIN fetch pd.displayInfos di "
+			+ "JOIN fetch pd.productPrices pp "
 			+ "WHERE di.id = ?1 "
 			+ "ORDER BY pp.id DESC")
-	List<ProductPriceRs> selectProductPrice(long displayInfoId);
+	List<Product> selectProductPrice(long displayInfoId);
 
 	@Query("SELECT "
 			+ "ruc.score "
@@ -47,112 +41,47 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 
 	@Nonnull
 	@Query("SELECT "
-			+ "new kr.or.connect.reservation.dto.CommentImageRs ( "
-			+ "ruci.id, "
-			+ "ri.id, "
-			+ "ruc.id, "
-			+ "fi.id, "
-			+ "fi.fileName, "
-			+ "fi.saveFileName, "
-			+ "fi.contentType, "
-			+ "fi.deleteFlag, "
-			+ "fi.createDate, "
-			+ "fi.modifyDate"
-			+ ") "
+			+ "ri "
 			+ "FROM ReservationInfo ri "
-			+ "JOIN ri.userComments ruc "
-			+ "JOIN ruc.reservationUserCommentImages ruci "
-			+ "JOIN ruci.fileInfo fi "
+			+ "JOIN fetch ri.userComments ruc "
+			+ "JOIN fetch ruc.reservationUserCommentImages ruci "
+			+ "JOIN fetch ruci.fileInfo fi "
 			+ "WHERE ruc.id = ?1")
-	List<CommentImageRs> selectCommentImageList(long userCommentId);
+	List<ReservationInfo> selectCommentImageList(long userCommentId);
 	
 	@Query("SELECT "
-			+ "new kr.or.connect.reservation.dto.CommentRs "
-			+ "( "
-			+ "ruc.id, "
-			+ "pd.id, "
-			+ "ri.id, "
-			+ "ruc.score, "
-			+ "ruc.comment, "
-			+ "ri.reservationName, "
-			+ "ri.reservationTel, "
-			+ "ri.reservationEmail, "
-			+ "ri.reservationDate, "
-			+ "ruc.createDate, "
-			+ "ruc.modifyDate "
-			+ ") "
+			+ "pd "
 			+ "FROM Product pd "
-			+ "JOIN pd.displayInfos di "
-			+ "JOIN pd.reservationInfos ri "
-			+ "JOIN ri.userComments ruc "
+			+ "JOIN fetch pd.displayInfos di "
+			+ "JOIN fetch pd.reservationInfos ri "
+			+ "JOIN fetch ri.userComments ruc "
 			+ "Where di.id = ?1 "
 			+ "ORDER BY ruc.id DESC")
-	List<CommentRs> selectComment(long displayInfoId);
+	List<Product> selectComment(long displayInfoId);
 
 	@Query("SELECT "
-			+ "new kr.or.connect.reservation.dto.DisplayInfoImageRs "
-			+ "( "
-			+ "di_img.id, "
-			+ "di.id, "
-			+ "fi.id, "
-			+ "fi.fileName, "
-			+ "fi.saveFileName, "
-			+ "fi.contentType, "
-			+ "fi.deleteFlag, "
-			+ "fi.createDate, "
-			+ "fi.modifyDate "
-			+ ") "
+			+ "di "
 			+ "FROM DisplayInfo di "
-			+ "JOIN di.displayinfoImages di_img "
-			+ "JOIN di_img.fileInfo fi "
+			+ "JOIN fetch di.displayinfoImages di_img "
+			+ "JOIN fetch di_img.fileInfo fi "
 			+ "Where di.id = ?1")
-	DisplayInfoImageRs selectDisplayInfoImage(long displayInfoId);
+	DisplayInfo selectDisplayInfoImage(long displayInfoId);
 
 	@Query("SELECT "
-			+ "new kr.or.connect.reservation.dto.ProductImageRs "
-			+ "( "
-			+ "pr.id, "
-			+ "pi.id, "
-			+ "pi.type, "
-			+ "fi.id, "
-			+ "fi.fileName, "
-			+ "fi.saveFileName, "
-			+ "fi.contentType, "
-			+ "fi.deleteFlag, "
-			+ "fi.createDate, "
-			+ "fi.modifyDate "
-			+ ") "
+			+ "pr "
 			+ "FROM Product pr "
 			+ "JOIN pr.productImages pi "
 			+ "JOIN pr.displayInfos di "
 			+ "JOIN pi.fileInfo fi "
 			+ "Where type in ('ma', 'et') AND di.id = ?1")
-	Page<ProductImageRs> selectProductImageList(long displayInfoId, Pageable pageable);
+	Page<Product> selectProductImageList(long displayInfoId, Pageable pageable);
 
 	@Query("SELECT "
-			+ "new kr.or.connect.reservation.dto.DisplayInfoRs "
-			+ "( "
-			+ "pr.id, "
-			+ "ca.id, "
-			+ "di.id, "
-			+ "ca.name, "
-			+ "pr.description, "
-			+ "pr.content, "
-			+ "pr.event, "
-			+ "di.placeName, "
-			+ "di.placeLot, "
-			+ "di.placeStreet, "
-			+ "di.tel, "
-			+ "di.homepage, "
-			+ "di.email, "
-			+ "di.createDate, "
-			+ "di.modifyDate, "
-			+ "di.openingHours "
-			+ ") "
+			+ "pr "
 			+ "FROM Product pr "
-			+ "JOIN pr.displayInfos di "
-			+ "JOIN pr.category ca "
+			+ "JOIN fetch pr.displayInfos di "
+			+ "JOIN fetch pr.category ca "
 			+ "Where di.id = ?1")
-	DisplayInfoRs selectDisplayInfo(long displayInfoId);
+	Product selectDisplayInfo(long displayInfoId);
 
 }
