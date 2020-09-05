@@ -27,11 +27,6 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
 	@Nonnull
 	@Override
 	public DisplayInfoRs getDisplayInfo(long displayInfoId) {
-		DisplayInfoRs displayInfoRs = displayInfoRep.selectDisplayInfo(displayInfoId);
-		if (displayInfoRs == null) {
-			throw new DisplayInfoIdNotExistExceiption(displayInfoId);
-		}
-
 		return displayInfoRep.selectDisplayInfo(displayInfoId);
 	}
 

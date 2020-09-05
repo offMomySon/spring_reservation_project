@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.or.connect.reservation.dto.Price;
 import kr.or.connect.reservation.dto.ReservationRequestRs;
 import kr.or.connect.reservation.dto.ReservationResponseRs;
+import kr.or.connect.reservation.exception.RsvIdNotExistExceiption;
+import kr.or.connect.reservation.exception.RsvRqtPricesNotExistExceiption;
 import kr.or.connect.reservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,10 +37,31 @@ public class ReservationApiController {
 	private ReservationService rsvService;
 
 	@PostMapping
-	public ResponseEntity<ReservationRequestRs> postBook(@RequestBody ReservationRequestRs reservation) {
-		log.debug("POST. ReservationRequestRs = {}.", reservation);
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(rsvService.addReservation(reservation));
+	public ResponseEntity<ReservationRequestRs> postBook(@RequestBody ReservationRequestRs rsvRequest) {
+		log.debug("POST. ReservationRequestRs = {}.", rsvRequest);
+
+		if (isNotReservationRequestRsValid(rsvRequest)) {
+			throw new RsvRqtPricesNotExistExceiption(rsvRequest);
+		}
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(rsvService.addReservation(rsvRequest));
+	}
+
+	public boolean isNotReservationRequestRsValid(ReservationRequestRs rsvRequest) {
+		List<Price> priceList = rsvRequest.getPrices();
+		priceList.removeIf((Price price) -> isPriceCountInvalid(price));
+
+		if (priceList.size() <= 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public Boolean isPriceCountInvalid(@ParametersAreNonnullByDefault Price price) {
+		if (price.getCount() > 0) {
+			return false;
+		}
+		return true;
 	}
 
 	@GetMapping
@@ -57,8 +81,20 @@ public class ReservationApiController {
 	@PutMapping(path = "/{reservationId}")
 	public ResponseEntity<ReservationRequestRs> cancleBook(@PathVariable Long reservationId) {
 		log.debug("PUT. reservationId = {}.", reservationId);
+		ReservationRequestRs rsvRequest = rsvService.cancleReservation(reservationId);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(rsvService.cancleReservation(reservationId));
+		if (isNotReservationIdValid(rsvRequest)) {
+			throw new RsvIdNotExistExceiption(reservationId);
+		}
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(rsvRequest);
+	}
+
+	private boolean isNotReservationIdValid(ReservationRequestRs rsvRequest) {
+		if (rsvRequest == null) {
+			return true;
+		}
+		return false;
 	}
 
 	public void storeEmailInfoIfNeeded(@ParametersAreNonnullByDefault List<ReservationResponseRs> responseList,

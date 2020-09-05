@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import kr.or.connect.reservation.dto.DisplayInfoRs;
 import kr.or.connect.reservation.dto.ProductRs;
+
 import kr.or.connect.reservation.exception.CategoryIdNotExistExceiption;
+import kr.or.connect.reservation.exception.DisplayInfoIdNotExistExceiption;
+
 import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ProductService;
 
@@ -29,28 +33,37 @@ public class ProductApiController {
 	@GetMapping
 	public Map<String, Object> getProduct(@RequestParam(defaultValue = "0") long categoryId,
 			@RequestParam(defaultValue = "0") long start) {
-		long totalCount;
-		List<ProductRs> items;
-		
-		totalCount = productService.getProductCountAtCategory(categoryId);
-		items = productService.getProductListAtCategory(categoryId, start);
-		
-		if(totalCount == 0 || items.size() == 0) {
+		long totalCount = productService.getProductCountAtCategory(categoryId);
+		List<ProductRs> items = productService.getProductListAtCategory(categoryId, start);
+
+		if (isNotCategoryIdValid(totalCount, items.size())) {
 			throw new CategoryIdNotExistExceiption(categoryId);
 		}
-		
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("totalCount", totalCount);
 		map.put("items", items);
 		return map;
 	}
 
+	private boolean isNotCategoryIdValid(long totalCount, long itemSize) {
+		if (totalCount == 0 || itemSize == 0) {
+			return true;
+		}
+		return false;
+	}
+
 	@GetMapping(path = "/{displayInfoId}")
 	public Map<String, Object> getDisplayInfo(@PathVariable Long displayInfoId) {
-		
+
 		Map<String, Object> map = new HashMap<>();
 
-		map.put("displayInfo", displayInfoService.getDisplayInfo(displayInfoId));
+		DisplayInfoRs displayInfo = displayInfoService.getDisplayInfo(displayInfoId);
+		if (isNotDisplayInfoIdValid(displayInfo, displayInfoId)) {
+			throw new DisplayInfoIdNotExistExceiption(displayInfoId);
+		}
+
+		map.put("displayInfo", displayInfo);
 		map.put("productImages", displayInfoService.getProductImageList(displayInfoId));
 		map.put("displayInfoImage", displayInfoService.getDisplayInfoImage(displayInfoId));
 		map.put("comments", displayInfoService.getCommentList(displayInfoId));
@@ -58,5 +71,12 @@ public class ProductApiController {
 		map.put("productPrices", displayInfoService.getProductPriceList(displayInfoId));
 
 		return map;
+	}
+
+	private boolean isNotDisplayInfoIdValid(DisplayInfoRs displayInfo, Long displayInfoId) {
+		if (displayInfo == null) {
+			return true;
+		}
+		return false;
 	}
 }
