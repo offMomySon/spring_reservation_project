@@ -22,6 +22,7 @@ import kr.or.connect.reservation.repository.DisplayInfoRepository;
 import kr.or.connect.reservation.repository.ProductPriceRepository;
 import kr.or.connect.reservation.repository.ReservationInfoPriceRepository;
 import kr.or.connect.reservation.repository.ReservationRepository;
+import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,8 +32,6 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Autowired
 	private ReservationRepository rsvRep;
-	@Autowired
-	private DisplayInfoRepository displayInfoRep;
 	@Autowired
 	private ReservationInfoPriceRepository rsvPriceRep;
 	@Autowired
@@ -70,41 +69,51 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Nonnull
 	@Override
-	public List<ReservationResponseRs> getReservation(@Nonnull String email) {
+	public List<ReservationInfo> getReservation(@Nonnull String email) {
+//
+//		List<ReservationInfo> responseList = rsvRep.selectAtEmail(email);
+//
+//		for (ReservationInfo rsvResponse : responseList) {
+//			rsvResponse.setDisplayInfo(displayInfoService.getDisplayInfo(rsvResponse.getDisplayInfoId()));
+//			rsvResponse.setTotalPrice(calTotalPrice(rsvResponse.getReservationInfoId()));
+//		}
 
-		List<ReservationResponseRs> responseList = rsvRep.selectAtEmail(email);
-
-		for (ReservationResponseRs rsvResponse : responseList) {
-			rsvResponse.setDisplayInfo(displayInfoRep.selectDisplayInfo(rsvResponse.getDisplayInfoId()));
-			rsvResponse.setTotalPrice(calTotalPrice(rsvResponse.getReservationInfoId()));
+		return rsvRep.selectAtEmail(email);
+	}
+	
+	@Override
+	public long getRsvTicketTotalPrice(Long rsvInfoId) {
+		log.debug("rsvInfoId = {}", rsvInfoId);
+		long totalPrice = 0;
+		List<ReservationInfoPrice> rsvInfoPriceList = rsvRep.selectTicketAtRsvInfoId(rsvInfoId);
+		
+		for (ReservationInfoPrice rsvInfoPrice : rsvInfoPriceList) {
+			totalPrice += calTicketPrice(rsvInfoPrice.getCount(), rsvInfoPrice.getProductPrice().getPrice());
 		}
 
-		return responseList;
+		return totalPrice;
 	}
 
+	long calTicketPrice(long count, long price) {
+		return count*price;
+	}
+	
 	@Nonnull
 	@Override
 	@Transactional(readOnly = false)
-	public ReservationRequestRs cancleReservation(Long reservationId) {
+	public ReservationInfo cancleReservation(Long reservationId) {
 		if (rsvRep.cancleRsvAtId(reservationId) == 0) {
 			return null;
 		}
 
-		ReservationRequestRs rsvRequest = rsvRep.selectAtId(reservationId);
-		rsvRequest.setPrices(rsvPriceRep.selectPriceAtRsvId(reservationId));
-
-		return rsvRequest;
+		return rsvRep.selectAtId(reservationId);
 	}
-
-	private long calTotalPrice(Long rsvInfoId) {
-		List<Ticket> ticketList = rsvRep.selectTicketAtRsvInfoId(rsvInfoId);
-		long totalPrice = 0;
-
-		for (Ticket ticket : ticketList) {
-			totalPrice += ticket.getCount() * ticket.getPrice();
-		}
-
-		return totalPrice;
+	
+	@Nonnull
+	@Override
+	@Transactional(readOnly = false)
+	public List<ReservationInfoPrice> selectPriceList(Long reservationId) {
+		return rsvPriceRep.selectPriceList(reservationId);
 	}
 
 	private void insertPriceList(Long rsvId, @Nonnull List<Price> priceList) {

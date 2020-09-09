@@ -1,5 +1,7 @@
 package kr.or.connect.reservation.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,9 @@ import kr.or.connect.reservation.dto.ReservationRequestRs;
 import kr.or.connect.reservation.dto.ReservationResponseRs;
 import kr.or.connect.reservation.exception.RsvIdNotExistExceiption;
 import kr.or.connect.reservation.exception.RsvRqtPricesNotExistExceiption;
+import kr.or.connect.reservation.model.ReservationInfo;
+import kr.or.connect.reservation.model.ReservationInfoPrice;
+import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +40,8 @@ public class ReservationApiController {
 
 	@Autowired
 	private ReservationService rsvService;
+	@Autowired
+	private DisplayInfoService displayInfoService;
 
 	@PostMapping
 	public ResponseEntity<ReservationRequestRs> postBook(@RequestBody ReservationRequestRs rsvRequest) {
@@ -67,7 +74,21 @@ public class ReservationApiController {
 	@GetMapping
 	public Map<String, Object> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session) {
 		log.debug("GET. reservationEmail = {}.", reservationEmail);
-		List<ReservationResponseRs> responseList = rsvService.getReservation(reservationEmail);
+		List<ReservationInfo> rsvInfoList = rsvService.getReservation(reservationEmail);
+		List<ReservationResponseRs> responseList = new ArrayList();
+		log.debug("GET. reservationEmail = {}.", reservationEmail);
+		
+		for (ReservationInfo rsvInfo : rsvInfoList) {
+			ReservationResponseRs requestRs = new ReservationResponseRs(rsvInfo.getId(), rsvInfo.getProductId(),
+					rsvInfo.getDisplayInfoId(), rsvInfo.getReservationName(), rsvInfo.getReservationTel(),
+					rsvInfo.getReservationEmail(), rsvInfo.getReservationDate(), rsvInfo.getCancelFlag(),
+					rsvInfo.getCreateDate(), rsvInfo.getModifyDate());
+
+			requestRs.setDisplayInfo(displayInfoService.getDisplayInfo(rsvInfo.getDisplayInfoId()));
+			requestRs.setTotalPrice(rsvService.getRsvTicketTotalPrice(rsvInfo.getId()));
+			
+			responseList.add(requestRs);
+		}
 
 		Map<String, Object> rsvMap = new HashMap<>();
 		rsvMap.put("reservations", responseList);
@@ -81,16 +102,33 @@ public class ReservationApiController {
 	@PutMapping(path = "/{reservationId}")
 	public ResponseEntity<ReservationRequestRs> cancleBook(@PathVariable Long reservationId) {
 		log.debug("PUT. reservationId = {}.", reservationId);
-		ReservationRequestRs rsvRequest = rsvService.cancleReservation(reservationId);
-
-		if (isNotReservationIdValid(rsvRequest)) {
+		
+		ReservationInfo rsvInfo = rsvService.cancleReservation(reservationId);
+		
+		ReservationRequestRs rsvRequestRs = 
+				new ReservationRequestRs(rsvInfo.getId(), rsvInfo.getProductId(),
+						rsvInfo.getDisplayInfoId(),rsvInfo.getReservationName(),
+						rsvInfo.getReservationTel(),rsvInfo.getReservationEmail(), 
+						rsvInfo.getReservationDate(),rsvInfo.getCancelFlag(),
+						rsvInfo.getCreateDate(),rsvInfo.getModifyDate());
+		
+		if (isNotReservationIdValid(rsvInfo)) {
 			throw new RsvIdNotExistExceiption(reservationId);
 		}
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(rsvRequest);
+		List<ReservationInfoPrice> rsvInfoPriceList = rsvService.selectPriceList(reservationId);
+		List<Price> priceList = new ArrayList();
+		
+		for(ReservationInfoPrice rsvInfoPrice : rsvInfoPriceList) {
+			priceList.add(new Price(rsvInfoPrice.getId(),rsvInfoPrice.getReservationInfoId(),
+					rsvInfoPrice.getProductPrice().getId(), rsvInfoPrice.getCount()));
+		}
+		
+		rsvRequestRs.setPrices(priceList);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(rsvRequestRs);
 	}
 
-	private boolean isNotReservationIdValid(ReservationRequestRs rsvRequest) {
+	private boolean isNotReservationIdValid(ReservationInfo rsvRequest) {
 		if (rsvRequest == null) {
 			return true;
 		}

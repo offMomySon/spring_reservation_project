@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -134,9 +135,27 @@ public class DisplayInfo {
 		this.modifyDate = modifyDate;
 	}
 	
+	@Nonnull
 	@OneToMany(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "display_info_id")
 	private Set<DisplayInfoImage> displayinfoImages = new HashSet<>();
+
+	public long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	@Nonnull
+	public Set<DisplayInfoImage> getDisplayinfoImages() {
+		return displayinfoImages;
+	}
+
+	public void setDisplayinfoImages(@Nonnull Set<DisplayInfoImage> displayinfoImages) {
+		this.displayinfoImages = displayinfoImages;
+	}
 
 	@Override
 	public String toString() {

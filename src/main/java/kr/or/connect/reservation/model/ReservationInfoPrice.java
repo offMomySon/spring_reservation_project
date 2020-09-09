@@ -1,5 +1,6 @@
 package kr.or.connect.reservation.model;
 
+import javax.annotation.Nonnull;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,51 +19,56 @@ public class ReservationInfoPrice {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id;
+	private long id;
 
 	@Column(name = "reservation_info_id")
-	private Long reservationInfoId;
+	private long reservationInfoId;
 	
 	@Column(name = "count")
-	private Long count;
+	private long count;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public Long getReservationInfoId() {
+	public long getReservationInfoId() {
 		return reservationInfoId;
 	}
 
-	public void setReservationInfoId(Long reservationInfoId) {
+	public void setReservationInfoId(long reservationInfoId) {
 		this.reservationInfoId = reservationInfoId;
 	}
 
-	public Long getCount() {
+	public long getCount() {
 		return count;
 	}
 
-	public void setCount(Long count) {
+	public void setCount(long count) {
 		this.count = count;
 	}
 
+	@Nonnull
 	@ManyToOne
 	@JoinColumn(name = "product_price_id")
 	private ProductPrice productPrice;
 
+	@Nonnull
 	public ProductPrice getProductPrice() {
 		return productPrice;
 	}
 
-	public void setProductPrice(ProductPrice productPrice) {
+	public void setProductPrice(@Nonnull ProductPrice productPrice) {
 		this.productPrice = productPrice;
 	}
 
-	public ReservationInfoPrice(Long id, Long reservationInfoId, Long count, ProductPrice productPrice) {
+	public ReservationInfoPrice() {
+	}
+
+	public ReservationInfoPrice(long id, long reservationInfoId, long count, @Nonnull ProductPrice productPrice) {
 		super();
 		this.id = id;
 		this.reservationInfoId = reservationInfoId;

@@ -15,34 +15,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 		
 		@Nonnull
 		@Query("SELECT "
-				+ "new kr.or.connect.reservation.dto.ProductRs "
-				+ "( "
-				+ "di.id, "
-				+ "pr.id, "
-				+ "pr.description, "
-				+ "di.placeName, "
-				+ "pr.content, "
-				+ "fi.saveFileName "
-				+ " ) "
+				+ "pr "
 				+ "FROM Product pr "
 				+ "JOIN pr.category ca "
 				+ "JOIN pr.displayInfos di "
 				+ "JOIN pr.productImages pi "
 				+ "JOIN pi.fileInfo fi "
 				+ "WHERE pi.type = 'th' ")
-		Page<ProductRs> selectWithTypeTH(Pageable pageable);
+		Page<Product> selectWithTypeTH(Pageable pageable);
 		
 		@Nonnull
 		@Query("SELECT "
-				+ "new kr.or.connect.reservation.dto.ProductRs "
-				+ "( "
-				+ "di.id, "
-				+ "pr.id, "
-				+ "pr.description, "
-				+ "di.placeName, "
-				+ "pr.content, "
-				+ "fi.saveFileName "
-				+ " ) "
+				+ "pr "
 				+ "FROM Product pr "
 				+ "JOIN pr.category ca "
 				+ "JOIN pr.displayInfos di "
@@ -50,7 +34,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 				+ "JOIN pi.fileInfo fi "
 				+ "WHERE pi.type = 'th' and "
 				+ "ca.id = ?1")
-		Page<ProductRs> selectWithCategoryId(Long categoryId, Pageable pageable);
+		Page<Product> selectWithCategoryId(Long categoryId, Pageable pageable);
 
 		@Query("SELECT count(*) FROM Product pr JOIN pr.displayInfos di")
 		long countWithDisplayInfo();
