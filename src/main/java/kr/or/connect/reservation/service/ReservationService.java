@@ -6,6 +6,7 @@ import javax.persistence.Tuple;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.or.connect.reservation.dto.Price;
 import kr.or.connect.reservation.dto.ReservationRequestRs;
 import kr.or.connect.reservation.dto.ReservationResponseRs;
 import kr.or.connect.reservation.model.ReservationInfo;
@@ -16,9 +17,9 @@ public interface ReservationService {
 
 	public List<ReservationInfo> getReservation(String email);
 	
-	public ReservationInfo cancleReservation(Long reservationId);
+	public ReservationRequestRs cancleReservation(Long reservationId);
 	
 	public long getRsvTicketTotalPrice(Long rsvInfoId);
 	
-	public List<ReservationInfoPrice> selectPriceList(Long reservationId);
+	public List<Price> selectPriceList(Long reservationId);
 }

@@ -4,23 +4,20 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import lombok.Getter;
 
 @Getter
 public enum ExceptionGroup {
-//	ApiErrorResponse response = new ApiErrorResponse("error-0000", "SomeThing wrong, please send another request.");
-
-	NULL_POINT_EXCEPTION(NullPointerException.class, HttpStatus.BAD_REQUEST, "error-0000",
+	NULL_POINT_EXCEPTION(NullPointerException.class, HttpStatus.INTERNAL_SERVER_ERROR, "error-0000",
 			"NPException, SomeThing wrong."),
 	RSV_RQ_PRICE_LIST_NOT_EXIST(RsvRqtPricesNotExistExceiption.class, HttpStatus.BAD_REQUEST, "error-0001",
-			"Not exist price list in Reservation Request"),
-	RESERVATION_ID_NOT_EXIST(RsvIdNotExistExceiption.class, HttpStatus.BAD_REQUEST, "error-0002",
-			"Reservation Id not exist."),
-	CATEGORY_ID_NOT_EXIST(CategoryIdNotExistExceiption.class, HttpStatus.BAD_REQUEST, "error-0003",
-			"wrong CategoryId Entered"),
-	DISPLAYINFO_ID_NOT_EXIST(DisplayInfoIdNotExistExceiption.class, HttpStatus.BAD_REQUEST, "error-0004",
-			"wrong DisplayInfoId Entered");
+			"The parameter entered is invalid. at postBook method"),
+	CATEGORY_ID_NOT_EXIST(CategoryIdNotExistExceiption.class, HttpStatus.NOT_FOUND, "error-0003",
+			"Unable to get result with entered categoryId."),
+	DISPLAYINFO_ID_NOT_EXIST(DisplayInfoIdNotExistExceiption.class, HttpStatus.NOT_FOUND, "error-0004",
+			"wrong DisplayInfoRs result");
 
 	private Class<? extends Exception> clz;
 	private HttpStatus status;

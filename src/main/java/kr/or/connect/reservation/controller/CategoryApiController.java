@@ -9,11 +9,14 @@ import javax.persistence.Tuple;
 
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.connect.reservation.dto.CategoryRs;
+import kr.or.connect.reservation.exception.ApiErrorResponse;
 import kr.or.connect.reservation.model.Category;
 import kr.or.connect.reservation.service.CategoryService;
 
@@ -24,18 +27,23 @@ public class CategoryApiController {
 	private CategoryService categoryService;
 
 	@GetMapping
-	public Map<String, Object> getCategoryItems() {
-		List<Tuple> categoryPairList = categoryService.getCategoryList();
-		List<CategoryRs> categoryRsList = new ArrayList();
-		
-		for(Tuple pair: categoryPairList ) {
-			Category category = (Category) pair.get(0);
-			categoryRsList.add(new CategoryRs(category.getId(), category.getName(), (long) pair.get(1)));
+	public ResponseEntity<?> getCategoryItems() {
+		List<CategoryRs> categoryRsList = categoryService.getCategoryList();
+
+		if(!hasCategoryRsList(categoryRsList)) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorResponse("error-0005", "server cannot fount category."));	
 		}
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("items", categoryRsList);
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("items", categoryRsList);
-		
-		return map;
+		return ResponseEntity.ok().body(resultMap);
+	}
+	
+	private boolean hasCategoryRsList(List<CategoryRs> categoryRsList) {
+		if(categoryRsList.size() <= 0) {
+			return false;
+		}
+		return true;
 	}
 }
