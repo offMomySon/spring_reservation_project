@@ -19,7 +19,7 @@ public class ReservationInfoPrice {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private long id;
+	private Long id;
 
 	@Column(name = "reservation_info_id")
 	private long reservationInfoId;
@@ -27,11 +27,11 @@ public class ReservationInfoPrice {
 	@Column(name = "count")
 	private long count;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -68,7 +68,7 @@ public class ReservationInfoPrice {
 	public ReservationInfoPrice() {
 	}
 
-	public ReservationInfoPrice(long id, long reservationInfoId, long count, @Nonnull ProductPrice productPrice) {
+	public ReservationInfoPrice(Long id, long reservationInfoId, long count, @Nonnull ProductPrice productPrice) {
 		super();
 		this.id = id;
 		this.reservationInfoId = reservationInfoId;

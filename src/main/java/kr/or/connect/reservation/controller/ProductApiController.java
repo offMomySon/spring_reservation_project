@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import kr.or.connect.reservation.dto.DisplayInfoRs;
 import kr.or.connect.reservation.dto.ProductRs;
-
+import kr.or.connect.reservation.exception.ApiErrorResponse;
 import kr.or.connect.reservation.exception.CategoryIdNotExistExceiption;
 import kr.or.connect.reservation.exception.DisplayInfoIdNotExistExceiption;
 import kr.or.connect.reservation.model.Product;
@@ -32,19 +33,32 @@ public class ProductApiController {
 	private DisplayInfoService displayInfoService;
 
 	@GetMapping
-	public Map<String, Object> getProduct(@RequestParam(defaultValue = "0") long categoryId,
+	public ResponseEntity<?> getProduct(@RequestParam(defaultValue = "0") long categoryId,
 			@RequestParam(defaultValue = "0") long start) {
+		if (isNotGetProductParamValid(categoryId, start)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new ApiErrorResponse("error-0006", "The parameter entered is invalid. at getProduct method"));
+		}
+
 		long totalCount = productService.getProductCountAtCategory(categoryId);
 		List<ProductRs> productRsList = productService.getProductListAtCategory(categoryId, start);
-		
+
 		if (isNotCategoryIdValid(totalCount, productRsList.size())) {
 			throw new CategoryIdNotExistExceiption(categoryId);
 		}
-		
-		Map<String, Object> map = new HashMap<>();
-		map.put("totalCount", totalCount);
-		map.put("items", productRsList);
-		return map;
+
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("totalCount", totalCount);
+		resultMap.put("items", productRsList);
+
+		return ResponseEntity.ok().body(resultMap);
+	}
+
+	private boolean isNotGetProductParamValid(long categoryId, long start) {
+		if (categoryId < 0 || start < 0) {
+			return true;
+		}
+		return false;
 	}
 
 	private boolean isNotCategoryIdValid(long totalCount, long itemSize) {
@@ -55,27 +69,37 @@ public class ProductApiController {
 	}
 
 	@GetMapping(path = "/{displayInfoId}")
-	public Map<String, Object> getDisplayInfo(@PathVariable Long displayInfoId) {
-
-		Map<String, Object> map = new HashMap<>();
-
-		DisplayInfoRs displayInfo = displayInfoService.getDisplayInfo(displayInfoId);
-		if (isNotDisplayInfoIdValid(displayInfo, displayInfoId)) {
-			throw new DisplayInfoIdNotExistExceiption(displayInfoId);
+	public ResponseEntity<?> getDisplayInfo(@PathVariable long displayInfoId) {
+		if (isNotGetDispalyInfoParamValid(displayInfoId)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(new ApiErrorResponse("error-0007", "The parameter entered is invalid.at displayinfo method"));
 		}
 
-		map.put("displayInfo", displayInfo);
-		map.put("productImages", displayInfoService.getProductImageList(displayInfoId));
-		map.put("displayInfoImage", displayInfoService.getDisplayInfoImage(displayInfoId));
-		map.put("comments", displayInfoService.getCommentList(displayInfoId));
-		map.put("averageScore", displayInfoService.getAverageScore(displayInfoId));
-		map.put("productPrices", displayInfoService.getProductPriceList(displayInfoId));
+		DisplayInfoRs displayInfo = displayInfoService.getDisplayInfo(displayInfoId);
+		if (isNotDisplayInfoIdValid(displayInfo)) {
+			throw new DisplayInfoIdNotExistExceiption(displayInfoId);
+		}
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("displayInfo", displayInfo);
+		resultMap.put("productImages", displayInfoService.getProductImageList(displayInfoId));
+		resultMap.put("displayInfoImage", displayInfoService.getDisplayInfoImage(displayInfoId));
+		resultMap.put("comments", displayInfoService.getCommentList(displayInfoId));
+		resultMap.put("averageScore", displayInfoService.getAverageScore(displayInfoId));
+		resultMap.put("productPrices", displayInfoService.getProductPriceList(displayInfoId));
 
-		return map;
+		return ResponseEntity.ok().body(resultMap);
 	}
 
-	private boolean isNotDisplayInfoIdValid(DisplayInfoRs displayInfo, Long displayInfoId) {
-		if (displayInfo == null) {
+	private boolean isNotGetDispalyInfoParamValid(long displayInfoId) {
+		if (displayInfoId < 0) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isNotDisplayInfoIdValid(DisplayInfoRs displayInfo) {
+		if (displayInfo.getProductId() < 1) {
 			return true;
 		}
 		return false;

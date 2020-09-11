@@ -24,7 +24,7 @@ public class ReservationInfo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
 	@Column(name = "product_id")
 	private long productId;
@@ -59,7 +59,7 @@ public class ReservationInfo {
 	public ReservationInfo() {
 	}
 
-	public ReservationInfo(long id, long productId, long displayInfoId, String reservationName, String reservationTel,
+	public ReservationInfo(Long id, long productId, long displayInfoId, String reservationName, String reservationTel,
 			String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate, Date modifyDate) {
 		super();
 		this.id = id;
