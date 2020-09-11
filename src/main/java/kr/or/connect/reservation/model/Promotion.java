@@ -12,28 +12,31 @@ import javax.persistence.Table;
 public class Promotion {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private long id;
 
 	@Column(name = "product_id")
-	private Long productId;
+	private long productId;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public Long getProductId() {
+	public long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(Long productId) {
+	public void setProductId(long productId) {
 		this.productId = productId;
 	}
 
-	public Promotion(Long id, Long productId) {
+	public Promotion() {
+	}
+
+	public Promotion(long id, long productId) {
 		super();
 		this.id = id;
 		this.productId = productId;

@@ -14,15 +14,9 @@ public interface ReservationInfoPriceRepository extends JpaRepository<Reservatio
 
 	@Nonnull
 	@Query("SELECT "
-			+ "new kr.or.connect.reservation.dto.Price "
-			+ "( "
-			+ "rsvInfoPrice.id,"
-			+ "rsvInfoPrice.reservationInfoId,"
-			+ "pp.id,"
-			+ "rsvInfoPrice.count "
-			+ " )"
+			+ "rsvInfoPrice "
 			+ "FROM ReservationInfoPrice rsvInfoPrice "
 			+ "JOIN rsvInfoPrice.productPrice pp "
 			+ "WHERE rsvInfoPrice.reservationInfoId = ?1 ")
-	public List<Price> selectPriceAtRsvId(Long reservationId);
+	public List<ReservationInfoPrice> selectPriceList(Long reservationId);
 }

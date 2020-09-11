@@ -8,22 +8,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import kr.or.connect.reservation.dto.PromotionRs;
+import kr.or.connect.reservation.model.Product;
 import kr.or.connect.reservation.model.Promotion;
 
 public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
 	@Nonnull
 	@Query("SELECT "
-			+ "new kr.or.connect.reservation.dto.PromotionRs "
-			+ "( "
-			+ "pm.id, "
-			+ "pd.id, "
-			+ "fi.saveFileName "
-			+ " ) "
+			+ "pd "
 			+ "FROM Product pd "
-			+ "JOIN pd.promotions pm "
-			+ "JOIN pd.productImages pi "
-			+ "JOIN pi.fileInfo fi "
-			+ "WHERE pi.type = 'th' ")
-	public List<PromotionRs> selectAll();
+			+ "JOIN  pd.promotions pm "
+			+ "JOIN  pd.productImages pi "
+			+ "JOIN  pi.fileInfo fi "
+			+ "where pi.type = 'th' ")
+	public List<Product> selectAll();
 }

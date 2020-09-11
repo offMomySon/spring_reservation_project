@@ -12,61 +12,35 @@ import kr.or.connect.reservation.dto.ReservationRequestRs;
 import kr.or.connect.reservation.dto.ReservationResponseRs;
 import kr.or.connect.reservation.dto.Ticket;
 import kr.or.connect.reservation.model.ReservationInfo;
+import kr.or.connect.reservation.model.ReservationInfoPrice;
 
 public interface ReservationRepository  extends JpaRepository<ReservationInfo, Long> {
 
 	@Modifying
 	@Query("UPDATE ReservationInfo rsvInfo "
-			+ "SET rsvInfo.cancelFlag = false "
+			+ "SET rsvInfo.cancelFlag = true "
 			+ "WHERE rsvInfo.id = ?1 ")
 	public int cancleRsvAtId(Long rsvId);
 	
 	@Query("SELECT "
-			+ "new kr.or.connect.reservation.dto.ReservationRequestRs "
-			+ "( "
-			+ "rsvInfo.id,"
-			+ "rsvInfo.productId,"
-			+ "rsvInfo.displayInfoId,"
-			+ "rsvInfo.reservationName, "
-			+ "rsvInfo.reservationTel, "
-			+ "rsvInfo.reservationEmail, "
-			+ "rsvInfo.reservationDate, "
-			+ "rsvInfo.cancelFlag, "
-			+ "rsvInfo.createDate, "
-			+ "rsvInfo.modifyDate "
-			+ " )"
+			+ "rsvInfo "
 			+ "FROM ReservationInfo rsvInfo "
 			+ "WHERE rsvInfo.id = ?1 ")
-	public ReservationRequestRs selectAtId(Long reservationId);
+	public ReservationInfo selectAtId(Long reservationId);
 
 	@Nonnull
 	@Query("SELECT "
-			+ "new kr.or.connect.reservation.dto.ReservationResponseRs "
-			+ "( "
-			+ "rsvInfo.id,"
-			+ "rsvInfo.productId,"
-			+ "rsvInfo.displayInfoId,"
-			+ "rsvInfo.reservationName, "
-			+ "rsvInfo.reservationTel, "
-			+ "rsvInfo.reservationEmail, "
-			+ "rsvInfo.reservationDate, "
-			+ "rsvInfo.cancelFlag, "
-			+ "rsvInfo.createDate, "
-			+ "rsvInfo.modifyDate"
-			+ " ) "
+			+ "rsvInfo "
 			+ "FROM ReservationInfo rsvInfo "
 			+ "WHERE rsvInfo.reservationEmail = ?1 ")
-	public List<ReservationResponseRs> selectAtEmail(String email);
+	public List<ReservationInfo> selectAtEmail(String email);
 
 	@Nonnull
 	@Query("SELECT "
-			+ "new kr.or.connect.reservation.dto.Ticket "
-			+ "( "
-			+ "pp.price, "
-			+ "rip.count "
-			+ ")"
+			+ "rip "
 			+ "FROM ReservationInfoPrice rip "
 			+ "JOIN rip.productPrice pp "
 			+ "WHERE rip.reservationInfoId = ?1")
-	public List<Ticket> selectTicketAtRsvInfoId(Long rsvInfoId);
+	public List<ReservationInfoPrice> selectTicketAtRsvInfoId(Long rsvInfoId);
+	
 }

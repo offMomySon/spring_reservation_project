@@ -27,10 +27,10 @@ public class ProductPrice {
 	private String priceTypeName;
 
 	@Column(name = "price")
-	private Long price;
+	private long price;
 
 	@Column(name = "discount_rate")
-	private Double discountRate;
+	private double discountRate;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "create_date")
@@ -43,7 +43,7 @@ public class ProductPrice {
 	public ProductPrice() {
 	}
 
-	public ProductPrice(long id, long productId, String priceTypeName, Long price, Double discountRate, Date createDate,
+	public ProductPrice(long id, long productId, String priceTypeName, long price, double discountRate, Date createDate,
 			Date modifyDate) {
 		super();
 		this.id = id;
@@ -79,19 +79,19 @@ public class ProductPrice {
 		this.priceTypeName = priceTypeName;
 	}
 
-	public Long getPrice() {
+	public long getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 
-	public Double getDiscountRate() {
+	public double getDiscountRate() {
 		return discountRate;
 	}
 
-	public void setDiscountRate(Double discountRate) {
+	public void setDiscountRate(double discountRate) {
 		this.discountRate = discountRate;
 	}
 

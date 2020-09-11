@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,15 +24,15 @@ public class ReservationUserComment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private long id;
 
 	@Column(name = "product_id")
-	private Long productId;
+	private long productId;
 
 	@Column(name = "reservation_info_id")
-	private Long reservationInfoId;
+	private long reservationInfoId;
 
-	private Double score;
+	private double score;
 
 	private String comment;
 
@@ -43,35 +44,35 @@ public class ReservationUserComment {
 	@Column(name = "modify_date")
 	private Date modifyDate;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public Long getProductId() {
+	public long getProductId() {
 		return productId;
 	}
 
-	public Long getReservationInfoId() {
+	public long getReservationInfoId() {
 		return reservationInfoId;
 	}
 
-	public void setReservationInfoId(Long reservationInfoId) {
+	public void setReservationInfoId(long reservationInfoId) {
 		this.reservationInfoId = reservationInfoId;
 	}
 
-	public void setProductId(Long productId) {
+	public void setProductId(long productId) {
 		this.productId = productId;
 	}
 
-	public Double getScore() {
+	public double getScore() {
 		return score;
 	}
 
-	public void setScore(Double score) {
+	public void setScore(double score) {
 		this.score = score;
 	}
 
@@ -99,15 +100,17 @@ public class ReservationUserComment {
 		this.modifyDate = modifyDate;
 	}
 
+	@Nonnull
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "reservation_user_comment_id")
 	private Set<ReservationUserCommentImage> reservationUserCommentImages = new HashSet<>();
 
+	@Nonnull
 	public Set<ReservationUserCommentImage> getReservationUserCommentImages() {
 		return reservationUserCommentImages;
 	}
 
-	public void setReservationUserCommentImages(Set<ReservationUserCommentImage> reservationUserCommentImages) {
+	public void setReservationUserCommentImages(@Nonnull Set<ReservationUserCommentImage> reservationUserCommentImages) {
 		this.reservationUserCommentImages = reservationUserCommentImages;
 	}
 
