@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import kr.or.connect.reservation.dto.CommentRs;
+import kr.or.connect.reservation.dto.DisplayInfoImageRs;
 import kr.or.connect.reservation.dto.DisplayInfoRs;
+import kr.or.connect.reservation.dto.ProductImageRs;
+import kr.or.connect.reservation.dto.ProductPriceRs;
 import kr.or.connect.reservation.dto.ProductRs;
 import kr.or.connect.reservation.exception.ApiErrorResponse;
 import kr.or.connect.reservation.exception.CategoryIdNotExistExceiption;
@@ -81,13 +87,29 @@ public class ProductApiController {
 		}
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("displayInfo", displayInfo);
-		resultMap.put("productImages", displayInfoService.getProductImageList(displayInfoId));
-		resultMap.put("displayInfoImage", displayInfoService.getDisplayInfoImage(displayInfoId));
-		resultMap.put("comments", displayInfoService.getCommentList(displayInfoId));
-		resultMap.put("averageScore", displayInfoService.getAverageScore(displayInfoId));
-		resultMap.put("productPrices", displayInfoService.getProductPriceList(displayInfoId));
-
+		
+		CompletableFuture<List<ProductImageRs>> pdImgRsListFuture = CompletableFuture.supplyAsync(()->displayInfoService.getProductImageList(displayInfoId));
+		CompletableFuture<DisplayInfoImageRs> dpInfoImgRsFuture = CompletableFuture.supplyAsync(()->displayInfoService.getDisplayInfoImage(displayInfoId));
+		CompletableFuture<List<CommentRs>> commentRsListFuture = CompletableFuture.supplyAsync(()->displayInfoService.getCommentList(displayInfoId));
+		CompletableFuture<Double> avgScoreFuture = CompletableFuture.supplyAsync(()->displayInfoService.getAverageScore(displayInfoId));
+		CompletableFuture<List<ProductPriceRs>> pdPriceRsListFuture = CompletableFuture.supplyAsync(()->displayInfoService.getProductPriceList(displayInfoId));
+		
+		CompletableFuture.allOf(pdImgRsListFuture, dpInfoImgRsFuture, commentRsListFuture, avgScoreFuture, pdPriceRsListFuture);
+		
+        try {
+            resultMap.put("displayInfo", displayInfo);
+    		resultMap.put("productImages", pdImgRsListFuture.get());
+    		resultMap.put("displayInfoImage", dpInfoImgRsFuture.get());
+    		resultMap.put("comments", commentRsListFuture.get());
+    		resultMap.put("averageScore", avgScoreFuture.get());
+    		resultMap.put("productPrices", pdPriceRsListFuture.get());  
+            
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+		
 		return ResponseEntity.ok().body(resultMap);
 	}
 

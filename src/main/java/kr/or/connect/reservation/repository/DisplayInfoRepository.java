@@ -25,8 +25,8 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 	@Query("SELECT "
 			+ "pd "
 			+ "FROM Product pd "
-			+ "JOIN fetch pd.displayInfos di "
-			+ "JOIN fetch pd.productPrices pp "
+			+ "JOIN pd.displayInfos di "
+			+ "JOIN pd.productPrices pp "
 			+ "WHERE di.id = ?1 "
 			+ "ORDER BY pp.id DESC")
 	List<Product> selectProductPrice(long displayInfoId);
@@ -43,18 +43,18 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 	@Query("SELECT "
 			+ "ri "
 			+ "FROM ReservationInfo ri "
-			+ "JOIN fetch ri.userComments ruc "
-			+ "JOIN fetch ruc.reservationUserCommentImages ruci "
-			+ "JOIN fetch ruci.fileInfo fi "
+			+ "JOIN ri.userComments ruc "
+			+ "JOIN ruc.reservationUserCommentImages ruci "
+			+ "JOIN ruci.fileInfo fi "
 			+ "WHERE ruc.id = ?1")
 	List<ReservationInfo> selectCommentImageList(long userCommentId);
 	
 	@Query("SELECT "
 			+ "pd "
 			+ "FROM Product pd "
-			+ "JOIN fetch pd.displayInfos di "
-			+ "JOIN fetch pd.reservationInfos ri "
-			+ "JOIN fetch ri.userComments ruc "
+			+ "JOIN pd.displayInfos di "
+			+ "JOIN pd.reservationInfos ri "
+			+ "JOIN ri.userComments ruc "
 			+ "Where di.id = ?1 "
 			+ "ORDER BY ruc.id DESC")
 	List<Product> selectComment(long displayInfoId);
@@ -62,8 +62,8 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 	@Query("SELECT "
 			+ "di "
 			+ "FROM DisplayInfo di "
-			+ "JOIN fetch di.displayinfoImages di_img "
-			+ "JOIN fetch di_img.fileInfo fi "
+			+ "JOIN di.displayinfoImages di_img "
+			+ "JOIN di_img.fileInfo fi "
 			+ "Where di.id = ?1")
 	DisplayInfo selectDisplayInfoImage(long displayInfoId);
 
@@ -79,8 +79,8 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 	@Query("SELECT "
 			+ "pr "
 			+ "FROM Product pr "
-			+ "JOIN fetch pr.displayInfos di "
-			+ "JOIN fetch pr.category ca "
+			+ "JOIN pr.displayInfos di "
+			+ "JOIN pr.category ca "
 			+ "Where di.id = ?1")
 	Product selectDisplayInfo(long displayInfoId);
 

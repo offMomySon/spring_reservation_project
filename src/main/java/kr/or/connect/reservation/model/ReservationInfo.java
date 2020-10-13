@@ -166,12 +166,12 @@ public class ReservationInfo {
 	}
 
 	@Nonnull
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "reservation_info_id")
 	private Set<ReservationUserComment> userComments = new HashSet<>();
 
 	@Nonnull
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "reservation_info_id")
 	private Set<ReservationInfoPrice> rsvInfoPrices = new HashSet<>();
 	

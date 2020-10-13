@@ -45,7 +45,9 @@ public class ReservationServiceImpl implements ReservationService {
 		
 		ReservationInfo reservationInfo = makeReservationInfo(rsvRequest);
 		reservationInfo = rsvRep.save(reservationInfo);
-
+		
+		rsvRequest.setReservationInfoId(reservationInfo.getId());
+		
 		savePriceList(reservationInfo.getId(), rsvRequest.getPrices());
 
 		return rsvRequest;

@@ -92,55 +92,55 @@ public class Product {
 	}
 
 	@Nonnull
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
-	private List<ProductImage> productImages = new ArrayList();
+	private Set<ProductImage> productImages = new HashSet();
 
 	@Nonnull
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
-	private List<DisplayInfo> displayInfos = new ArrayList();
+	private Set<DisplayInfo> displayInfos = new HashSet();
 	
 	@Nonnull
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Set<ReservationInfo> reservationInfos = new HashSet<>();
 
 	@Nonnull
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Set<ReservationUserComment> reservationUserComments = new HashSet<>();
 	
 	@Nonnull
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Set<ProductPrice> productPrices = new HashSet<>();
 	
 	@Nonnull
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "product_id")
 	private Set<Promotion> promotions = new HashSet<>();
 	
 	@Nonnull
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Category.class)
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Category.class)
 	@JoinColumn(name = "category_id")
 	private Category category;
 
 	@Nonnull
-	public List<ProductImage> getProductImages() {
+	public Set<ProductImage> getProductImages() {
 		return productImages;
 	}
 
-	public void setProductImages(@Nonnull List<ProductImage> productImages) {
+	public void setProductImages(@Nonnull Set<ProductImage> productImages) {
 		this.productImages = productImages;
 	}
 
 	@Nonnull
-	public List<DisplayInfo> getDisplayInfos() {
+	public Set<DisplayInfo> getDisplayInfos() {
 		return displayInfos;
 	}
 
-	public void setDisplayInfos(@Nonnull List<DisplayInfo> displayInfos) {
+	public void setDisplayInfos(@Nonnull Set<DisplayInfo> displayInfos) {
 		this.displayInfos = displayInfos;
 	}
 

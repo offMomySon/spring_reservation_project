@@ -101,7 +101,7 @@ public class ReservationUserComment {
 	}
 
 	@Nonnull
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "reservation_user_comment_id")
 	private Set<ReservationUserCommentImage> reservationUserCommentImages = new HashSet<>();
 

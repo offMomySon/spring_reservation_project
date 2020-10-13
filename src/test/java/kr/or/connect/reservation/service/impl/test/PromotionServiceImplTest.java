@@ -32,14 +32,14 @@ public class PromotionServiceImplTest {
 
 	@Test
 	public void test() {
-		List<PromotionRs> promotionRsList = new ArrayList<>();
-		promotionRsList.add(new PromotionRs(1, 1, "A"));
-		promotionRsList.add(new PromotionRs(2, 2, "B"));
-		logger.info("promotionRsList = {}", promotionRsList);
-		
-//		when(promotionRep.selectAll()).thenReturn(promotionRsList);
-//		logger.info("promotionRep.selectAll() = {}", promotionRep.selectAll());
-		
-		assertThat(promotionRep.selectAll(), is(promotionRsList));
+//		List<PromotionRs> promotionRsList = new ArrayList<>();
+//		promotionRsList.add(new PromotionRs(1, 1, "A"));
+//		promotionRsList.add(new PromotionRs(2, 2, "B"));
+//		logger.info("promotionRsList = {}", promotionRsList);
+//		
+////		when(promotionRep.selectAll()).thenReturn(promotionRsList);
+////		logger.info("promotionRep.selectAll() = {}", promotionRep.selectAll());
+//		
+//		assertThat(promotionRep.selectAll(), is(promotionRsList));
 	}
 }
