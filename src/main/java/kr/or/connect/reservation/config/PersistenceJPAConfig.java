@@ -31,8 +31,8 @@ public class PersistenceJPAConfig {
 		dataSource.setUrl(url);
 		dataSource.setUsername(username);
 		dataSource.setPassword(password);
-		dataSource.setMaxIdle(40);
-		dataSource.setMaxTotal(40);
+		dataSource.setMaxIdle(20);
+		dataSource.setMaxTotal(20);
 		return dataSource;
 	}
 
