@@ -25,7 +25,7 @@
 |rsv_POST_api | 154.43ms   |  634.9693/s  |   19152      |         0  |
 
 
-### 1core_1024m_40connectio
+### Least-connected
 | TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
 |--      |--               |--                 |--           |--           |
 | categories_api_test | 49.94ms     |  1720.981548/s |   51878      |         0  |
