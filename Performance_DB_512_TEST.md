@@ -96,7 +96,7 @@
 |rsv_POST_api| 1.32s       |  73.565999/s   |   2246      |         0  |
 
 
-### 1core_1024m_100connectio
+### 1core_1024m_200connectio
 | TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
 |--      |--               |--                 |--           |--           |
 | categories_api_test | 352.59ms     |  133.259663/s |   4037      |         0  |
