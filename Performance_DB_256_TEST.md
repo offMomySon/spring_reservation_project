@@ -1,4 +1,4 @@
-### 1core_128m_40connectio
+### 1core_128m_20connectio
 | TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
 |--      |--               |--                 |--           |--           |
 | categories_api_test| 369.75ms         |  220.522471/s  |   6918      |         0  |
@@ -44,6 +44,17 @@
 |rsv_GET_api| 10.08s        |  9.517491/s  |   302      |         0  |
 |rsv_PUT_api| 1.02s        |  95.811418/s  |   2943      |         0  |
 |rsv_POST_api | 2.15s      |  39.853904/s   |   1665      |         0  |
+
+### 1core_256m_40connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 359.07ms         |  235.353451/s  |   7138      |         0  |
+|   products_api_test  | 5.24s         | 17.936444/s  |   606      |         0  |
+|products_with_displayInfoId_api_test| 3.75s        |  3.871073/s  |   125      |         0  |
+|promotion_api_test| 14.05s         |  6.142161/s  |   260      |         0  |
+|rsv_GET_api| 6.4s        | 14.576673/s |   509      |         0  |
+|rsv_PUT_api| 954.95ms         |  102.737884/s  |   3166      |         0  |
+|rsv_POST_api | 1.22s         |  79.049385/s  |   2439      |         0  |
 
 
 ### 1core_256m_40connectio
