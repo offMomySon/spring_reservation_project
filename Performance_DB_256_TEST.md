@@ -3,6 +3,20 @@
 |--      |--               |--                 |--           |--           |
 | categories_api_test| 369.75ms         |  220.522471/s  |   6918      |         0  |
 |   products_api_test    | 5.26s         | 17.8047955/s  |   612      |         0  |
+|products_with_displayInfoId_api_test| 4.195s        |  3.45803/s  |   113      |         0  |
+|promotion_api_test| 13.55s         |  6.421449/s  |   260      |         0  |
+|rsv_GET_api| 6.52s        |  14.26314/s  |   501      |         0  | 
+|rsv_PUT_api| 973.79ms         |  100.596307/s  |   3094      |         0  |  
+|rsv_POST_api| 1.24s         |  78.164485/s  |   2410      |         0  |
+
+
+
+
+### 1core_128m_40connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 369.75ms         |  220.522471/s  |   6918      |         0  |
+|   products_api_test    | 5.26s         | 17.8047955/s  |   612      |         0  |
 |products_with_displayInfoId_api_test| 4.58s        |  3.223175/s  |   101      |         0  |
 |promotion_api_test| 17s         |  5.10321/s  |   220      |         0  |
 |rsv_GET_api| 7.77s	        |  12.017059/s  |   419      |         0  |
