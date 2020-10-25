@@ -16,13 +16,13 @@
 ### 1core_256m_100connectio
 | TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
 |--      |--               |--                 |--           |--           |
-| categories_api_test | 350.34ms         |  263.145311/s | 7978 |     0  |
-|   products_api_test    | 5.64s         | 16.896079/s     |   541    |         0  |
-|products_with_displayInfoId_api_test|  4.45s       | 4.39882/s  |  140   |     0  |
-|promotion_api_test| 19.84s  | 4.966036/s |  200   |         0  |
-|rsv_GET_api| 7.07s |  13.304025/s |  435  |         0  |
-|rsv_PUT_api| 970.61ms  | 101.451653/s |   3106 |         0  |
-|rsv_POST_api | 1.29s |  75.345379/s   | 2312    |   0  |
+| categories_api_test |372.63ms     | 249.509417/s | 7560 |     0  |
+|   products_api_test    | 5.58s      | 17.154857/s     |   563    |         0  |
+|products_with_displayInfoId_api_test|  6.84s       | 4.20537/s  |  142   |     0  |
+|promotion_api_test| 19.48s  | 5.05215/s |  200   |         0  |
+|rsv_GET_api| 8.04s |  12.031267/s |  400  |         0  |
+|rsv_PUT_api| 897.16ms  | 109.433007/s |   3357 |         0  |
+|rsv_POST_api | 1.28s |  75.939224/s   | 2322    |   0  |
 
 ### 1core_256m_200connectio
 | TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
