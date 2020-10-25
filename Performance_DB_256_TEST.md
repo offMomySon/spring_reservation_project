@@ -145,8 +145,176 @@
 |rsv_POST_api| 1.25s       |  78.070196/s  |   2382      |         0  |
 
 
+### 4core_256m_40connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 69.13ms         |  1366.097383/s   |   41165      |         0  |
+|   products_api_test| 1.53s         | 63.761524/s  |   1988      |         0  |
+|products_with_displayInfoId_api_test| 3.5s       |  8.106936/s  |   271      |         0  |
+|promotion_api_test| 4.7s        | 20.238508/s  |   687      |         0  |
+|rsv_GET_api| 1.95s        | 50.024217/s |   1,574      |         0  |
+|rsv_PUT_api|  883.66ms      | 111.097399/s	 |   3434      |         0  |
+|rsv_POST_api| 201.21ms       |  487.737911/s  |   14719      |         0  |
 
 
+### 4core_256m_100connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 68.99ms         |  1325.544117/s   |   39922      |         0  |
+|   products_api_test| 1.52s         | 64.592297/s  |   1990      |         0  |
+|products_with_displayInfoId_api_test| 3.63s      |  7.839118/s  |   262      |         0  |  
+|promotion_api_test| 5.19s        | 18.862841/s  |   602      |         0  |
+|rsv_GET_api| 1.95s        | 50.255351/s |   1556      |         0  |
+|rsv_PUT_api|  914.37ms      | 107.325897/s	 |   3320      |         0  |
+|rsv_POST_api| 207.1ms       |  470.548593/s  |   14185      |         0  |
 
+### 4core_256m_200connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 71.01ms        |  1325.093988/s  |   39936      |         0  |
+|   products_api_test| 1.57s       | 62.571582/s  |   1926      |         0  |
+|products_with_displayInfoId_api_test| 3.56s     |  7.986114/s  |   267      |         0  |
+|promotion_api_test| 5.54s        | 17.788534/s  |   599      |         0  |
+|rsv_GET_api| 1.99s        | 49.262461/s |   1526      |         0  |
+|rsv_PUT_api|  870.57ms      | 112.769658/s	 |   3485      |         0  |
+|rsv_POST_api| 208.85ms       |  467.374849/s  |   14088      |         0  |
+
+
+### 4core_512m_40connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 74.09ms      | 1302.250216/s |   39177      |         0  |
+|   products_api_test| 1.46s      | 67.18247/s |   2092      |         0  |
+|products_with_displayInfoId_api_test| 3.55s     |  8.010638/s |   267      |         0  |
+|promotion_api_test|4.78s      |  19.852281/s|   664      |         0  |
+|rsv_GET_api| 1.86s    | 52.308366/s  |   1643	      |         0  |
+|rsv_PUT_api| 881.95ms    | 111.43953/s	 |   3443      |         0  |
+|rsv_POST_api| 197.91ms       |  496.873823/s |   14995      |         0  |
+
+### 4core_512m_100connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 71.33ms       | 1317.720741/s  |   39639      |         0  |
+|   products_api_test| 1.54s      | 64.011699/s |   1974      |         0  |
+|products_with_displayInfoId_api_test| 3.62s     |  7.859625/s  |   262      |         0  |
+|promotion_api_test|5.3s       |  18.574422/s |   600      |         0  |
+|rsv_GET_api| 1.96s     | 50.129831/s  |   1549      |         0  |
+|rsv_PUT_api| 887.46ms    | 110.571956/s	 |   3418      |         0  |
+|rsv_POST_api| 203.33ms       |  479.146885/s  |   14449      |         0  |
+
+### 4core_512m_200connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 70.63ms       | 1305.613666/s  |   39395      |         0  |
+|   products_api_test| 1.58s       | 61.849067/s |   1918      |         0  |
+|products_with_displayInfoId_api_test| 5.14s     |  5.474498/s  |   188      |         0  |
+|promotion_api_test| 4.78s       | 20.139712/s |   662      |         0  |
+|rsv_GET_api| 2.05s       | 47.869878/s |   1486      |         0  |
+|rsv_PUT_api|  897.8ms      |109.358359/s	 |   3382      |         0  |
+|rsv_POST_api| 206.32ms       |  471.848321/s  |   14259      |         0  |
+
+
+### 4core_1024m_40connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 70.4ms     | 1362.131288/s |   41020      |         0  |
+|   products_api_test| 1.55s     | 63.002119/s |   1967      |         0  |
+|products_with_displayInfoId_api_test| 3.71s   |  7.668022/s |   255      |         0  |
+|promotion_api_test|4.86s	      |  19.521897/s|   661      |         0  |
+|rsv_GET_api| 1.89s   | 51.623072/s  |   1626	      |         0  |
+|rsv_PUT_api| 886.57ms   | 110.968007/s	 |   3425      |         0  |
+|rsv_POST_api| 200.3ms      |  491.224504/s |   14817      |         0  |
+
+### 4core_1024m_100connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 68.86ms      | 1385.368698/s  |   41737      |         0  |
+|   products_api_test| 1.52s      | 64.471051/s |   1992      |         0  |
+|products_with_displayInfoId_api_test| 3.53s	     |  8.049695/s  |   269      |         0  |
+|promotion_api_test|  5.06s       |  19.317739/s  |   606      |         0  |
+|rsv_GET_api| 1.9s     | 51.784559/s  |   1601      |         0  |
+|rsv_PUT_api| 872.77ms    | 112.741441/s	 |   3479      |         0  |
+|rsv_POST_api| 201.11ms   |  485.393161/s  |   14627      |         0  |
+
+### 4core_1024m_200connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 72.53ms      | 1316.876029/s |   39689      |         0  |
+|   products_api_test| 1.49s	      | 65.883294/s |   2031      |         0  |
+|products_with_displayInfoId_api_test| 3.55s	   |  7.986742/s  |   267      |         0  |
+|promotion_api_test| 5.22s       | 18.850542/s |   600      |         0  |
+|rsv_GET_api| 1.94s      | 50.675088/s |   1569      |         0  |
+|rsv_PUT_api| 878.06ms   |  112.025564/s	 |   3458      |         0  |
+|rsv_POST_api| 201.3ms       |  485.488522/s  |   14630      |         0  |
+
+### 4core_2048m_40connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 67.84ms      | 1413.196395/s  |   42575      |         0  |
+|   products_api_test| 1.47s    | 66.593473/s |   2076      |         0  |
+|products_with_displayInfoId_api_test| 3.62s   |  7.857022/s |   262      |         0  |
+|promotion_api_test|  4.6s      |  20.675088/s  |   700      |         0  |
+|rsv_GET_api| 1.86s   | 52.486169/s |   1646      |         0  |
+|rsv_PUT_api| 891.86ms  |  110.303775/s |   3404      |         0  |
+|rsv_POST_api| 203.92ms  |  483.333625/s |   14579      |         0  |
+
+
+### 4core_2048m_100connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 65.82ms      | 1438.858399/s  |   43285      |         0  |
+|   products_api_test| 1.56s     | 63.111606/s |   1946      |         0  |
+|products_with_displayInfoId_api_test| 3.59s	     |  7.922432/s  |   264      |         0  |
+|promotion_api_test|  5.01s      |  19.449944/s  |   613      |         0  |
+|rsv_GET_api| 1.98s    | 49.635702/s  |   1536      |         0  |
+|rsv_PUT_api| 874.36ms    |  112.523956/s	 |   3471      |         0  |
+|rsv_POST_api| 205.96ms   |  452.252856/s |   13631      |         0  |
+
+### 4core_2048m_200connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 67.67ms     | 1393.615513/s |   41986      |         0  |
+|   products_api_test| 1.56s     | 62.972741/s |   1949      |         0  |
+|products_with_displayInfoId_api_test| 3.51s  | 8.104296/s  |   270      |         0  |
+|promotion_api_test| 4.78s    | 20.128346/s |   654      |         0  |
+|rsv_GET_api|  1.95s     | 50.293061/s |   1558      |         0  |
+|rsv_PUT_api| 877.29ms |  111.893537/s  |   3457      |         0  |
+|rsv_POST_api| 202.21ms      |  483.880604/s  |   14578      |         0  |
+
+
+### 4core_4096m_40connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 68.67ms    | 1403.271547/s |   42281      |         0  |
+|   products_api_test| 1.61s    | 60.672762/s |   1896      |         0  |
+|products_with_displayInfoId_api_test| 3.63s	  |  7.829582/s |   262      |         0  |
+|promotion_api_test|  5s    |  18.929066/s  |   646      |         0  |
+|rsv_GET_api| 1.98s | 49.134244/s  |   1547      |         0  |
+|rsv_PUT_api| 889.31ms  | 110.441575/s |   3413      |         0  |
+|rsv_POST_api| 213.93ms  |  460.756433/s |   13900      |         0  |
+
+
+### 4core_4096m_100connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test| 67.84ms  | 1393.732255/s |   41991      |         0  |
+|   products_api_test| 1.52s	    | 64.854379/s |   1996      |         0  |
+|products_with_displayInfoId_api_test| 3.62s	  |  7.845781/s  |   262      |         0  |
+|promotion_api_test|  5.27s  |  18.647137/s |   600      |         0  |
+|rsv_GET_api| 1.92s  | 51.011568/s  |   1581      |         0  |
+|rsv_PUT_api| 890.81ms | 110.245308/s |   3408      |         0  |
+|rsv_POST_api| 204.08ms |  478.822861/s |   14423      |         0  |
+
+
+### 4core_4096m_200connectio
+| TS API | 평균요청 처리시간 | 초당 처리 요청수  |   성공요청   |   실패 요청  | 
+|--      |--               |--                 |--           |--           |
+| categories_api_test|  68.45ms | 1370.258428/s |   41460      |         0  |
+|   products_api_test| 1.56s	    | 62.944749/s|    1941      |         0  |
+|products_with_displayInfoId_api_test| 3.62s	  |  7.860651/s  |   261      |         0  |
+|promotion_api_test| 5.24s	  | 18.751474/s |   600      |         0  |
+|rsv_GET_api| 1.93s   | 50.884981/s  |   1573      |         0  |
+|rsv_PUT_api| 888.74ms | 110.654321/s |   3417      |         0  |
+|rsv_POST_api| 204.86ms |  476.700697/s |   14372      |         0  |
 
 
