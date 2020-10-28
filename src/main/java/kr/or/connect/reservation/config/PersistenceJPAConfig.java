@@ -14,9 +14,8 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource("classpath:application.properties")
 @EnableConfigurationProperties
-@SpringBootApplication
+//@PropertySource("classpath:application.properties")
 public class PersistenceJPAConfig {
 
 	private String driverClassName = "com.mysql.cj.jdbc.Driver";

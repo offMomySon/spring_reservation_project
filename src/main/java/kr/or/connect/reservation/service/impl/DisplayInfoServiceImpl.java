@@ -67,7 +67,7 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
 	@Transactional
 	@Override
 	public List<ProductImageRs> getProductImageList(long displayInfoId) {
-		PageRequest pageRequest = PageRequest.of(FIRST_PAGE, (int) SELECT_IMAGE_COUNT_LIMIT);
+		PageRequest pageRequest =  PageRequest.of(FIRST_PAGE, (int) SELECT_IMAGE_COUNT_LIMIT);
 		
 		List<Product> productList = displayInfoRep.selectProductImageList(displayInfoId, pageRequest).getContent();
 		List<ProductImageRs> productImageRsList = new ArrayList();
