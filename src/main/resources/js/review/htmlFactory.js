@@ -23,7 +23,7 @@ var Server = {
             httpRequest.addEventListener("load", () => {
                 resolve(JSON.parse(httpRequest.responseText));
             });
-            httpRequest.open("GET", `/reservation/api/products/${displayInfoId}`);
+            httpRequest.open("GET", `/api/products/${displayInfoId}`);
             httpRequest.send();
         });
     }

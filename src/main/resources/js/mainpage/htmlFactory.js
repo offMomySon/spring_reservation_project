@@ -41,7 +41,7 @@ var Server = {
             httpRequest.addEventListener("load", () => {
                 resolve(JSON.parse(httpRequest.responseText));
             });
-            httpRequest.open("GET", "/reservation/api/categories");
+            httpRequest.open("GET", "/api/categories");
             httpRequest.send();
         });
     },
@@ -63,14 +63,14 @@ var Server = {
             httpRequest.addEventListener("load", () => {
                 resolve(JSON.parse(httpRequest.responseText));
             });
-            httpRequest.open("GET", "/reservation/api/promotions");
+            httpRequest.open("GET", "/api/promotions");
             httpRequest.send();
         });
     },
     makeProductRequestURL(start, categoryId) {
         if (categoryId == this.TOTAL_LIST_CATEGORY_ID) {
-            return `/reservation/api/products?start=${start}`;
+            return `/api/products?start=${start}`;
         }
-        return `/reservation/api/products?categoryId=${categoryId}&start=${start}`;
+        return `/api/products?categoryId=${categoryId}&start=${start}`;
     }
 }

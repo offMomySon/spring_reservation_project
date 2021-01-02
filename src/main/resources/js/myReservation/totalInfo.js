@@ -14,7 +14,7 @@ class Builder {
     }
 
     static get RSVINFOURL() {
-        return `/reservation/api/reservations`;
+        return `/api/reservations`;
     }
 
     static async create() {

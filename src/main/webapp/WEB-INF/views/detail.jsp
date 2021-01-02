@@ -204,7 +204,7 @@
     <script type="rv-template" id="visualItem">
         {{#each productImages}}
         <li class="item container_visual">
-            <img alt="" class="img_thumb container_visual" src="http://localhost:8080/reservation/{{saveFileName}}">
+            <img alt="" class="img_thumb container_visual" src="http://localhost:8080/{{saveFileName}}">
             <span class="img_bg">aa</span>
             <div class="visual_txt">
                 <div class="visual_txt_inn">
@@ -227,7 +227,7 @@
                     {{#each commentImages}}
                         <div class="thumb_area">
                             <a href="#" class="thumb" title="이미지 크게 보기">
-                                <img width="90" height="90" class="img_vertical_top" src="http://localhost:8080/reservation/{{saveFileName}}" alt="리뷰이미지">
+                                <img width="90" height="90" class="img_vertical_top" src="http://localhost:8080/{{saveFileName}}" alt="리뷰이미지">
                             </a>
                             <span class="img_count" style="display:none;">{{@index}}</span>
                         </div>

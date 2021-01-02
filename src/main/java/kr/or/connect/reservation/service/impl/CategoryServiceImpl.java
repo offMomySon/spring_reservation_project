@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import kr.or.connect.reservation.dto.CategoryRs;

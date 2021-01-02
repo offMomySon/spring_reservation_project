@@ -8,6 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,7 @@ public class ProductApiController {
 	@Autowired
 	private DisplayInfoService displayInfoService;
 
+	@Cacheable(cacheNames = "product_cache")
 	@GetMapping
 	public ResponseEntity<?> getProduct(@RequestParam(defaultValue = "0") long categoryId,
 			@RequestParam(defaultValue = "0") long start) {

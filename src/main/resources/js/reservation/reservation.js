@@ -13,11 +13,11 @@ class Reservation {
     }
 
     static get PRODUCTINFOURL() {
-        return `/reservation/api/products/`;
+        return `/api/products/`;
     }
 
     static get RSVURL() {
-        return `/reservation/api/reservations/`;
+        return `/api/reservations/`;
     }
 
     async setTiketElm() {

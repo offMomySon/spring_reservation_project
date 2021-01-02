@@ -28,7 +28,7 @@ class Product{
     }
 
     static get PRODUCTINFOURL() {
-        return `/reservation/api/products/`;
+        return `/api/products/`;
     }
 
     getDisplayInfo(displayInfoId){

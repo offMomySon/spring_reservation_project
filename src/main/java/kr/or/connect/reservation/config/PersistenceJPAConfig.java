@@ -2,6 +2,7 @@ package kr.or.connect.reservation.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,29 +10,37 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
 @EnableConfigurationProperties
-//@PropertySource("classpath:application.properties")
+//@ConfigurationProperties(prefix = "spring.datasource")
+@Slf4j
 public class PersistenceJPAConfig {
 
+	
 	private String driverClassName = "com.mysql.cj.jdbc.Driver";
-	private String url = "jdbc:mysql://3.134.162.196:3306/connectdb?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8";
+	private String url = "jdbc:mysql://localhost:3306/connectdb?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8";
 	private String username = "connectuser";
 	private String password = "connect123!@#";
 
+
 	@Bean
 	public DataSource dataSource() {
+		log.info("dataSource called");
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName(driverClassName);
 		dataSource.setUrl(url);
 		dataSource.setUsername(username);
 		dataSource.setPassword(password);
-		dataSource.setMaxIdle(20);
-		dataSource.setMaxTotal(20);
+		dataSource.setInitialSize(100);
+		dataSource.setMinIdle(100);
+//		dataSource.setMaxIdle(100);
+		dataSource.setMaxTotal(100);
 		return dataSource;
 	}
 

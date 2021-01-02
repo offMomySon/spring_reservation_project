@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 //@SpringBootApplication
-//@Import({ PersistenceJPAConfig.class, WebMvcContextConfiguration.class })
+@Import({ PersistenceJPAConfig.class, WebMvcContextConfiguration.class, CacheConfig.class })
 @Configuration
 @ComponentScan(basePackages = { "kr.or.connect.reservation.dao", "kr.or.connect.reservation.service", "kr.or.connect.reservation.exception" })
 @EntityScan("kr.or.connect.reservation.model")

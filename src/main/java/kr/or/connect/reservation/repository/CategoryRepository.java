@@ -13,6 +13,8 @@ import org.springframework.data.jpa.repository.Query;
 import kr.or.connect.reservation.model.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+	
+	
 	@Nonnull
 	@Query("SELECT "
 			+ "ca, COUNT(*) "

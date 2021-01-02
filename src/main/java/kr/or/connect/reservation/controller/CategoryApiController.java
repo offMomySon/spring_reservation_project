@@ -9,6 +9,7 @@ import javax.persistence.Tuple;
 
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ public class CategoryApiController {
 	@Autowired
 	private CategoryService categoryService;
 
+	@Cacheable(cacheNames = "category_list_cache")
 	@GetMapping
 	public ResponseEntity<?> getCategoryItems() {
 		List<CategoryRs> categoryRsList = categoryService.getCategoryList();
