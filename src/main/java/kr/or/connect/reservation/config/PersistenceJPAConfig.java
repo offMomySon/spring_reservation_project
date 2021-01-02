@@ -1,16 +1,12 @@
 package kr.or.connect.reservation.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -18,8 +14,8 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableConfigurationProperties
-//@ConfigurationProperties(prefix = "spring.datasource")
 @Slf4j
+//@ConfigurationProperties(prefix = "spring.datasource")
 public class PersistenceJPAConfig {
 
 	

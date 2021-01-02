@@ -9,7 +9,7 @@
 <body>
 
 <%
-    response.sendRedirect("/reservation/htmls/mainpage.html");    
+    response.sendRedirect("/htmls/mainpage.html");
 %>
 	
 </body>
