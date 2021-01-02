@@ -1,27 +1,27 @@
 package kr.or.connect.reservation.dao;
 
-import static kr.or.connect.reservation.sql.ProductSql.*;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
+import kr.or.connect.reservation.dto.ProductRs;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import kr.or.connect.reservation.dto.ProductRs;
+import javax.sql.DataSource;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static kr.or.connect.reservation.sql.ProductSql.*;
 
 @Repository
 public class ProductDao {
 	private NamedParameterJdbcTemplate jdbcTemplate;
 	private RowMapper<ProductRs> rowMapper = BeanPropertyRowMapper.newInstance(ProductRs.class);
 
-	public ProductDao(DataSource dataSource) {
+
+	public ProductDao(@Qualifier("dataSource") DataSource dataSource) {
 		jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 

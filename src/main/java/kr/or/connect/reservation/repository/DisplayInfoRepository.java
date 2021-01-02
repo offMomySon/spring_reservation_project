@@ -1,24 +1,15 @@
 package kr.or.connect.reservation.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import kr.or.connect.reservation.dto.CommentImageRs;
-import kr.or.connect.reservation.dto.CommentRs;
-import kr.or.connect.reservation.dto.DisplayInfoImageRs;
-import kr.or.connect.reservation.dto.DisplayInfoRs;
-import kr.or.connect.reservation.dto.ProductImageRs;
-import kr.or.connect.reservation.dto.ProductPriceRs;
 import kr.or.connect.reservation.model.DisplayInfo;
 import kr.or.connect.reservation.model.Product;
 import kr.or.connect.reservation.model.ReservationInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> {
 

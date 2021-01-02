@@ -1,15 +1,12 @@
 package kr.or.connect.reservation.repository;
 
+import kr.or.connect.reservation.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.annotation.Nonnull;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import kr.or.connect.reservation.dto.ProductRs;
-import kr.or.connect.reservation.model.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 		

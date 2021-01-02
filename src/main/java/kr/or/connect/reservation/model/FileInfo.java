@@ -15,7 +15,7 @@ import javax.persistence.TemporalType;
 @Table(name = "file_info")
 public class FileInfo {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "file_name")

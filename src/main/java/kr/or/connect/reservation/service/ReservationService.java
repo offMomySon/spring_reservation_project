@@ -1,16 +1,10 @@
 package kr.or.connect.reservation.service;
 
-import java.util.List;
-
-import javax.persistence.Tuple;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import kr.or.connect.reservation.dto.Price;
 import kr.or.connect.reservation.dto.ReservationRequestRs;
-import kr.or.connect.reservation.dto.ReservationResponseRs;
 import kr.or.connect.reservation.model.ReservationInfo;
-import kr.or.connect.reservation.model.ReservationInfoPrice;
+
+import java.util.List;
 
 public interface ReservationService {
 	public ReservationRequestRs addReservation(ReservationRequestRs reservation);

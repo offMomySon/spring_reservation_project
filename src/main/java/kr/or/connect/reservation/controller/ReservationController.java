@@ -1,11 +1,10 @@
 package kr.or.connect.reservation.controller;
 
-import javax.servlet.http.HttpSession;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Controller

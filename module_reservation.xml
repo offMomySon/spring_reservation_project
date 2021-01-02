@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_reservation" default="compile.module.reservation">
+  <dirname property="module.reservation.basedir" file="${ant.file.module_reservation}"/>
+  
+  <property name="module.jdk.home.reservation" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.reservation" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.reservation" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.reservation" value="-encoding UTF-8 -source 8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="reservation.output.dir" value="undefined"/>
+  <property name="reservation.testoutput.dir" value="undefined"/>
+  
+  <path id="reservation.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="reservation.module.production.classpath">
+    <path refid="${module.jdk.classpath.reservation}"/>
+  </path>
+  
+  <path id="reservation.runtime.production.module.classpath"/>
+  
+  <path id="reservation.module.classpath">
+    <path refid="${module.jdk.classpath.reservation}"/>
+  </path>
+  
+  <path id="reservation.runtime.module.classpath"/>
+  
+  
+  <patternset id="excluded.from.module.reservation">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.reservation">
+    <patternset refid="excluded.from.module.reservation"/>
+  </patternset>
+  
+  
+  <target name="compile.module.reservation" depends="compile.module.reservation.production,compile.module.reservation.tests" description="Compile module reservation"/>
+  
+  <target name="compile.module.reservation.production" depends="register.custom.compilers" description="Compile module reservation; production classes"/>
+  
+  <target name="compile.module.reservation.tests" depends="register.custom.compilers,compile.module.reservation.production" description="compile module reservation; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.reservation" description="cleanup module">
+    <delete dir="${reservation.output.dir}"/>
+    <delete dir="${reservation.testoutput.dir}"/>
+  </target>
+</project>

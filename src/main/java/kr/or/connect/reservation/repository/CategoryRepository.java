@@ -1,16 +1,12 @@
 package kr.or.connect.reservation.repository;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.persistence.Tuple;
-
-import org.javatuples.Pair;
+import kr.or.connect.reservation.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import kr.or.connect.reservation.model.Category;
+import javax.annotation.Nonnull;
+import javax.persistence.Tuple;
+import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 	

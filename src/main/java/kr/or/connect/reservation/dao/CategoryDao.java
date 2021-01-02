@@ -1,18 +1,17 @@
 package kr.or.connect.reservation.dao;
 
-import static kr.or.connect.reservation.sql.CategorySql.*;
-
-import java.util.Collections;
-import java.util.List;
-
-import javax.sql.DataSource;
-
+import kr.or.connect.reservation.dto.CategoryRs;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import kr.or.connect.reservation.dto.CategoryRs;
+
+import javax.sql.DataSource;
+import java.util.Collections;
+import java.util.List;
+
+import static kr.or.connect.reservation.sql.CategorySql.SELECT_ALL_WITH_COUNT;
 
 @Repository
 public class CategoryDao {

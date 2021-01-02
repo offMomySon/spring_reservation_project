@@ -1,18 +1,16 @@
 package kr.or.connect.reservation.dto;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import kr.or.connect.reservation.objmapper.RsvDateDeserializer;
 import kr.or.connect.reservation.objmapper.RsvDateSerializer;
+
+import javax.annotation.Nonnull;
+import java.util.Date;
+import java.util.List;
 
 public class ReservationRequestRs {
 

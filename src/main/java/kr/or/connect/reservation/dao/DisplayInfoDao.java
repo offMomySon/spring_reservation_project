@@ -1,24 +1,17 @@
 package kr.or.connect.reservation.dao;
 
-import static kr.or.connect.reservation.sql.DisplayInfoSql.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
+import kr.or.connect.reservation.dto.*;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import kr.or.connect.reservation.dto.CommentRs;
-import kr.or.connect.reservation.dto.CommentImageRs;
-import kr.or.connect.reservation.dto.DisplayInfoRs;
-import kr.or.connect.reservation.dto.DisplayInfoImageRs;
-import kr.or.connect.reservation.dto.ProductImageRs;
-import kr.or.connect.reservation.dto.ProductPriceRs;
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static kr.or.connect.reservation.sql.DisplayInfoSql.*;
 
 @Repository
 public class DisplayInfoDao {

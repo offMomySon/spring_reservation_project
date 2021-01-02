@@ -1,20 +1,17 @@
 package kr.or.connect.reservation.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
+import kr.or.connect.reservation.dto.PromotionRs;
+import kr.or.connect.reservation.model.Product;
+import kr.or.connect.reservation.repository.PromotionRepository;
+import kr.or.connect.reservation.service.PromotionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.or.connect.reservation.dto.PromotionRs;
-import kr.or.connect.reservation.model.Product;
-import kr.or.connect.reservation.model.ProductImage;
-import kr.or.connect.reservation.repository.PromotionRepository;
-import kr.or.connect.reservation.service.PromotionService;
-import lombok.extern.slf4j.Slf4j;
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service

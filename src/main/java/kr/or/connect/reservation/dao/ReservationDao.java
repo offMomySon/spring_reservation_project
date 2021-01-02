@@ -1,11 +1,11 @@
 package kr.or.connect.reservation.dao;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
+import kr.or.connect.reservation.dto.Price;
+import kr.or.connect.reservation.dto.ReservationRequestRs;
+import kr.or.connect.reservation.dto.ReservationResponseRs;
+import kr.or.connect.reservation.dto.Ticket;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -14,13 +14,12 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import static kr.or.connect.reservation.sql.ReservationSql.*;
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import kr.or.connect.reservation.dto.Price;
-import kr.or.connect.reservation.dto.ReservationRequestRs;
-import kr.or.connect.reservation.dto.ReservationResponseRs;
-import kr.or.connect.reservation.dto.Ticket;
-import lombok.extern.slf4j.Slf4j;
+import static kr.or.connect.reservation.sql.ReservationSql.*;
 
 @Slf4j
 @Repository
@@ -37,7 +36,7 @@ public class ReservationDao {
 	private RowMapper<Price> priceMapper = BeanPropertyRowMapper.newInstance(Price.class);
 	private RowMapper<Ticket> ticketMapper = BeanPropertyRowMapper.newInstance(Ticket.class);
 
-	public ReservationDao(DataSource dataSource) {
+	public ReservationDao(@Qualifier("dataSource") DataSource dataSource) {
 		reservationInfoInsert = new SimpleJdbcInsert(dataSource).withTableName("reservation_info")
 				.usingGeneratedKeyColumns("id");
 		reservationInfoPriceInsert = new SimpleJdbcInsert(dataSource).withTableName("reservation_info_price")

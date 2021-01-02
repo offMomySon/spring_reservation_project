@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "display_info_image")
 public class DisplayInfoImage {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
 	@Column(name="display_info_id")

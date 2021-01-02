@@ -1,12 +1,8 @@
 package kr.or.connect.reservation.service;
 
-import java.util.List;
+import kr.or.connect.reservation.dto.*;
 
-import kr.or.connect.reservation.dto.CommentRs;
-import kr.or.connect.reservation.dto.DisplayInfoRs;
-import kr.or.connect.reservation.dto.DisplayInfoImageRs;
-import kr.or.connect.reservation.dto.ProductImageRs;
-import kr.or.connect.reservation.dto.ProductPriceRs;
+import java.util.List;
 
 public interface DisplayInfoService {
 	public static final long SELECT_IMAGE_COUNT_LIMIT = 2;

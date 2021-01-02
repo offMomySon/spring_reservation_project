@@ -1,0 +1,86 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+
+group = 'kr.or.connect.webapp'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '15'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine:2.8.2'
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'org.slf4j:log4j-over-slf4j:1.7.25'
+    implementation 'org.slf4j:jcl-over-slf4j:1.7.25'
+    implementation 'org.slf4j:jul-to-slf4j:1.7.25'
+
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.10.1'
+
+    implementation 'org.springframework:spring-context:5.2.5.RELEASE'
+    implementation 'org.springframework:spring-jdbc:5.2.5.RELEASE'
+    implementation 'org.springframework:spring-webmvc:5.2.5.RELEASE'
+    implementation 'org.springframework:spring-tx:5.2.5.RELEASE'
+
+    implementation 'mysql:mysql-connector-java:8.0.11'
+    implementation 'org.apache.commons:commons-dbcp2:2.7.0'
+    implementation 'javax.servlet:jstl:1.2'
+
+    implementation 'org.springframework:spring-test:5.2.5.RELEASE'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'org.javatuples:javatuples:1.2'
+
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    implementation 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    compileOnly 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.35'
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
+    compileOnly 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.1'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-all:1.9.5'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+
+    implementation 'javax.xml.bind:jaxb-api:2.3.0'
+}
+
+//test {
+//    useJUnitPlatform()
+//}
+
+jar{
+    manifest{
+        attributes 'Main-Class' : "Application"
+    }
+}
+
+tasks.bootJar {
+    mainClassName = "kr.or.connect.reservation.Application"
+    archiveFileName.set("jihun.jar")
+}

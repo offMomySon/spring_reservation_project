@@ -1,16 +1,7 @@
 package kr.or.connect.reservation.model;
 
 import javax.annotation.Nonnull;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import kr.or.connect.reservation.model.ProductPrice;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "reservation_info_price")

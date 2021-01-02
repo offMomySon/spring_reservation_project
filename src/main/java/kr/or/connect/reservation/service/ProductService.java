@@ -1,9 +1,8 @@
 package kr.or.connect.reservation.service;
 
-import java.util.List;
-
 import kr.or.connect.reservation.dto.ProductRs;
-import kr.or.connect.reservation.model.Product;
+
+import java.util.List;
 
 public interface ProductService {
 	public static final long SELECT_COUNT_LIMIT = 4;

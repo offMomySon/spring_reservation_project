@@ -1,14 +1,11 @@
 package kr.or.connect.reservation.repository;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
+import kr.or.connect.reservation.model.ReservationInfoPrice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import kr.or.connect.reservation.dto.Price;
-import kr.or.connect.reservation.model.ReservationInfoPrice;
+import javax.annotation.Nonnull;
+import java.util.List;
 
 public interface ReservationInfoPriceRepository extends JpaRepository<ReservationInfoPrice, Long> {	
 

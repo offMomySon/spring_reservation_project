@@ -1,35 +1,22 @@
 package kr.or.connect.reservation.controller;
 
-import java.util.ArrayList;
+import kr.or.connect.reservation.dto.*;
+import kr.or.connect.reservation.exception.ApiErrorResponse;
+import kr.or.connect.reservation.exception.CategoryIdNotExistExceiption;
+import kr.or.connect.reservation.exception.DisplayInfoIdNotExistExceiption;
+import kr.or.connect.reservation.service.DisplayInfoService;
+import kr.or.connect.reservation.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
-import kr.or.connect.reservation.dto.CommentRs;
-import kr.or.connect.reservation.dto.DisplayInfoImageRs;
-import kr.or.connect.reservation.dto.DisplayInfoRs;
-import kr.or.connect.reservation.dto.ProductImageRs;
-import kr.or.connect.reservation.dto.ProductPriceRs;
-import kr.or.connect.reservation.dto.ProductRs;
-import kr.or.connect.reservation.exception.ApiErrorResponse;
-import kr.or.connect.reservation.exception.CategoryIdNotExistExceiption;
-import kr.or.connect.reservation.exception.DisplayInfoIdNotExistExceiption;
-import kr.or.connect.reservation.model.Product;
-import kr.or.connect.reservation.service.DisplayInfoService;
-import kr.or.connect.reservation.service.ProductService;
 
 @RestController
 @RequestMapping(path = "/api/products")

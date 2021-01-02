@@ -23,7 +23,7 @@ import javax.persistence.OneToMany;
 @Table(name = "display_info")
 public class DisplayInfo {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "product_id")

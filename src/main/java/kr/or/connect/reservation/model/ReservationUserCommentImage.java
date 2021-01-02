@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "reservation_user_comment_image")
 public class ReservationUserCommentImage {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@Column(name = "reservation_info_id")
