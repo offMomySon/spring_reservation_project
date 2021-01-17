@@ -8,7 +8,7 @@ COPY . .
 RUN ./gradlew -x test build
 
 FROM adoptopenjdk/openjdk15:latest
-ENV ARTIFACT_NAME=jihun.jar
+ENV ARTIFACT_NAME=jihun.war
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 COPY --from=TEMP_BUILD_IMAGE $APP_HOME/build/libs/$ARTIFACT_NAME .

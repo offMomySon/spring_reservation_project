@@ -4,6 +4,13 @@ plugins {
     id 'java'
 }
 
+apply plugin: 'war'
+
+bootWar {
+    baseName = 'jihun'
+    archiveName 'jihun.war'
+}
+
 group = 'kr.or.connect.webapp'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '15'
@@ -44,7 +51,13 @@ dependencies {
 
     implementation 'mysql:mysql-connector-java:8.0.11'
     implementation 'org.apache.commons:commons-dbcp2:2.7.0'
-    implementation 'javax.servlet:jstl:1.2'
+
+    compile('javax.servlet:jstl:1.2')
+    compile('org.apache.tomcat.embed:tomcat-embed-jasper')
+//    compileOnly 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.35'
+    compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
+    compileOnly 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.1'
+//    implementation 'javax.servlet:jstl:1.2'
 
     implementation 'org.springframework:spring-test:5.2.5.RELEASE'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
@@ -58,16 +71,14 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    compileOnly 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.35'
-    compileOnly 'org.projectlombok:lombok:1.18.12'
-    compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
-    compileOnly 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.1'
-
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-all:1.9.5'
     testImplementation 'org.hamcrest:hamcrest:2.2'
 
-    implementation 'javax.xml.bind:jaxb-api:2.3.0'
+    implementation "javax.xml.bind:jaxb-api:2.3.0"
+    implementation "com.sun.xml.bind:jaxb-core:2.3.0"
+    implementation "com.sun.xml.bind:jaxb-impl:2.3.0"
+    implementation "javax.activation:activation:1.1.1"
 }
 
 //test {
