@@ -194,7 +194,6 @@ modules.xml
 
 # Package Files #
 *.zip
-*.jar
 *.war
 *.nar
 *.ear
