@@ -1,6 +1,13 @@
-
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,intellij,java-web,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,intellij,java-web,java
+
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
 
 ### Eclipse ###
 .metadata
