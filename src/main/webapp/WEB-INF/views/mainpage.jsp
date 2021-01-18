@@ -133,7 +133,7 @@
     </script>
 
 	<script type="rv-template" id="promotionItem">
-    <li class="item" id="{{productId}}" style="background-image: url(http://localhost:8080/{{productImageUrl}}/);">
+    <li class="item" id="{{productId}}" style="background-image: url(http://34.122.84.61:8080/{{productImageUrl}}/);">
         <a href="#">
             <span class="img_btm_border"></span>
             <span class="img_right_border"></span>
@@ -151,7 +151,7 @@
         <li class="item">
             <a href="detail.html?id={{productId}}" class="item_book">
                 <div class="item_preview">
-                    <img alt="{{productDescription}}" class="img_thumb" src="http://localhost:8080/{{productImageUrl}}">
+                    <img alt="{{productDescription}}" class="img_thumb" src="http://34.122.84.61:8080/{{productImageUrl}}">
                     <span class="img_border"></span>
                 </div>
                 <div class="event_txt">

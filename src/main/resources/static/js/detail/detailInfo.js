@@ -87,7 +87,7 @@ var DetailInfo = {
         this.introduceDscElm.innerHTML = content;
     },
     setStoreMapImg(mapImgSrc) {
-        this.storeMapElm.setAttribute('src', `http://localhost:8080/${mapImgSrc}`);
+        this.storeMapElm.setAttribute('src', `http://34.122.84.61:8080/${mapImgSrc}`);
     },
     setStoreAddr(addr) {
         this.storeAddrElm.innerHTML = addr;

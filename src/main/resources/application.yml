@@ -1,6 +1,6 @@
 spring:
   #  redis:
-  #    host: localhost
+  #    host: 34.122.84.61
   #    port: 6379
   #    password:
   #    lettuce:
