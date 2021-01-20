@@ -18,7 +18,7 @@ on:
   push:
     branches:
       - master
-      - feature
+      - develop
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
