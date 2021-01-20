@@ -16,7 +16,7 @@ public interface ReservationRepository  extends JpaRepository<ReservationInfo, L
 			+ "SET rsvInfo.cancelFlag = true "
 			+ "WHERE rsvInfo.id = ?1 ")
 	public int cancleRsvAtId(Long rsvId);
-	
+
 	@Query("SELECT "
 			+ "rsvInfo "
 			+ "FROM ReservationInfo rsvInfo "

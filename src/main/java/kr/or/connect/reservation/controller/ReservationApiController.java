@@ -4,7 +4,7 @@ import kr.or.connect.reservation.dto.Price;
 import kr.or.connect.reservation.dto.ReservationRequestRs;
 import kr.or.connect.reservation.dto.ReservationResponseRs;
 import kr.or.connect.reservation.exception.ApiErrorResponse;
-import kr.or.connect.reservation.exception.RsvRqtPricesNotExistExceiption;
+import kr.or.connect.reservation.exception.list.ParamNotValidException;
 import kr.or.connect.reservation.model.ReservationInfo;
 import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ReservationService;
@@ -26,7 +26,6 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/api/reservations")
 public class ReservationApiController {
-
 	@Autowired
 	private ReservationService rsvService;
 	@Autowired
@@ -35,29 +34,28 @@ public class ReservationApiController {
 	@PostMapping
 	public ResponseEntity<?> postBook(@RequestBody ReservationRequestRs rsvRequest) {		
 		if (isNotPostBookParamValid(rsvRequest)) {
-			throw new RsvRqtPricesNotExistExceiption(rsvRequest);
+			throw new ParamNotValidException();
 		}
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(rsvService.addReservation(rsvRequest));
+		ReservationRequestRs requestRs = rsvService.addReservation(rsvRequest);
+		return ResponseEntity.status(HttpStatus.CREATED).body(rsvService.addReservation(requestRs));
 	}
 
 	private boolean isNotPostBookParamValid(@Nonnull ReservationRequestRs rsvRequest) {
-		if (rsvRequest.getReservationInfoId() < 0 || rsvRequest.getProductId() < 0
-				|| rsvRequest.getReservationEmail() == null || rsvRequest.getReservationName() == null
-				|| rsvRequest.getReservationTel() == null || rsvRequest.getReservationDate() == null) {
+		if (rsvRequest.getReservationInfoId() < 0 || rsvRequest.getProductId() < 0 ){
 			return true;
 		}
-
+		if( rsvRequest.getReservationEmail() == null || rsvRequest.getReservationName() == null ||
+				rsvRequest.getReservationTel() == null || rsvRequest.getReservationDate() == null){
+			return true;
+		}
 		if (isNotRequestPriceListValid(rsvRequest.getPrices())) {
 			return true;
 		}
-
 		return false;
 	}
 
 	private boolean isNotRequestPriceListValid(@Nonnull List<Price> priceList) {
 		priceList.removeIf((Price price) -> isPriceCountInvalid(price));
-
 		if (priceList.isEmpty()) {
 			return true;
 		}
@@ -74,9 +72,6 @@ public class ReservationApiController {
 	@GetMapping
 	public ResponseEntity<?> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session) {
 		List<ReservationResponseRs> rsvResponseList = makeRsvResponseRsList(rsvService.getReservation(reservationEmail));
-		if(isNotRsvResponseRsListValid(rsvResponseList)) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorResponse("error-0012", "getBook api result is not exist."));
-		}
 		
 		Map<String, Object> rsvMap = new HashMap<>();
 		rsvMap.put("reservations", rsvResponseList);
@@ -106,14 +101,6 @@ public class ReservationApiController {
 		return responseList;
 	}
 	
-	private boolean isNotRsvResponseRsListValid(@Nonnull List<ReservationResponseRs> responseList) {
-		if(responseList.isEmpty()) {
-			return true;
-		}
-		return false;
-	}
-	
-	
 	private void storeEmailInfoIfNeeded(@ParametersAreNonnullByDefault List<ReservationResponseRs> responseList,
 			@ParametersAreNonnullByDefault HttpSession session,
 			@ParametersAreNonnullByDefault String reservationEmail) {
@@ -126,20 +113,12 @@ public class ReservationApiController {
 	@PutMapping(path = "/{reservationId}")
 	public ResponseEntity<?> cancleBook(@PathVariable long reservationId) {
 		if(isNotCancleBookParamValid(reservationId)) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiErrorResponse("error-0010", "The parameter entered is invalid. at cancleBook method"));
+			throw new ParamNotValidException();
 		}
 
 		ReservationRequestRs rsvRequestRs = rsvService.cancleReservation(reservationId);
-
-		if (isNotReservationIdValid(rsvRequestRs)) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorResponse("error-0011", "cancleBook api result is not exist."));
-		}
-
 		List<Price> priceList = rsvService.selectPriceList(reservationId);
-		if(isNotPriceListValid(priceList)) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorResponse("error-0011", "cancleBook api result is not exist."));
-		}
-		
+
 		rsvRequestRs.setPrices(priceList);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(rsvRequestRs);
@@ -147,20 +126,6 @@ public class ReservationApiController {
 	
 	private boolean isNotCancleBookParamValid(long reservationId) {
 		if (reservationId < 0) {
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean isNotReservationIdValid(@Nonnull ReservationRequestRs rsvRequestRs) {
-		if (rsvRequestRs.getReservationInfoId() < 0) {
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean isNotPriceListValid(List<Price> priceList) {
-		if(priceList.isEmpty()) {
 			return true;
 		}
 		return false;

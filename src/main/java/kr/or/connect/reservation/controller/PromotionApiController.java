@@ -25,21 +25,10 @@ public class PromotionApiController {
 	@GetMapping
 	public ResponseEntity<?> promotionItems() {
 		List<PromotionRs> promotionRsList = promotionService.getPromotionList();
-		
-		if(isNotPromotionRsListValid(promotionRsList)) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorResponse("error-0008", "promotion api result is not exist."));
-		}
-		
+
 		Map<String, Object> itemMap = new HashMap<>();
 		itemMap.put("items", promotionRsList);
 
 		return ResponseEntity.ok().body(itemMap);
-	}
-	
-	private boolean isNotPromotionRsListValid(List<PromotionRs> promotionRsList) {
-		if(promotionRsList.size()<0) {
-			return true;
-		}
-		return false;
 	}
 }

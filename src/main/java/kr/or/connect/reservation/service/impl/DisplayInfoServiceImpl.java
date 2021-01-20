@@ -21,6 +21,12 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
 	@Autowired
 	private DisplayInfoRepository displayInfoRep;
 
+	@Transactional
+	@Override
+	public boolean isExistDisplayInfoId(long displayInfoId){
+		return displayInfoRep.existsById(displayInfoId);
+	}
+
 	@Nonnull
 	@Transactional
 	@Override

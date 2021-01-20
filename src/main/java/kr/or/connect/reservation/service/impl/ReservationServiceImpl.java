@@ -2,6 +2,7 @@ package kr.or.connect.reservation.service.impl;
 
 import kr.or.connect.reservation.dto.Price;
 import kr.or.connect.reservation.dto.ReservationRequestRs;
+import kr.or.connect.reservation.exception.list.ReservationIdNotExistException;
 import kr.or.connect.reservation.model.ReservationInfo;
 import kr.or.connect.reservation.model.ReservationInfoPrice;
 import kr.or.connect.reservation.repository.ProductPriceRepository;
@@ -95,10 +96,11 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	@Transactional(readOnly = false)
 	public ReservationRequestRs cancleReservation(Long reservationId) {
-		if (rsvRep.cancleRsvAtId(reservationId) == 0) {
-			return null;
+		if(!rsvRep.existsById(reservationId)){
+			throw new ReservationIdNotExistException(reservationId);
 		}
 
+		rsvRep.cancleRsvAtId(reservationId);
 		return makeRsvRequestRs(rsvRep.selectAtId(reservationId));
 	}
 	

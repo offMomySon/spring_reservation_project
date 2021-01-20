@@ -36,11 +36,9 @@ public class ProductServiceImpl implements ProductService {
 		
 		if (categoryId == 0) {
 			List<Product> productList = productRep.selectWithTypeTH(pageRequest).getContent();
-			
 			for(Product product : productList ) {
 				productRsList.add(makeProductRs(product));
 			}
-			
 			return productRsList;
 		}
 		
@@ -48,7 +46,6 @@ public class ProductServiceImpl implements ProductService {
 		for(Product product : productList ) {
 			productRsList.add(makeProductRs(product));
 		}
-		
 		return productRsList;
 	}
 	

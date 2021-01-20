@@ -26,20 +26,9 @@ public class CategoryApiController {
 	public ResponseEntity<?> getCategoryItems() {
 		List<CategoryRs> categoryRsList = categoryService.getCategoryList();
 
-		if(!hasCategoryRsList(categoryRsList)) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorResponse("error-0005", "server cannot fount category."));	
-		}
-
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("items", categoryRsList);
 		
 		return ResponseEntity.ok().body(resultMap);
-	}
-	
-	private boolean hasCategoryRsList(List<CategoryRs> categoryRsList) {
-		if(categoryRsList.size() <= 0) {
-			return false;
-		}
-		return true;
 	}
 }
