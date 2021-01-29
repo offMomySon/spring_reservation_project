@@ -6,7 +6,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "reservation_info_price")
 public class ReservationInfoPrice {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -14,7 +13,7 @@ public class ReservationInfoPrice {
 
 	@Column(name = "reservation_info_id")
 	private long reservationInfoId;
-	
+
 	@Column(name = "count")
 	private long count;
 

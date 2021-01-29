@@ -32,11 +32,11 @@ public class ProductApiController {
 		}
 
 		long totalCount = productService.getProductCountAtCategory(categoryId);
-		List<ProductRs> productRsList = productService.getProductListAtCategory(categoryId, start);
+		List<ProductResult> Products = productService.getProductListAtCategory(categoryId, start);
 
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("totalCount", totalCount);
-		resultMap.put("items", productRsList);
+		resultMap.put("items", Products);
 
 		return ResponseEntity.ok().body(resultMap);
 	}
@@ -57,15 +57,15 @@ public class ProductApiController {
 			throw new DisplayInfoIdNotExistException(displayInfoId);
 		}
 
-		DisplayInfoRs displayInfo = displayInfoService.getDisplayInfo(displayInfoId);
+		DisplayInfoResult displayInfo = displayInfoService.getDisplayInfo(displayInfoId);
 
 		Map<String, Object> resultMap = new HashMap<>();
 
-		CompletableFuture<List<ProductImageRs>> pdImgRsListFuture = CompletableFuture.supplyAsync(()->displayInfoService.getProductImageList(displayInfoId));
-		CompletableFuture<DisplayInfoImageRs> dpInfoImgRsFuture = CompletableFuture.supplyAsync(()->displayInfoService.getDisplayInfoImage(displayInfoId));
-		CompletableFuture<List<CommentRs>> commentRsListFuture = CompletableFuture.supplyAsync(()->displayInfoService.getCommentList(displayInfoId));
+		CompletableFuture<List<ProductImageResult>> pdImgRsListFuture = CompletableFuture.supplyAsync(()->displayInfoService.getProductImageList(displayInfoId));
+		CompletableFuture<DisplayInfoImageResult> dpInfoImgRsFuture = CompletableFuture.supplyAsync(()->displayInfoService.getDisplayInfoImage(displayInfoId));
+		CompletableFuture<List<CommentResult>> commentRsListFuture = CompletableFuture.supplyAsync(()->displayInfoService.getCommentList(displayInfoId));
 		CompletableFuture<Double> avgScoreFuture = CompletableFuture.supplyAsync(()->displayInfoService.getAverageScore(displayInfoId));
-		CompletableFuture<List<ProductPriceRs>> pdPriceRsListFuture = CompletableFuture.supplyAsync(()->displayInfoService.getProductPriceList(displayInfoId));
+		CompletableFuture<List<ProductPriceResult>> pdPriceRsListFuture = CompletableFuture.supplyAsync(()->displayInfoService.getProductPriceList(displayInfoId));
 		
 		CompletableFuture.allOf(pdImgRsListFuture, dpInfoImgRsFuture, commentRsListFuture, avgScoreFuture, pdPriceRsListFuture);
 		

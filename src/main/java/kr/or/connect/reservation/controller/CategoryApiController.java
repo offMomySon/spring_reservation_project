@@ -1,11 +1,9 @@
 package kr.or.connect.reservation.controller;
 
-import kr.or.connect.reservation.dto.CategoryRs;
-import kr.or.connect.reservation.exception.ApiErrorResponse;
+import kr.or.connect.reservation.dto.CategoryResult;
 import kr.or.connect.reservation.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +22,10 @@ public class CategoryApiController {
 	@Cacheable(cacheNames = "category_list_cache")
 	@GetMapping
 	public ResponseEntity<?> getCategoryItems() {
-		List<CategoryRs> categoryRsList = categoryService.getCategoryList();
+		List<CategoryResult> categoryResults = categoryService.getCategoryList();
 
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("items", categoryRsList);
+		resultMap.put("items", categoryResults);
 		
 		return ResponseEntity.ok().body(resultMap);
 	}

@@ -2,7 +2,7 @@ package kr.or.connect.reservation.dto;
 
 import java.util.Date;
 
-public class DisplayInfoRs {
+public class DisplayInfoResult {
 	private long productId;
 	private long categoryId;
 	private long displayInfoId;
@@ -20,13 +20,13 @@ public class DisplayInfoRs {
 	private Date modifyDate;
 	private String openingHours;
 
-	public DisplayInfoRs() {
+	public DisplayInfoResult() {
 	}
 
-	public DisplayInfoRs(long productId, long categoryId, long displayInfoId, String categoryName,
-			String productDescription, String productContent, String productEvent, String placeName, String placeLot,
-			String placeStreet, String telephone, String homepage, String email, Date createDate, Date modifyDate,
-			String openingHours) {
+	public DisplayInfoResult(long productId, long categoryId, long displayInfoId, String categoryName,
+							 String productDescription, String productContent, String productEvent, String placeName, String placeLot,
+							 String placeStreet, String telephone, String homepage, String email, Date createDate, Date modifyDate,
+							 String openingHours) {
 		super();
 		this.productId = productId;
 		this.categoryId = categoryId;
@@ -176,7 +176,7 @@ public class DisplayInfoRs {
 
 	@Override
 	public String toString() {
-		return "DisplayInfoRs [productId=" + productId + ", categoryId=" + categoryId + ", displayInfoId=" + displayInfoId
+		return "DisplayInfoResult [productId=" + productId + ", categoryId=" + categoryId + ", displayInfoId=" + displayInfoId
 				+ ", categoryName=" + categoryName + ", productDescription=" + productDescription + ", productContent="
 				+ productContent + ", productEvent=" + productEvent + ", placeName=" + placeName + ", placeLot="
 				+ placeLot + ", placeStreet=" + placeStreet + ", telephone=" + telephone + ", homepage=" + homepage

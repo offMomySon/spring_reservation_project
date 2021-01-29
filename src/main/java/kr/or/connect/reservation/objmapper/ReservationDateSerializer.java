@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CustomDateSerializer extends JsonSerializer<Date> {
-    private static final String customDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+public class ReservationDateSerializer extends JsonSerializer<Date> {
+    private static final SimpleDateFormat DATEFORMATTER = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public void serialize(Date value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        gen.writeString(new SimpleDateFormat(customDateFormat).format(value));
+        gen.writeString(DATEFORMATTER.format(value));
     }
 }

@@ -3,8 +3,7 @@ package kr.or.connect.reservation.dto;
 import java.util.Date;
 import java.util.List;
 
-public class CommentRs {
-
+public class CommentResult {
 	private Long commentId;
 	private Long productId;
 	private Long reservationInfoId;
@@ -16,14 +15,14 @@ public class CommentRs {
 	private Date reservationDate;
 	private Date createDate;
 	private Date modifyDate;
-	private List<CommentImageRs> commentImageRs;
+	private List<CommentImageResult> commentImageRS;
 
-	public CommentRs() {
+	public CommentResult() {
 	}
 
-	public CommentRs(Long commentId, Long productId, Long reservationInfoId, Double score, String comment,
-			String reservationName, String reservationTelephone, String reservationEmail, Date reservationDate,
-			Date createDate, Date modifyDate) {
+	public CommentResult(Long commentId, Long productId, Long reservationInfoId, Double score, String comment,
+						 String reservationName, String reservationTelephone, String reservationEmail, Date reservationDate,
+						 Date createDate, Date modifyDate) {
 		super();
 		this.commentId = commentId;
 		this.productId = productId;
@@ -39,9 +38,9 @@ public class CommentRs {
 	}
 
 	
-	public CommentRs(Long commentId, Long productId, Long reservationInfoId, Double score, String comment,
-			String reservationName, String reservationTelephone, String reservationEmail, Date reservationDate,
-			Date createDate, Date modifyDate, List<CommentImageRs> commentImageRs) {
+	public CommentResult(Long commentId, Long productId, Long reservationInfoId, Double score, String comment,
+						 String reservationName, String reservationTelephone, String reservationEmail, Date reservationDate,
+						 Date createDate, Date modifyDate, List<CommentImageResult> commentImageRS) {
 		super();
 		this.commentId = commentId;
 		this.productId = productId;
@@ -54,7 +53,7 @@ public class CommentRs {
 		this.reservationDate = reservationDate;
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
-		this.commentImageRs = commentImageRs;
+		this.commentImageRS = commentImageRS;
 	}
 
 	public Long getCommentId() {
@@ -145,20 +144,20 @@ public class CommentRs {
 		this.modifyDate = modifyDate;
 	}
 
-	public List<CommentImageRs> getCommentImages() {
-		return commentImageRs;
+	public List<CommentImageResult> getCommentImages() {
+		return commentImageRS;
 	}
 
-	public void setCommentImages(List<CommentImageRs> commentImageRs) {
-		this.commentImageRs = commentImageRs;
+	public void setCommentImages(List<CommentImageResult> commentImageRS) {
+		this.commentImageRS = commentImageRS;
 	}
 
 	@Override
 	public String toString() {
-		return "CommentRs [commentId=" + commentId + ", productId=" + productId + ", reservationInfoId="
+		return "CommentResult [commentId=" + commentId + ", productId=" + productId + ", reservationInfoId="
 				+ reservationInfoId + ", score=" + score + ", comment=" + comment + ", reservationName="
 				+ reservationName + ", reservationTelephone=" + reservationTelephone + ", reservationEmail="
 				+ reservationEmail + ", reservationDate=" + reservationDate + ", createDate=" + createDate
-				+ ", modifyDate=" + modifyDate + ", commentImageRs=" + commentImageRs + "]";
+				+ ", modifyDate=" + modifyDate + ", commentImageRS=" + commentImageRS + "]";
 	}
 }

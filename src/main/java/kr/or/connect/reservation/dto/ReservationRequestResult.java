@@ -5,14 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import kr.or.connect.reservation.objmapper.RsvDateDeserializer;
-import kr.or.connect.reservation.objmapper.RsvDateSerializer;
+import kr.or.connect.reservation.objmapper.ReservationDateDeserializer;
+import kr.or.connect.reservation.objmapper.ReservationDateSerializer;
 
 import javax.annotation.Nonnull;
 import java.util.Date;
 import java.util.List;
 
-public class ReservationRequestRs {
+public class ReservationRequestResult {
 
 	private long reservationInfoId;
 	private long productId;
@@ -28,12 +28,12 @@ public class ReservationRequestRs {
 	private Date modifyDate;
 	private List<Price> prices;
 
-	public ReservationRequestRs() {
+	public ReservationRequestResult() {
 	}
 
-	public ReservationRequestRs(long reservationInfoId, long productId, long displayInfoId, String reservationName,
-			String reservationTel, String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate,
-			Date modifyDate) {
+	public ReservationRequestResult(long reservationInfoId, long productId, long displayInfoId, String reservationName,
+									String reservationTel, String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate,
+									Date modifyDate) {
 		super();
 		this.reservationInfoId = reservationInfoId;
 		this.productId = productId;
@@ -47,9 +47,9 @@ public class ReservationRequestRs {
 		this.modifyDate = modifyDate;
 	}
 
-	public ReservationRequestRs(long reservationInfoId, long productId, long displayInfoId, String reservationName,
-			String reservationTel, String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate,
-			Date modifyDate, List<Price> prices) {
+	public ReservationRequestResult(long reservationInfoId, long productId, long displayInfoId, String reservationName,
+									String reservationTel, String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate,
+									Date modifyDate, List<Price> prices) {
 		super();
 		this.reservationInfoId = reservationInfoId;
 		this.productId = productId;
@@ -105,13 +105,13 @@ public class ReservationRequestRs {
 	}
 
 	@JsonGetter("reservationDate")
-	@JsonSerialize(using = RsvDateSerializer.class)
+	@JsonSerialize(using = ReservationDateSerializer.class)
 	public Date getReservationDate() {
 		return reservationDate;
 	}
 
 	@JsonSetter("reservationYearMonthDay")
-	@JsonDeserialize(using = RsvDateDeserializer.class)
+	@JsonDeserialize(using = ReservationDateDeserializer.class)
 	public void setReservationDate(Date reservationDate){
 		this.reservationDate = reservationDate;
 	}
@@ -158,7 +158,7 @@ public class ReservationRequestRs {
 
 	@Override
 	public String toString() {
-		return "ReservationRequestRs [reservationInfoId=" + reservationInfoId + ", productId=" + productId + ", displayInfoId="
+		return "ReservationRequestResult [reservationInfoId=" + reservationInfoId + ", productId=" + productId + ", displayInfoId="
 				+ displayInfoId + ", reservationName=" + reservationName + ", reservationTel=" + reservationTel
 				+ ", reservationEmail=" + reservationEmail + ", reservationDate=" + reservationDate + ", cancelFlag="
 				+ cancelFlag + ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", prices=" + prices + "]";

@@ -1,8 +1,6 @@
 package kr.or.connect.reservation.exception.list;
 
 import kr.or.connect.reservation.exception.ErrorCode;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter

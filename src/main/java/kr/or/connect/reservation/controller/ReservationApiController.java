@@ -1,9 +1,8 @@
 package kr.or.connect.reservation.controller;
 
 import kr.or.connect.reservation.dto.Price;
-import kr.or.connect.reservation.dto.ReservationRequestRs;
-import kr.or.connect.reservation.dto.ReservationResponseRs;
-import kr.or.connect.reservation.exception.ApiErrorResponse;
+import kr.or.connect.reservation.dto.ReservationRequestResult;
+import kr.or.connect.reservation.dto.ReservationResponseResult;
 import kr.or.connect.reservation.exception.list.ParamNotValidException;
 import kr.or.connect.reservation.model.ReservationInfo;
 import kr.or.connect.reservation.service.DisplayInfoService;
@@ -26,108 +25,108 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/api/reservations")
 public class ReservationApiController {
-	@Autowired
-	private ReservationService rsvService;
-	@Autowired
-	private DisplayInfoService displayInfoService;
+    @Autowired
+    private ReservationService reservationService;
+    @Autowired
+    private DisplayInfoService displayInfoService;
 
-	@PostMapping
-	public ResponseEntity<?> postBook(@RequestBody ReservationRequestRs rsvRequest) {		
-		if (isNotPostBookParamValid(rsvRequest)) {
-			throw new ParamNotValidException();
-		}
-		ReservationRequestRs requestRs = rsvService.addReservation(rsvRequest);
-		return ResponseEntity.status(HttpStatus.CREATED).body(rsvService.addReservation(requestRs));
-	}
+    @PostMapping
+    public ResponseEntity<?> postBook(@RequestBody ReservationRequestResult reservationRequest) {
+        if (isNotPostBookParamValid(reservationRequest)) {
+            throw new ParamNotValidException();
+        }
+        ReservationRequestResult requestResult = reservationService.addReservation(reservationRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.addReservation(requestResult));
+    }
 
-	private boolean isNotPostBookParamValid(@Nonnull ReservationRequestRs rsvRequest) {
-		if (rsvRequest.getReservationInfoId() < 0 || rsvRequest.getProductId() < 0 ){
-			return true;
-		}
-		if( rsvRequest.getReservationEmail() == null || rsvRequest.getReservationName() == null ||
-				rsvRequest.getReservationTel() == null || rsvRequest.getReservationDate() == null){
-			return true;
-		}
-		if (isNotRequestPriceListValid(rsvRequest.getPrices())) {
-			return true;
-		}
-		return false;
-	}
+    private boolean isNotPostBookParamValid(@Nonnull ReservationRequestResult reservationRequest) {
+        if (reservationRequest.getReservationInfoId() < 0 || reservationRequest.getProductId() < 0) {
+            return true;
+        }
+        if (reservationRequest.getReservationEmail() == null || reservationRequest.getReservationName() == null ||
+                reservationRequest.getReservationTel() == null || reservationRequest.getReservationDate() == null) {
+            return true;
+        }
+        if (isNotRequestPriceListValid(reservationRequest.getPrices())) {
+            return true;
+        }
+        return false;
+    }
 
-	private boolean isNotRequestPriceListValid(@Nonnull List<Price> priceList) {
-		priceList.removeIf((Price price) -> isPriceCountInvalid(price));
-		if (priceList.isEmpty()) {
-			return true;
-		}
-		return false;
-	}
+    private boolean isNotRequestPriceListValid(@Nonnull List<Price> prices) {
+        prices.removeIf((Price price) -> isPriceCountInvalid(price));
+        if (prices.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
 
-	private boolean isPriceCountInvalid(@ParametersAreNonnullByDefault Price price) {
-		if (price.getCount() > 0) {
-			return false;
-		}
-		return true;
-	}
+    private boolean isPriceCountInvalid(@ParametersAreNonnullByDefault Price price) {
+        if (price.getCount() > 0) {
+            return false;
+        }
+        return true;
+    }
 
-	@GetMapping
-	public ResponseEntity<?> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session) {
-		List<ReservationResponseRs> rsvResponseList = makeRsvResponseRsList(rsvService.getReservation(reservationEmail));
-		
-		Map<String, Object> rsvMap = new HashMap<>();
-		rsvMap.put("reservations", rsvResponseList);
-		rsvMap.put("size", rsvResponseList.size());
+    @GetMapping
+    public ResponseEntity<?> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session) {
+        List<ReservationResponseResult> rsvResponses = makeRsvResponseRsList(reservationService.getReservation(reservationEmail));
 
-		storeEmailInfoIfNeeded(rsvResponseList, session, reservationEmail);
+        Map<String, Object> rsvMap = new HashMap<>();
+        rsvMap.put("reservations", rsvResponses);
+        rsvMap.put("size", rsvResponses.size());
 
-		return ResponseEntity.ok().body(rsvMap);
-	}
-	
-	@Nonnull
-	private List<ReservationResponseRs> makeRsvResponseRsList(@Nonnull List<ReservationInfo> rsvInfoList) {
-		List<ReservationResponseRs> responseList = new ArrayList();
-		
-		for (ReservationInfo rsvInfo : rsvInfoList) {
-			ReservationResponseRs requestRs = new ReservationResponseRs(rsvInfo.getId(), rsvInfo.getProductId(),
-					rsvInfo.getDisplayInfoId(), rsvInfo.getReservationName(), rsvInfo.getReservationTel(),
-					rsvInfo.getReservationEmail(), rsvInfo.getReservationDate(), rsvInfo.getCancelFlag(),
-					rsvInfo.getCreateDate(), rsvInfo.getModifyDate());
+        storeEmailInfoIfNeeded(rsvResponses, session, reservationEmail);
 
-			requestRs.setDisplayInfo(displayInfoService.getDisplayInfo(rsvInfo.getDisplayInfoId()));
-			requestRs.setTotalPrice(rsvService.getRsvTicketTotalPrice(rsvInfo.getId()));
+        return ResponseEntity.ok().body(rsvMap);
+    }
 
-			responseList.add(requestRs);
-		}
-		
-		return responseList;
-	}
-	
-	private void storeEmailInfoIfNeeded(@ParametersAreNonnullByDefault List<ReservationResponseRs> responseList,
-			@ParametersAreNonnullByDefault HttpSession session,
-			@ParametersAreNonnullByDefault String reservationEmail) {
-		if (responseList.isEmpty()) {
-			return;
-		}
-		session.setAttribute("rsvEmail", reservationEmail);
-	}
-	
-	@PutMapping(path = "/{reservationId}")
-	public ResponseEntity<?> cancleBook(@PathVariable long reservationId) {
-		if(isNotCancleBookParamValid(reservationId)) {
-			throw new ParamNotValidException();
-		}
+    @Nonnull
+    private List<ReservationResponseResult> makeRsvResponseRsList(@Nonnull List<ReservationInfo> reservationResponses) {
+        List<ReservationResponseResult> reservationResponseResults = new ArrayList();
 
-		ReservationRequestRs rsvRequestRs = rsvService.cancleReservation(reservationId);
-		List<Price> priceList = rsvService.selectPriceList(reservationId);
+        for (ReservationInfo reservationInfo : reservationResponses) {
+            ReservationResponseResult requestResult = new ReservationResponseResult(reservationInfo.getId(), reservationInfo.getProductId(),
+                    reservationInfo.getDisplayInfoId(), reservationInfo.getReservationName(), reservationInfo.getReservationTel(),
+                    reservationInfo.getReservationEmail(), reservationInfo.getReservationDate(), reservationInfo.getCancelFlag(),
+                    reservationInfo.getCreateDate(), reservationInfo.getModifyDate());
 
-		rsvRequestRs.setPrices(priceList);
+            requestResult.setDisplayInfo(displayInfoService.getDisplayInfo(reservationInfo.getDisplayInfoId()));
+            requestResult.setTotalPrice(reservationService.getRsvTicketTotalPrice(reservationInfo.getId()));
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(rsvRequestRs);
-	}
-	
-	private boolean isNotCancleBookParamValid(long reservationId) {
-		if (reservationId < 0) {
-			return true;
-		}
-		return false;
-	}
+            reservationResponseResults.add(requestResult);
+        }
+
+        return reservationResponseResults;
+    }
+
+    private void storeEmailInfoIfNeeded(@ParametersAreNonnullByDefault List<ReservationResponseResult> reservationResponseResults,
+                                        @ParametersAreNonnullByDefault HttpSession session,
+                                        @ParametersAreNonnullByDefault String reservationEmail) {
+        if (reservationResponseResults.isEmpty()) {
+            return;
+        }
+        session.setAttribute("reservationEmail", reservationEmail);
+    }
+
+    @PutMapping(path = "/{reservationId}")
+    public ResponseEntity<?> cancleBook(@PathVariable long reservationId) {
+        if (isNotCancleBookParamValid(reservationId)) {
+            throw new ParamNotValidException();
+        }
+
+        ReservationRequestResult reservationRequestResponse = reservationService.cancleReservation(reservationId);
+        List<Price> prices = reservationService.selectPriceList(reservationId);
+
+        reservationRequestResponse.setPrices(prices);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservationRequestResponse);
+    }
+
+    private boolean isNotCancleBookParamValid(long reservationId) {
+        if (reservationId < 0) {
+            return true;
+        }
+        return false;
+    }
 }

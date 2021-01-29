@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.dto;
 
-public class ProductRs {
+public class ProductResult {
 	private Long displayInfoId;
 	private Long productId;
 	private String productDescription;
@@ -8,7 +8,7 @@ public class ProductRs {
 	private String productContent;
 	private String productImageUrl;
 
-	public ProductRs(Long displayInfoId, Long productId, String productDescription, String placeName,
+	public ProductResult(Long displayInfoId, Long productId, String productDescription, String placeName,
 			String productContent, String productImageUrl) {
 		super();
 		this.displayInfoId = displayInfoId;
@@ -69,7 +69,7 @@ public class ProductRs {
 
 	@Override
 	public String toString() {
-		return "ProductRs\n[\ndisplayInfoId=" + displayInfoId + ", productId=" + productId + ", productDescription="
+		return "ProductResult\n[\ndisplayInfoId=" + displayInfoId + ", productId=" + productId + ", productDescription="
 				+ productDescription + "\n, placeName=" + placeName + "\n, productContent=" + productContent
 				+ "\n, productImageUrl=" + productImageUrl + "\n]";
 	}
