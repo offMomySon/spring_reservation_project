@@ -9,24 +9,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import static kr.or.connect.reservation.dto.response.CategoryApiResponse.createCategoryApiResponse;
 
 @RestController
 @RequestMapping(path = "/api/categories")
 public class CategoryApiController {
-	@Autowired
-	private CategoryService categoryService;
+    @Autowired
+    private CategoryService categoryService;
 
-	@Cacheable(cacheNames = "category_list_cache")
-	@GetMapping
-	public ResponseEntity<?> getCategoryItems() {
-		List<CategoryResult> categoryResults = categoryService.getCategoryList();
+    @Cacheable(cacheNames = "category_list_cache")
+    @GetMapping
+    public ResponseEntity<?> getCategoryItems() {
+        List<CategoryResult> categoryResults = categoryService.getCategoryList();
 
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("items", categoryResults);
-		
-		return ResponseEntity.ok().body(resultMap);
-	}
+        return ResponseEntity.ok().body(createCategoryApiResponse(categoryResults));
+    }
 }
