@@ -2,6 +2,7 @@ package kr.or.connect.reservation.service.impl;
 
 import kr.or.connect.reservation.dto.Price;
 import kr.or.connect.reservation.dto.ReservationRequestResult;
+import kr.or.connect.reservation.dto.request.ReservationRequest;
 import kr.or.connect.reservation.exception.list.ReservationIdNotExistException;
 import kr.or.connect.reservation.model.ReservationInfo;
 import kr.or.connect.reservation.model.ReservationInfoPrice;
@@ -32,17 +33,18 @@ public class ReservationServiceImpl implements ReservationService {
     @Nonnull
     @Override
     @Transactional(readOnly = false)
-    public ReservationRequestResult addReservation(@Nonnull ReservationRequestResult reservationRequest) {
-        setNewDate(reservationRequest);
+    public ReservationRequestResult addReservation(@Nonnull ReservationRequest reservationRequest) {
+        ReservationRequestResult reservationRequestResult = new ReservationRequestResult();
+        setNewDate(reservationRequestResult);
 
-        ReservationInfo reservationInfo = makeReservationInfo(reservationRequest);
+        ReservationInfo reservationInfo = makeReservationInfo(reservationRequestResult);
         reservationInfo = reservationRepository.save(reservationInfo);
 
-        reservationRequest.setReservationInfoId(reservationInfo.getId());
+        reservationRequestResult.setReservationInfoId(reservationInfo.getId());
 
-        savePriceList(reservationInfo.getId(), reservationRequest.getPrices());
+        savePriceList(reservationInfo.getId(), reservationRequestResult.getPrices());
 
-        return reservationRequest;
+        return reservationRequestResult;
     }
 
     public void setNewDate(@Nonnull ReservationRequestResult reservationRequest) {
@@ -69,6 +71,12 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Nonnull
+    public ReservationInfoPrice makeReservationInfoPrice(Long reservationId, Price price) {
+        return new ReservationInfoPrice(null, reservationId, price.getCount(),
+                productPriceRepository.findById(price.getProductPriceId()).get());
+    }
+
+    @Nonnull
     @Override
     public List<ReservationInfo> getReservation(@Nonnull String email) {
         return reservationRepository.selectAtEmail(email);
@@ -90,6 +98,7 @@ public class ReservationServiceImpl implements ReservationService {
         return count * price;
     }
 
+
     @Nonnull
     @Override
     @Transactional(readOnly = false)
@@ -109,6 +118,7 @@ public class ReservationServiceImpl implements ReservationService {
                 reservationInfo.getCreateDate(), reservationInfo.getModifyDate());
     }
 
+
     @Nonnull
     @Override
     @Transactional(readOnly = false)
@@ -125,11 +135,5 @@ public class ReservationServiceImpl implements ReservationService {
                     reservationInfoPrice.getProductPrice().getId(), reservationInfoPrice.getCount()));
         }
         return prices;
-    }
-
-    @Nonnull
-    public ReservationInfoPrice makeReservationInfoPrice(Long reservationId, Price price) {
-        return new ReservationInfoPrice(null, reservationId, price.getCount(),
-                productPriceRepository.findById(price.getProductPriceId()).get());
     }
 }

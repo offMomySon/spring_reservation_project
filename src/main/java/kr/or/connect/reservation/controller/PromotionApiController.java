@@ -9,24 +9,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import static kr.or.connect.reservation.dto.response.PromotionApiResponse.createPromotionApiResponse;
 
 @Slf4j
 @RestController
 @RequestMapping(path = "/api/promotions")
 public class PromotionApiController {
-	@Autowired
-	private PromotionService promotionService;
+    @Autowired
+    private PromotionService promotionService;
 
-	@GetMapping
-	public ResponseEntity<?> promotionItems() {
-		List<PromotionResult> promotionResults = promotionService.getPromotionList();
+    @GetMapping
+    public ResponseEntity<?> promotionItems() {
+        List<PromotionResult> promotionResults = promotionService.getPromotionList();
 
-		Map<String, Object> itemMap = new HashMap<>();
-		itemMap.put("items", promotionResults);
-
-		return ResponseEntity.ok().body(itemMap);
-	}
+        return ResponseEntity.ok().body(createPromotionApiResponse(promotionResults));
+    }
 }
