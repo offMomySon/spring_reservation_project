@@ -14,7 +14,11 @@ public enum ErrorCode {
 
     //ID NOT EXIST
     DISPLAYINFO_ID_NOT_EXIST(HttpStatus.NOT_FOUND, "error-0004", "The DisplayInfo id is not exist."),
-    RESERVATION_ID_NOT_EXIST(HttpStatus.BAD_REQUEST, "error-0005", "The Reservation id is not exist.");
+    RESERVATION_ID_NOT_EXIST(HttpStatus.BAD_REQUEST, "error-0005", "The Reservation id is not exist."),
+
+    //COMPLETABLEFUTURE EXCEPTION
+    PRODUCT_COMPLETABLE_FUTURE_INTERRUPT_EXCEPTION(HttpStatus.BAD_REQUEST, "error-0006", "While making product api response, problem happen."),
+    PRODUCT_COMPLETABLE_FUTURE_EXECUTION_EXCEPTION(HttpStatus.BAD_REQUEST, "error-0007", "While making product api response, problem happen.");
 
     private HttpStatus status;
     private String error;
