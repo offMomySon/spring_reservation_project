@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.concurrent.ExecutionException;
+
 @ControllerAdvice
 @Slf4j
 public class ExceptionReciever {
@@ -83,6 +85,22 @@ public class ExceptionReciever {
     public ResponseEntity<ApiErrorResponse> handleApiCommonException(ApiCommonException ex) {
         log.debug("handleApiCommonException is called");
         ErrorCode errorCode = ex.getErrorCode();
+        ApiErrorResponse response = new ApiErrorResponse(errorCode.getError(), errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getStatus()).body(response);
+    }
+
+    @ExceptionHandler(ExecutionException.class)
+    protected ResponseEntity<ApiErrorResponse> handleExecutionException(ExecutionException ex) {
+        log.error("handleMethodArgumentNotValidException", ex);
+        ErrorCode errorCode = ErrorCode.INVALID_INPUT_VALUE;
+        ApiErrorResponse response = new ApiErrorResponse(errorCode.getError(), errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getStatus()).body(response);
+    }
+
+    @ExceptionHandler(InterruptedException.class)
+    protected ResponseEntity<ApiErrorResponse> handleInterruptedExceptionException(InterruptedException ex) {
+        log.error("handleMethodArgumentNotValidException", ex);
+        ErrorCode errorCode = ErrorCode.INVALID_INPUT_VALUE;
         ApiErrorResponse response = new ApiErrorResponse(errorCode.getError(), errorCode.getMessage());
         return ResponseEntity.status(errorCode.getStatus()).body(response);
     }

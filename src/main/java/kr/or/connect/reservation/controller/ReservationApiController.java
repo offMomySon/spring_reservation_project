@@ -1,8 +1,11 @@
 package kr.or.connect.reservation.controller;
 
 import kr.or.connect.reservation.dto.Price;
+import kr.or.connect.reservation.dto.ReservationCancleResult;
 import kr.or.connect.reservation.dto.ReservationRequestResult;
 import kr.or.connect.reservation.dto.ReservationResponseResult;
+import kr.or.connect.reservation.dto.request.ReservationRequest;
+import kr.or.connect.reservation.dto.response.ReservationGetApiResponse;
 import kr.or.connect.reservation.exception.list.ParamNotValidException;
 import kr.or.connect.reservation.model.ReservationInfo;
 import kr.or.connect.reservation.service.DisplayInfoService;
@@ -17,9 +20,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import static kr.or.connect.reservation.dto.response.ReservationCancleResponse.createReservationCancleResponse;
+import static kr.or.connect.reservation.dto.response.ReservationPostApiResponse.createReservationPostApiResponse;
 
 @Slf4j
 @RestController
@@ -31,26 +35,10 @@ public class ReservationApiController {
     private DisplayInfoService displayInfoService;
 
     @PostMapping
-    public ResponseEntity<?> postBook(@RequestBody ReservationRequestResult reservationRequest) {
-        if (isNotPostBookParamValid(reservationRequest)) {
-            throw new ParamNotValidException();
-        }
-        ReservationRequestResult requestResult = reservationService.addReservation(reservationRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.addReservation(requestResult));
-    }
+    public ResponseEntity<?> postBook(@RequestBody ReservationRequest reservationRequest) {
+        ReservationRequestResult reservationRequestResult = reservationService.addReservation(reservationRequest);
 
-    private boolean isNotPostBookParamValid(@Nonnull ReservationRequestResult reservationRequest) {
-        if (reservationRequest.getReservationInfoId() < 0 || reservationRequest.getProductId() < 0) {
-            return true;
-        }
-        if (reservationRequest.getReservationEmail() == null || reservationRequest.getReservationName() == null ||
-                reservationRequest.getReservationTel() == null || reservationRequest.getReservationDate() == null) {
-            return true;
-        }
-        if (isNotRequestPriceListValid(reservationRequest.getPrices())) {
-            return true;
-        }
-        return false;
+        return ResponseEntity.status(HttpStatus.CREATED).body(createReservationPostApiResponse(reservationRequestResult));
     }
 
     private boolean isNotRequestPriceListValid(@Nonnull List<Price> prices) {
@@ -70,15 +58,11 @@ public class ReservationApiController {
 
     @GetMapping
     public ResponseEntity<?> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session) {
-        List<ReservationResponseResult> rsvResponses = makeRsvResponseRsList(reservationService.getReservation(reservationEmail));
+        List<ReservationResponseResult> reservationResponseResults = makeRsvResponseRsList(reservationService.getReservation(reservationEmail));
 
-        Map<String, Object> rsvMap = new HashMap<>();
-        rsvMap.put("reservations", rsvResponses);
-        rsvMap.put("size", rsvResponses.size());
+        storeEmailInfoIfNeeded(reservationResponseResults, session, reservationEmail);
 
-        storeEmailInfoIfNeeded(rsvResponses, session, reservationEmail);
-
-        return ResponseEntity.ok().body(rsvMap);
+        return ResponseEntity.ok().body(ReservationGetApiResponse.createReservationGetApiResponse(reservationResponseResults));
     }
 
     @Nonnull
@@ -115,12 +99,10 @@ public class ReservationApiController {
             throw new ParamNotValidException();
         }
 
-        ReservationRequestResult reservationRequestResponse = reservationService.cancleReservation(reservationId);
+        ReservationCancleResult reservationCancleResult = reservationService.cancleReservation(reservationId);
         List<Price> prices = reservationService.selectPriceList(reservationId);
 
-        reservationRequestResponse.setPrices(prices);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservationRequestResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createReservationCancleResponse(reservationCancleResult, prices));
     }
 
     private boolean isNotCancleBookParamValid(long reservationId) {
