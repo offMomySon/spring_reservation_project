@@ -1,5 +1,10 @@
 package kr.or.connect.reservation.model;
 
+import kr.or.connect.reservation.dto.ReservationRequestResult;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.annotation.Nonnull;
 import javax.persistence.*;
 import java.util.Date;
@@ -7,11 +12,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Data
 @Table(name = "reservation_info")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "product_id")
     private long productId;
@@ -42,25 +49,40 @@ public class ReservationInfo {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_date")
     private Date modifyDate;
+    @Nonnull
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "reservation_info_id")
+    private Set<ReservationUserComment> userComments = new HashSet<>();
+    @Nonnull
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "reservation_info_id")
+    private Set<ReservationInfoPrice> rsvInfoPrices = new HashSet<>();
 
-    public ReservationInfo() {
-    }
-
-    public ReservationInfo(Long id, long productId, long displayInfoId, String reservationName, String reservationTel,
-                           String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate, Date modifyDate) {
-        super();
-        this.id = id;
+    public ReservationInfo(long productId, long displayInfoId, String reservationName, String reservationTel,
+                           String reservationEmail, Date reservationDate, Date createDate, Date modifyDate, Boolean cancelFlag) {
         this.productId = productId;
         this.displayInfoId = displayInfoId;
         this.reservationName = reservationName;
         this.reservationTel = reservationTel;
         this.reservationEmail = reservationEmail;
-
         this.reservationDate = reservationDate;
-        this.cancelFlag = cancelFlag;
         this.createDate = createDate;
         this.modifyDate = modifyDate;
-        this.userComments = null;
+        this.cancelFlag = cancelFlag;
+    }
+
+    public static ReservationInfo createReservationInfo(ReservationRequestResult reservationRequestResult) {
+        return new ReservationInfo(
+                reservationRequestResult.getProductId(),
+                reservationRequestResult.getDisplayInfoId(),
+                reservationRequestResult.getReservationName(),
+                reservationRequestResult.getReservationTel(),
+                reservationRequestResult.getReservationEmail(),
+                reservationRequestResult.getReservationDate(),
+                reservationRequestResult.getCreateDate(),
+                reservationRequestResult.getModifyDate(),
+                reservationRequestResult.getCancelFlag()
+        );
     }
 
     public long getProductId() {
@@ -86,14 +108,6 @@ public class ReservationInfo {
 
     public void setRsvInfoPrices(@Nonnull Set<ReservationInfoPrice> rsvInfoPrices) {
         this.rsvInfoPrices = rsvInfoPrices;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getReservationName() {
@@ -151,16 +165,6 @@ public class ReservationInfo {
     public void setModifyDate(Date modifyDate) {
         this.modifyDate = modifyDate;
     }
-
-    @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "reservation_info_id")
-    private Set<ReservationUserComment> userComments = new HashSet<>();
-
-    @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "reservation_info_id")
-    private Set<ReservationInfoPrice> rsvInfoPrices = new HashSet<>();
 
     @Nonnull
     public Set<ReservationUserComment> getUserComments() {
