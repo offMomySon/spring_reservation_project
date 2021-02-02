@@ -1,29 +1,45 @@
 package kr.or.connect.reservation.controller;
 
-import kr.or.connect.reservation.dto.CategoryResult;
+import kr.or.connect.reservation.dto.CategoryRs;
+import kr.or.connect.reservation.exception.ApiErrorResponse;
 import kr.or.connect.reservation.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
-
-import static kr.or.connect.reservation.dto.response.CategoryApiResponse.createCategoryApiResponse;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/categories")
 public class CategoryApiController {
-    @Autowired
-    private CategoryService categoryService;
+	@Autowired
+	private CategoryService categoryService;
 
-    @Cacheable(cacheNames = "category_list_cache")
-    @GetMapping
-    public ResponseEntity<?> getCategoryItems() {
-        List<CategoryResult> categoryResults = categoryService.getCategoryList();
+	@Cacheable(cacheNames = "category_list_cache")
+	@GetMapping
+	public ResponseEntity<?> getCategoryItems() {
+		List<CategoryRs> categoryRsList = categoryService.getCategoryList();
 
-        return ResponseEntity.ok().body(createCategoryApiResponse(categoryResults));
-    }
+		if(!hasCategoryRsList(categoryRsList)) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorResponse("error-0005", "server cannot fount category."));	
+		}
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("items", categoryRsList);
+		
+		return ResponseEntity.ok().body(resultMap);
+	}
+	
+	private boolean hasCategoryRsList(List<CategoryRs> categoryRsList) {
+		if(categoryRsList.size() <= 0) {
+			return false;
+		}
+		return true;
+	}
 }

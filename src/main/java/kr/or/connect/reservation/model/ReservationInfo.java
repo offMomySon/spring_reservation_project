@@ -1,185 +1,194 @@
 package kr.or.connect.reservation.model;
 
-import kr.or.connect.reservation.dto.ReservationRequestResult;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.annotation.Nonnull;
-import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 @Entity
-@Data
 @Table(name = "reservation_info")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationInfo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
-    @Column(name = "product_id")
-    private long productId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "display_info_id")
-    private long displayInfoId;
+	@Column(name = "product_id")
+	private long productId;
 
-    @Column(name = "reservation_name")
-    private String reservationName;
+	@Column(name = "display_info_id")
+	private long displayInfoId;
 
-    @Column(name = "reservation_tel")
-    private String reservationTel;
+	@Column(name = "reservation_name")
+	private String reservationName;
 
-    @Column(name = "reservation_email")
-    private String reservationEmail;
+	@Column(name = "reservation_tel")
+	private String reservationTel;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "reservation_date")
-    private Date reservationDate;
+	@Column(name = "reservation_email")
+	private String reservationEmail;
 
-    @Column(name = "cancel_flag")
-    private Boolean cancelFlag;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "reservation_date")
+	private Date reservationDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date")
-    private Date createDate;
+	@Column(name = "cancel_flag")
+	private Boolean cancelFlag;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modify_date")
-    private Date modifyDate;
-    @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "reservation_info_id")
-    private Set<ReservationUserComment> userComments = new HashSet<>();
-    @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "reservation_info_id")
-    private Set<ReservationInfoPrice> rsvInfoPrices = new HashSet<>();
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_date")
+	private Date createDate;
 
-    public ReservationInfo(long productId, long displayInfoId, String reservationName, String reservationTel,
-                           String reservationEmail, Date reservationDate, Date createDate, Date modifyDate, Boolean cancelFlag) {
-        this.productId = productId;
-        this.displayInfoId = displayInfoId;
-        this.reservationName = reservationName;
-        this.reservationTel = reservationTel;
-        this.reservationEmail = reservationEmail;
-        this.reservationDate = reservationDate;
-        this.createDate = createDate;
-        this.modifyDate = modifyDate;
-        this.cancelFlag = cancelFlag;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modify_date")
+	private Date modifyDate;
 
-    public static ReservationInfo createReservationInfo(ReservationRequestResult reservationRequestResult) {
-        return new ReservationInfo(
-                reservationRequestResult.getProductId(),
-                reservationRequestResult.getDisplayInfoId(),
-                reservationRequestResult.getReservationName(),
-                reservationRequestResult.getReservationTel(),
-                reservationRequestResult.getReservationEmail(),
-                reservationRequestResult.getReservationDate(),
-                reservationRequestResult.getCreateDate(),
-                reservationRequestResult.getModifyDate(),
-                reservationRequestResult.getCancelFlag()
-        );
-    }
+	public ReservationInfo() {
+	}
 
-    public long getProductId() {
-        return productId;
-    }
+	public ReservationInfo(Long id, long productId, long displayInfoId, String reservationName, String reservationTel,
+			String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate, Date modifyDate) {
+		super();
+		this.id = id;
+		this.productId = productId;
+		this.displayInfoId = displayInfoId;
+		this.reservationName = reservationName;
+		this.reservationTel = reservationTel;
+		this.reservationEmail = reservationEmail;
 
-    public void setProductId(long productId) {
-        this.productId = productId;
-    }
+		this.reservationDate = reservationDate;
+		this.cancelFlag = cancelFlag;
+		this.createDate = createDate;
+		this.modifyDate = modifyDate;
+		this.userComments = null;
+	}
 
-    public long getDisplayInfoId() {
-        return displayInfoId;
-    }
+	public long getProductId() {
+		return productId;
+	}
 
-    public void setDisplayInfoId(long displayInfoId) {
-        this.displayInfoId = displayInfoId;
-    }
+	public void setProductId(long productId) {
+		this.productId = productId;
+	}
 
-    @Nonnull
-    public Set<ReservationInfoPrice> getRsvInfoPrices() {
-        return rsvInfoPrices;
-    }
+	public long getDisplayInfoId() {
+		return displayInfoId;
+	}
 
-    public void setRsvInfoPrices(@Nonnull Set<ReservationInfoPrice> rsvInfoPrices) {
-        this.rsvInfoPrices = rsvInfoPrices;
-    }
+	public void setDisplayInfoId(long displayInfoId) {
+		this.displayInfoId = displayInfoId;
+	}
 
-    public String getReservationName() {
-        return reservationName;
-    }
+	@Nonnull
+	public Set<ReservationInfoPrice> getRsvInfoPrices() {
+		return rsvInfoPrices;
+	}
 
-    public void setReservationName(String reservationName) {
-        this.reservationName = reservationName;
-    }
+	public void setRsvInfoPrices(@Nonnull Set<ReservationInfoPrice> rsvInfoPrices) {
+		this.rsvInfoPrices = rsvInfoPrices;
+	}
+	
+	public Long getId() {
+		return id;
+	}
 
-    public String getReservationTel() {
-        return reservationTel;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setReservationTel(String reservationTel) {
-        this.reservationTel = reservationTel;
-    }
+	public String getReservationName() {
+		return reservationName;
+	}
 
-    public String getReservationEmail() {
-        return reservationEmail;
-    }
+	public void setReservationName(String reservationName) {
+		this.reservationName = reservationName;
+	}
 
-    public void setReservationEmail(String reservationEmail) {
-        this.reservationEmail = reservationEmail;
-    }
+	public String getReservationTel() {
+		return reservationTel;
+	}
 
-    public Date getReservationDate() {
-        return reservationDate;
-    }
+	public void setReservationTel(String reservationTel) {
+		this.reservationTel = reservationTel;
+	}
 
-    public void setReservationDate(Date reservationDate) {
-        this.reservationDate = reservationDate;
-    }
+	public String getReservationEmail() {
+		return reservationEmail;
+	}
 
-    public Boolean getCancelFlag() {
-        return cancelFlag;
-    }
+	public void setReservationEmail(String reservationEmail) {
+		this.reservationEmail = reservationEmail;
+	}
 
-    public void setCancelFlag(Boolean cancelFlag) {
-        this.cancelFlag = cancelFlag;
-    }
+	public Date getReservationDate() {
+		return reservationDate;
+	}
 
-    public Date getCreateDate() {
-        return createDate;
-    }
+	public void setReservationDate(Date reservationDate) {
+		this.reservationDate = reservationDate;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	public Boolean getCancelFlag() {
+		return cancelFlag;
+	}
 
-    public Date getModifyDate() {
-        return modifyDate;
-    }
+	public void setCancelFlag(Boolean cancelFlag) {
+		this.cancelFlag = cancelFlag;
+	}
 
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
+	public Date getCreateDate() {
+		return createDate;
+	}
 
-    @Nonnull
-    public Set<ReservationUserComment> getUserComments() {
-        return userComments;
-    }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-    public void setUserComments(@Nonnull Set<ReservationUserComment> userComments) {
-        this.userComments = userComments;
-    }
+	public Date getModifyDate() {
+		return modifyDate;
+	}
 
-    @Override
-    public String toString() {
-        return "ReservationInfo [id=" + id + ", productId=" + productId + ", displayInfoId=" + displayInfoId
-                + ", reservationName=" + reservationName + ", reservationTel=" + reservationTel + ", reservationEmail="
-                + reservationEmail + ", reservationDate=" + reservationDate + ", cancelFlag=" + cancelFlag
-                + ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", userComments=" + userComments + "]";
-    }
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+
+	@Nonnull
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "reservation_info_id")
+	private Set<ReservationUserComment> userComments = new HashSet<>();
+
+	@Nonnull
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "reservation_info_id")
+	private Set<ReservationInfoPrice> rsvInfoPrices = new HashSet<>();
+	
+	@Nonnull
+	public Set<ReservationUserComment> getUserComments() {
+		return userComments;
+	}
+
+	public void setUserComments(@Nonnull Set<ReservationUserComment> userComments) {
+		this.userComments = userComments;
+	}
+
+	@Override
+	public String toString() {
+		return "ReservationInfo [id=" + id + ", productId=" + productId + ", displayInfoId=" + displayInfoId
+				+ ", reservationName=" + reservationName + ", reservationTel=" + reservationTel + ", reservationEmail="
+				+ reservationEmail + ", reservationDate=" + reservationDate + ", cancelFlag=" + cancelFlag
+				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", userComments=" + userComments + "]";
+	}
 }

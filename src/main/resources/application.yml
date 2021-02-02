@@ -10,8 +10,6 @@ spring:
   #        max-idle: 500
   #        min-idle: 50
   #    connect-timeout: 500
-  jackson:
-    date-format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
 
   datasource:
     username: connectuser

@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.dao;
 
-import kr.or.connect.reservation.dto.ProductResult;
+import kr.or.connect.reservation.dto.ProductRs;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,14 +18,14 @@ import static kr.or.connect.reservation.sql.ProductSql.*;
 @Repository
 public class ProductDao {
 	private NamedParameterJdbcTemplate jdbcTemplate;
-	private RowMapper<ProductResult> rowMapper = BeanPropertyRowMapper.newInstance(ProductResult.class);
+	private RowMapper<ProductRs> rowMapper = BeanPropertyRowMapper.newInstance(ProductRs.class);
 
 
 	public ProductDao(@Qualifier("dataSource") DataSource dataSource) {
 		jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 
-	public List<ProductResult> selectAll(Long start, Long limit) {
+	public List<ProductRs> selectAll(Long start, Long limit) {
 		Map<String, Long> paramMap = new HashMap<String, Long>();
 		paramMap.put("start", start);
 		paramMap.put("end", limit);
@@ -33,7 +33,7 @@ public class ProductDao {
 		return jdbcTemplate.query(SELECT_ALL_PRODUCT, paramMap, rowMapper);
 	}
 
-	public List<ProductResult> selectAllAtCategory(long categoryId, long start, long limit) {
+	public List<ProductRs> selectAllAtCategory(long categoryId, long start, long limit) {
 		Map<String, Long> paramMap = new HashMap<String, Long>();
 		paramMap.put("start", start);
 		paramMap.put("end", limit);

@@ -1,57 +1,64 @@
 package kr.or.connect.reservation.model;
 
 import javax.annotation.Nonnull;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "reservation_user_comment_image")
 public class ReservationUserCommentImage {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	
+	@Column(name = "reservation_info_id")
+	private String reservationInfoId;
 
-    @Column(name = "reservation_info_id")
-    private String reservationInfoId;
+	@Column(name = "reservation_user_comment_id")
+	private String reservationUserCommentId;
 
-    @Column(name = "reservation_user_comment_id")
-    private String reservationUserCommentId;
+	@Nonnull
+	@ManyToOne
+	@JoinColumn(name = "file_id")
+	private FileInfo fileInfo;
+	
+	public long getId() {
+		return id;
+	}
 
-    @Nonnull
-    @ManyToOne
-    @JoinColumn(name = "file_id")
-    private FileInfo fileInfo;
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public long getId() {
-        return id;
-    }
+	public String getReservationInfoId() {
+		return reservationInfoId;
+	}
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public void setReservationInfoId(String reservationInfoId) {
+		this.reservationInfoId = reservationInfoId;
+	}
 
-    public String getReservationInfoId() {
-        return reservationInfoId;
-    }
+	public String getReservationUserCommentId() {
+		return reservationUserCommentId;
+	}
 
-    public void setReservationInfoId(String reservationInfoId) {
-        this.reservationInfoId = reservationInfoId;
-    }
+	public void setReservationUserCommentId(String reservationUserCommentId) {
+		this.reservationUserCommentId = reservationUserCommentId;
+	}
 
-    public String getReservationUserCommentId() {
-        return reservationUserCommentId;
-    }
+	@Nonnull
+	public FileInfo getFileInfo() {
+		return fileInfo;
+	}
 
-    public void setReservationUserCommentId(String reservationUserCommentId) {
-        this.reservationUserCommentId = reservationUserCommentId;
-    }
-
-    @Nonnull
-    public FileInfo getFileInfo() {
-        return fileInfo;
-    }
-
-    public void setFileInfo(@Nonnull FileInfo fileInfo) {
-        this.fileInfo = fileInfo;
-    }
+	public void setFileInfo(@Nonnull FileInfo fileInfo) {
+		this.fileInfo = fileInfo;
+	}
 
 }

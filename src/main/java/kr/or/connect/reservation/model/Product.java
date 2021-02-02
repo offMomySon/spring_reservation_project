@@ -1,184 +1,199 @@
 package kr.or.connect.reservation.model;
 
-import javax.annotation.Nonnull;
-import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "product")
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
-    @Column(name = "description")
-    private String description;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private long id;
 
-    @Column(name = "content")
-    private String content;
+	@Column(name = "description")
+	private String description;
 
-    @Column(name = "event")
-    private String event;
+	@Column(name = "content")
+	private String content;
 
-    @Column(name = "create_date")
-    private Date createDate;
+	@Column(name = "event")
+	private String event;
 
-    @Column(name = "modify_date")
-    private Date modifyDate;
+	@Column(name = "create_date")
+	private Date createDate;
 
-    public long getId() {
-        return id;
-    }
+	@Column(name = "modify_date")
+	private Date modifyDate;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getContent() {
-        return content;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public String getEvent() {
-        return event;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-    public void setEvent(String event) {
-        this.event = event;
-    }
+	public String getEvent() {
+		return event;
+	}
 
-    public Date getCreateDate() {
-        return createDate;
-    }
+	public void setEvent(String event) {
+		this.event = event;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	public Date getCreateDate() {
+		return createDate;
+	}
 
-    public Date getModifyDate() {
-        return modifyDate;
-    }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
+	public Date getModifyDate() {
+		return modifyDate;
+	}
 
-    @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private Set<ProductImage> productImages = new HashSet();
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
 
-    @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private Set<DisplayInfo> displayInfos = new HashSet();
+	@Nonnull
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<ProductImage> productImages = new HashSet();
 
-    @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private Set<ReservationInfo> reservationInfos = new HashSet<>();
+	@Nonnull
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<DisplayInfo> displayInfos = new HashSet();
+	
+	@Nonnull
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<ReservationInfo> reservationInfos = new HashSet<>();
 
-    @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private Set<ReservationUserComment> reservationUserComments = new HashSet<>();
+	@Nonnull
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<ReservationUserComment> reservationUserComments = new HashSet<>();
+	
+	@Nonnull
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<ProductPrice> productPrices = new HashSet<>();
+	
+	@Nonnull
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Set<Promotion> promotions = new HashSet<>();
+	
+	@Nonnull
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Category.class)
+	@JoinColumn(name = "category_id")
+	private Category category;
 
-    @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private Set<ProductPrice> productPrices = new HashSet<>();
+	@Nonnull
+	public Set<ProductImage> getProductImages() {
+		return productImages;
+	}
 
-    @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private Set<Promotion> promotions = new HashSet<>();
+	public void setProductImages(@Nonnull Set<ProductImage> productImages) {
+		this.productImages = productImages;
+	}
 
-    @Nonnull
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Category.class)
-    @JoinColumn(name = "category_id")
-    private Category category;
+	@Nonnull
+	public Set<DisplayInfo> getDisplayInfos() {
+		return displayInfos;
+	}
 
-    @Nonnull
-    public Set<ProductImage> getProductImages() {
-        return productImages;
-    }
+	public void setDisplayInfos(@Nonnull Set<DisplayInfo> displayInfos) {
+		this.displayInfos = displayInfos;
+	}
 
-    public void setProductImages(@Nonnull Set<ProductImage> productImages) {
-        this.productImages = productImages;
-    }
+	@Nonnull
+	public Set<ReservationInfo> getReservationInfos() {
+		return reservationInfos;
+	}
 
-    @Nonnull
-    public Set<DisplayInfo> getDisplayInfos() {
-        return displayInfos;
-    }
+	public void setReservationInfos(@Nonnull Set<ReservationInfo> reservationInfos) {
+		this.reservationInfos = reservationInfos;
+	}
 
-    public void setDisplayInfos(@Nonnull Set<DisplayInfo> displayInfos) {
-        this.displayInfos = displayInfos;
-    }
+	@Nonnull
+	public Set<ReservationUserComment> getReservationUserComments() {
+		return reservationUserComments;
+	}
 
-    @Nonnull
-    public Set<ReservationInfo> getReservationInfos() {
-        return reservationInfos;
-    }
+	public void setReservationUserComments(@Nonnull Set<ReservationUserComment> reservationUserComments) {
+		this.reservationUserComments = reservationUserComments;
+	}
 
-    public void setReservationInfos(@Nonnull Set<ReservationInfo> reservationInfos) {
-        this.reservationInfos = reservationInfos;
-    }
+	@Nonnull
+	public Set<ProductPrice> getProductPrices() {
+		return productPrices;
+	}
 
-    @Nonnull
-    public Set<ReservationUserComment> getReservationUserComments() {
-        return reservationUserComments;
-    }
+	public void setProductPrices(@Nonnull Set<ProductPrice> productPrices) {
+		this.productPrices = productPrices;
+	}
 
-    public void setReservationUserComments(@Nonnull Set<ReservationUserComment> reservationUserComments) {
-        this.reservationUserComments = reservationUserComments;
-    }
+	@Nonnull
+	public Set<Promotion> getPromotions() {
+		return promotions;
+	}
 
-    @Nonnull
-    public Set<ProductPrice> getProductPrices() {
-        return productPrices;
-    }
+	public void setPromotions(@Nonnull Set<Promotion> promotions) {
+		this.promotions = promotions;
+	}
 
-    public void setProductPrices(@Nonnull Set<ProductPrice> productPrices) {
-        this.productPrices = productPrices;
-    }
+	@Nonnull
+	public Category getCategory() {
+		return category;
+	}
 
-    @Nonnull
-    public Set<Promotion> getPromotions() {
-        return promotions;
-    }
+	public void setCategory(@Nonnull Category category) {
+		this.category = category;
+	}
 
-    public void setPromotions(@Nonnull Set<Promotion> promotions) {
-        this.promotions = promotions;
-    }
-
-    @Nonnull
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(@Nonnull Category category) {
-        this.category = category;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductResult [id=" + id + ", description=" + description + ", content=" + content + ", event=" + event
-                + ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", displayInfos=" + displayInfos
-                + ", category=" + category + "]";
-    }
+	@Override
+	public String toString() {
+		return "ProductRs [id=" + id + ", description=" + description + ", content=" + content + ", event=" + event
+				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", displayInfos=" + displayInfos
+				+ ", category=" + category + "]";
+	}
 
 }

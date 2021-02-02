@@ -1,11 +1,7 @@
 package kr.or.connect.reservation.service.impl;
 
 import kr.or.connect.reservation.dto.Price;
-import kr.or.connect.reservation.dto.ReservationCancleResult;
-import kr.or.connect.reservation.dto.ReservationRequestResult;
-import kr.or.connect.reservation.dto.request.ReservationRequest;
-import kr.or.connect.reservation.exception.list.ReservationIdNotExistException;
-import kr.or.connect.reservation.model.ProductPrice;
+import kr.or.connect.reservation.dto.ReservationRequestRs;
 import kr.or.connect.reservation.model.ReservationInfo;
 import kr.or.connect.reservation.model.ReservationInfoPrice;
 import kr.or.connect.reservation.repository.ProductPriceRepository;
@@ -19,103 +15,122 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import static kr.or.connect.reservation.dto.ReservationCancleResult.createReservationCancleResult;
-import static kr.or.connect.reservation.dto.ReservationRequestResult.createReservationRequestResult;
-import static kr.or.connect.reservation.model.ReservationInfoPrice.createReservationInfoPrice;
 
 @Slf4j
 @Service
 public class ReservationServiceImpl implements ReservationService {
-    @Autowired
-    private ReservationRepository reservationRepository;
-    @Autowired
-    private ReservationInfoPriceRepository reservationInfoPriceRepository;
-    @Autowired
-    private ProductPriceRepository productPriceRepository;
 
-    @Nonnull
-    @Override
-    @Transactional(readOnly = false)
-    public ReservationRequestResult addReservation(@Nonnull ReservationRequest reservationRequest) {
-        ReservationRequestResult reservationRequestResult = createReservationRequestResult(reservationRequest);
+	@Autowired
+	private ReservationRepository rsvRep;
+	@Autowired
+	private ReservationInfoPriceRepository rsvPriceRep;
+	@Autowired
+	private ProductPriceRepository pdPriceRep;
 
-        ReservationInfo reservationInfo = ReservationInfo.createReservationInfo(reservationRequestResult);
-        reservationInfo = reservationRepository.save(reservationInfo);
-        reservationRequestResult.setReservationInfoId(reservationInfo.getId());
+	@Nonnull
+	@Override
+	@Transactional(readOnly = false)
+	public ReservationRequestRs addReservation(@Nonnull ReservationRequestRs rsvRequest) {
+		setNewDate(rsvRequest);
+		
+		ReservationInfo reservationInfo = makeReservationInfo(rsvRequest);
+		reservationInfo = rsvRep.save(reservationInfo);
+		
+		rsvRequest.setReservationInfoId(reservationInfo.getId());
+		
+		savePriceList(reservationInfo.getId(), rsvRequest.getPrices());
 
-        savePriceList(reservationInfo.getId(), reservationRequestResult.getPrices());
+		return rsvRequest;
+	}
 
-        return reservationRequestResult;
-    }
+	public void setNewDate(@Nonnull ReservationRequestRs rsvRequest) {
+		Date date = new Date();
+		rsvRequest.setReservationDate(date);
+		rsvRequest.setCreateDate(date);
+		rsvRequest.setModifyDate(date);
+		rsvRequest.setCancelFlag(false);
+	}
+	
+	public ReservationInfo makeReservationInfo(ReservationRequestRs rsvRequest) {
+		return new ReservationInfo(null, rsvRequest.getProductId(), rsvRequest.getDisplayInfoId(),
+				rsvRequest.getReservationName(), rsvRequest.getReservationTel(), rsvRequest.getReservationEmail(),
+				rsvRequest.getReservationDate(), false, rsvRequest.getCreateDate(), rsvRequest.getModifyDate());
+	}
+	
+	private void savePriceList(Long rsvId, @Nonnull List<Price> priceList) {
+		for (Price price : priceList) {
+			ReservationInfoPrice reservationInfoPrice = makeReservationInfoPrice(rsvId, price);
+			reservationInfoPrice = rsvPriceRep.save(reservationInfoPrice);
 
-    private void savePriceList(long reservationInfoId, @Nonnull List<Price> prices) {
-        for (Price price : prices) {
-            ProductPrice productPrice = productPriceRepository.findById(price.getProductPriceId()).orElseThrow(() -> new ReservationIdNotExistException(1));
+			price.setReservationInfoPriceId(reservationInfoPrice.getId());
+		}
+	}
 
-            ReservationInfoPrice reservationInfoPrice = createReservationInfoPrice(reservationInfoId, price.getCount(), productPrice);
-            reservationInfoPrice = reservationInfoPriceRepository.save(reservationInfoPrice);
+	@Nonnull
+	@Override
+	public List<ReservationInfo> getReservation(@Nonnull String email) {
+		return rsvRep.selectAtEmail(email);
+	}
+	
+	@Override
+	public long getRsvTicketTotalPrice(Long rsvInfoId) {
+		log.debug("rsvInfoId = {}", rsvInfoId);
+		long totalPrice = 0;
+		List<ReservationInfoPrice> rsvInfoPriceList = rsvRep.selectTicketAtRsvInfoId(rsvInfoId);
+		
+		for (ReservationInfoPrice rsvInfoPrice : rsvInfoPriceList) {
+			totalPrice += calTicketPrice(rsvInfoPrice.getCount(), rsvInfoPrice.getProductPrice().getPrice());
+		}
 
-            price.setReservationInfoId(reservationInfoId);
-            price.setReservationInfoPriceId(reservationInfoPrice.getId());
-        }
-    }
+		return totalPrice;
+	}
 
-    @Nonnull
-    @Override
-    public List<ReservationInfo> getReservation(@Nonnull String email) {
-        return reservationRepository.selectAtEmail(email);
-    }
+	long calTicketPrice(long count, long price) {
+		return count*price;
+	}
+	
+	@Nonnull
+	@Override
+	@Transactional(readOnly = false)
+	public ReservationRequestRs cancleReservation(Long reservationId) {
+		if (rsvRep.cancleRsvAtId(reservationId) == 0) {
+			return null;
+		}
 
-    @Override
-    public long getRsvTicketTotalPrice(long reservationInfoId) {
-        log.debug("reservationInfoId = {}", reservationInfoId);
-        long totalPrice = 0;
-        List<ReservationInfoPrice> reservationInfoPrices = reservationRepository.selectTicketAtReservationInfoId(reservationInfoId);
+		return makeRsvRequestRs(rsvRep.selectAtId(reservationId));
+	}
+	
+	private ReservationRequestRs  makeRsvRequestRs(ReservationInfo rsvInfo) {
+		return new ReservationRequestRs(rsvInfo.getId(), rsvInfo.getProductId(),
+				rsvInfo.getDisplayInfoId(), rsvInfo.getReservationName(), rsvInfo.getReservationTel(),
+				rsvInfo.getReservationEmail(), rsvInfo.getReservationDate(), rsvInfo.getCancelFlag(),
+				rsvInfo.getCreateDate(), rsvInfo.getModifyDate());
+	}
+	
+	@Nonnull
+	@Override
+	@Transactional(readOnly = false)
+	public List<Price> selectPriceList(Long reservationId) {
+		return makePriceList(rsvPriceRep.selectPriceList(reservationId));
+	}
+	
+	@Nonnull
+	private List<Price> makePriceList(@Nonnull List<ReservationInfoPrice> rsvInfoPriceList){
+		List<Price> priceList = new ArrayList();
+		
+		for (ReservationInfoPrice rsvInfoPrice : rsvInfoPriceList) {
+			priceList.add(new Price(rsvInfoPrice.getId(), rsvInfoPrice.getReservationInfoId(),
+					rsvInfoPrice.getProductPrice().getId(), rsvInfoPrice.getCount()));
+		}
+		
+		return priceList;
+	}
 
-        for (ReservationInfoPrice reservationInfoPrice : reservationInfoPrices) {
-            totalPrice += calTicketPrice(reservationInfoPrice.getCount(), reservationInfoPrice.getProductPrice().getPrice());
-        }
-        return totalPrice;
-    }
-
-    long calTicketPrice(long count, long price) {
-        return count * price;
-    }
-
-
-    @Nonnull
-    @Override
-    @Transactional(readOnly = false)
-    public ReservationCancleResult cancleReservation(long reservationId) {
-        if (!reservationRepository.existsById(reservationId)) {
-            throw new ReservationIdNotExistException(reservationId);
-        }
-
-        reservationRepository.cancleAtId(reservationId);
-        ReservationCancleResult reservationCancleResult = createReservationCancleResult(reservationRepository.selectAtId(reservationId));
-
-        log.info("{}", reservationCancleResult);
-        return reservationCancleResult;
-    }
-
-
-    @Nonnull
-    @Override
-    @Transactional(readOnly = false)
-    public List<Price> selectPriceList(long reservationId) {
-        return makePriceList(reservationInfoPriceRepository.selectPriceList(reservationId));
-    }
-
-    @Nonnull
-    private List<Price> makePriceList(@Nonnull List<ReservationInfoPrice> reservationInfoPrices) {
-        List<Price> prices = new ArrayList();
-
-        for (ReservationInfoPrice reservationInfoPrice : reservationInfoPrices) {
-            prices.add(new Price(reservationInfoPrice.getId(), reservationInfoPrice.getReservationInfoId(),
-                    reservationInfoPrice.getProductPrice().getId(), reservationInfoPrice.getCount()));
-        }
-        return prices;
-    }
+	@Nonnull
+	public ReservationInfoPrice makeReservationInfoPrice(Long rsvId, Price price) {
+		return new ReservationInfoPrice(null, rsvId, price.getCount(),
+				pdPriceRep.findById(price.getProductPriceId()).get());
+	}
 }

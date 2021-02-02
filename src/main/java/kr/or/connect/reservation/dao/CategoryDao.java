@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.dao;
 
-import kr.or.connect.reservation.dto.CategoryResult;
+import kr.or.connect.reservation.dto.CategoryRs;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,13 +16,13 @@ import static kr.or.connect.reservation.sql.CategorySql.SELECT_ALL_WITH_COUNT;
 @Repository
 public class CategoryDao {
 	private NamedParameterJdbcTemplate jdbc;
-	private RowMapper<CategoryResult> rowMapper = BeanPropertyRowMapper.newInstance(CategoryResult.class);
+	private RowMapper<CategoryRs> rowMapper = BeanPropertyRowMapper.newInstance(CategoryRs.class);
 
 	public CategoryDao(DataSource dataSource) {
 		jdbc = new NamedParameterJdbcTemplate(dataSource);
 	}
 
-	public List<CategoryResult> selectAll() {
+	public List<CategoryRs> selectAll() {
 		try {
 			return jdbc.query(SELECT_ALL_WITH_COUNT, Collections.emptyMap(), rowMapper);
 		} catch (EmptyResultDataAccessException e) {

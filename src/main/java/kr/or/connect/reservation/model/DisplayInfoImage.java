@@ -1,37 +1,44 @@
 package kr.or.connect.reservation.model;
 
 import javax.annotation.Nonnull;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "display_info_image")
 public class DisplayInfoImage {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    @Column(name = "display_info_id")
-    private long displayInfoId;
+	@Column(name="display_info_id")
+	private long displayInfoId;
+	
+	public long getId() {
+		return id;
+	}
 
-    public long getId() {
-        return id;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	@Nonnull
+	@ManyToOne
+	@JoinColumn(name = "file_id")
+	private FileInfo fileInfo;
 
-    @Nonnull
-    @ManyToOne
-    @JoinColumn(name = "file_id")
-    private FileInfo fileInfo;
+	@Nonnull
+	public FileInfo getFileInfo() {
+		return fileInfo;
+	}
 
-    @Nonnull
-    public FileInfo getFileInfo() {
-        return fileInfo;
-    }
-
-    public void setFileInfo(@Nonnull FileInfo fileInfo) {
-        this.fileInfo = fileInfo;
-    }
+	public void setFileInfo(@Nonnull FileInfo fileInfo) {
+		this.fileInfo = fileInfo;
+	}
 }

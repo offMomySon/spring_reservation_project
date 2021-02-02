@@ -1,12 +1,10 @@
 package kr.or.connect.reservation.controller;
 
 import kr.or.connect.reservation.dto.Price;
-import kr.or.connect.reservation.dto.ReservationCancleResult;
-import kr.or.connect.reservation.dto.ReservationRequestResult;
-import kr.or.connect.reservation.dto.ReservationResponseResult;
-import kr.or.connect.reservation.dto.request.ReservationRequest;
-import kr.or.connect.reservation.dto.response.ReservationGetApiResponse;
-import kr.or.connect.reservation.exception.list.ParamNotValidException;
+import kr.or.connect.reservation.dto.ReservationRequestRs;
+import kr.or.connect.reservation.dto.ReservationResponseRs;
+import kr.or.connect.reservation.exception.ApiErrorResponse;
+import kr.or.connect.reservation.exception.RsvRqtPricesNotExistExceiption;
 import kr.or.connect.reservation.model.ReservationInfo;
 import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ReservationService;
@@ -20,95 +18,151 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import static kr.or.connect.reservation.dto.response.ReservationCancleResponse.createReservationCancleResponse;
-import static kr.or.connect.reservation.dto.response.ReservationPostApiResponse.createReservationPostApiResponse;
+import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping(path = "/api/reservations")
 public class ReservationApiController {
-    @Autowired
-    private ReservationService reservationService;
-    @Autowired
-    private DisplayInfoService displayInfoService;
 
-    @PostMapping
-    public ResponseEntity<?> postBook(@RequestBody ReservationRequest reservationRequest) {
-        ReservationRequestResult reservationRequestResult = reservationService.addReservation(reservationRequest);
+	@Autowired
+	private ReservationService rsvService;
+	@Autowired
+	private DisplayInfoService displayInfoService;
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(createReservationPostApiResponse(reservationRequestResult));
-    }
+	@PostMapping
+	public ResponseEntity<?> postBook(@RequestBody ReservationRequestRs rsvRequest) {		
+		if (isNotPostBookParamValid(rsvRequest)) {
+			throw new RsvRqtPricesNotExistExceiption(rsvRequest);
+		}
 
-    private boolean isNotRequestPriceListValid(@Nonnull List<Price> prices) {
-        prices.removeIf((Price price) -> isPriceCountInvalid(price));
-        if (prices.isEmpty()) {
-            return true;
-        }
-        return false;
-    }
+		return ResponseEntity.status(HttpStatus.CREATED).body(rsvService.addReservation(rsvRequest));
+	}
 
-    private boolean isPriceCountInvalid(@ParametersAreNonnullByDefault Price price) {
-        if (price.getCount() > 0) {
-            return false;
-        }
-        return true;
-    }
+	private boolean isNotPostBookParamValid(@Nonnull ReservationRequestRs rsvRequest) {
+		if (rsvRequest.getReservationInfoId() < 0 || rsvRequest.getProductId() < 0
+				|| rsvRequest.getReservationEmail() == null || rsvRequest.getReservationName() == null
+				|| rsvRequest.getReservationTel() == null || rsvRequest.getReservationDate() == null) {
+			return true;
+		}
 
-    @GetMapping
-    public ResponseEntity<?> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session) {
-        List<ReservationResponseResult> reservationResponseResults = makeRsvResponseRsList(reservationService.getReservation(reservationEmail));
+		if (isNotRequestPriceListValid(rsvRequest.getPrices())) {
+			return true;
+		}
 
-        storeEmailInfoIfNeeded(reservationResponseResults, session, reservationEmail);
+		return false;
+	}
 
-        return ResponseEntity.ok().body(ReservationGetApiResponse.createReservationGetApiResponse(reservationResponseResults));
-    }
+	private boolean isNotRequestPriceListValid(@Nonnull List<Price> priceList) {
+		priceList.removeIf((Price price) -> isPriceCountInvalid(price));
 
-    @Nonnull
-    private List<ReservationResponseResult> makeRsvResponseRsList(@Nonnull List<ReservationInfo> reservationResponses) {
-        List<ReservationResponseResult> reservationResponseResults = new ArrayList();
+		if (priceList.isEmpty()) {
+			return true;
+		}
+		return false;
+	}
 
-        for (ReservationInfo reservationInfo : reservationResponses) {
-            ReservationResponseResult requestResult = new ReservationResponseResult(reservationInfo.getId(), reservationInfo.getProductId(),
-                    reservationInfo.getDisplayInfoId(), reservationInfo.getReservationName(), reservationInfo.getReservationTel(),
-                    reservationInfo.getReservationEmail(), reservationInfo.getReservationDate(), reservationInfo.getCancelFlag(),
-                    reservationInfo.getCreateDate(), reservationInfo.getModifyDate());
+	private boolean isPriceCountInvalid(@ParametersAreNonnullByDefault Price price) {
+		if (price.getCount() > 0) {
+			return false;
+		}
+		return true;
+	}
 
-            requestResult.setDisplayInfo(displayInfoService.getDisplayInfo(reservationInfo.getDisplayInfoId()));
-            requestResult.setTotalPrice(reservationService.getRsvTicketTotalPrice(reservationInfo.getId()));
+	@GetMapping
+	public ResponseEntity<?> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session) {
+		List<ReservationResponseRs> rsvResponseList = makeRsvResponseRsList(rsvService.getReservation(reservationEmail));
+		if(isNotRsvResponseRsListValid(rsvResponseList)) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorResponse("error-0012", "getBook api result is not exist."));
+		}
+		
+		Map<String, Object> rsvMap = new HashMap<>();
+		rsvMap.put("reservations", rsvResponseList);
+		rsvMap.put("size", rsvResponseList.size());
 
-            reservationResponseResults.add(requestResult);
-        }
+		storeEmailInfoIfNeeded(rsvResponseList, session, reservationEmail);
 
-        return reservationResponseResults;
-    }
+		return ResponseEntity.ok().body(rsvMap);
+	}
+	
+	@Nonnull
+	private List<ReservationResponseRs> makeRsvResponseRsList(@Nonnull List<ReservationInfo> rsvInfoList) {
+		List<ReservationResponseRs> responseList = new ArrayList();
+		
+		for (ReservationInfo rsvInfo : rsvInfoList) {
+			ReservationResponseRs requestRs = new ReservationResponseRs(rsvInfo.getId(), rsvInfo.getProductId(),
+					rsvInfo.getDisplayInfoId(), rsvInfo.getReservationName(), rsvInfo.getReservationTel(),
+					rsvInfo.getReservationEmail(), rsvInfo.getReservationDate(), rsvInfo.getCancelFlag(),
+					rsvInfo.getCreateDate(), rsvInfo.getModifyDate());
 
-    private void storeEmailInfoIfNeeded(@ParametersAreNonnullByDefault List<ReservationResponseResult> reservationResponseResults,
-                                        @ParametersAreNonnullByDefault HttpSession session,
-                                        @ParametersAreNonnullByDefault String reservationEmail) {
-        if (reservationResponseResults.isEmpty()) {
-            return;
-        }
-        session.setAttribute("reservationEmail", reservationEmail);
-    }
+			requestRs.setDisplayInfo(displayInfoService.getDisplayInfo(rsvInfo.getDisplayInfoId()));
+			requestRs.setTotalPrice(rsvService.getRsvTicketTotalPrice(rsvInfo.getId()));
 
-    @PutMapping(path = "/{reservationId}")
-    public ResponseEntity<?> cancleBook(@PathVariable long reservationId) {
-        if (isNotCancleBookParamValid(reservationId)) {
-            throw new ParamNotValidException();
-        }
+			responseList.add(requestRs);
+		}
+		
+		return responseList;
+	}
+	
+	private boolean isNotRsvResponseRsListValid(@Nonnull List<ReservationResponseRs> responseList) {
+		if(responseList.isEmpty()) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	private void storeEmailInfoIfNeeded(@ParametersAreNonnullByDefault List<ReservationResponseRs> responseList,
+			@ParametersAreNonnullByDefault HttpSession session,
+			@ParametersAreNonnullByDefault String reservationEmail) {
+		if (responseList.isEmpty()) {
+			return;
+		}
+		session.setAttribute("rsvEmail", reservationEmail);
+	}
+	
+	@PutMapping(path = "/{reservationId}")
+	public ResponseEntity<?> cancleBook(@PathVariable long reservationId) {
+		if(isNotCancleBookParamValid(reservationId)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiErrorResponse("error-0010", "The parameter entered is invalid. at cancleBook method"));
+		}
 
-        ReservationCancleResult reservationCancleResult = reservationService.cancleReservation(reservationId);
-        List<Price> prices = reservationService.selectPriceList(reservationId);
+		ReservationRequestRs rsvRequestRs = rsvService.cancleReservation(reservationId);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(createReservationCancleResponse(reservationCancleResult, prices));
-    }
+		if (isNotReservationIdValid(rsvRequestRs)) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorResponse("error-0011", "cancleBook api result is not exist."));
+		}
 
-    private boolean isNotCancleBookParamValid(long reservationId) {
-        if (reservationId < 0) {
-            return true;
-        }
-        return false;
-    }
+		List<Price> priceList = rsvService.selectPriceList(reservationId);
+		if(isNotPriceListValid(priceList)) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiErrorResponse("error-0011", "cancleBook api result is not exist."));
+		}
+		
+		rsvRequestRs.setPrices(priceList);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(rsvRequestRs);
+	}
+	
+	private boolean isNotCancleBookParamValid(long reservationId) {
+		if (reservationId < 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isNotReservationIdValid(@Nonnull ReservationRequestRs rsvRequestRs) {
+		if (rsvRequestRs.getReservationInfoId() < 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isNotPriceListValid(List<Price> priceList) {
+		if(priceList.isEmpty()) {
+			return true;
+		}
+		return false;
+	}
 }

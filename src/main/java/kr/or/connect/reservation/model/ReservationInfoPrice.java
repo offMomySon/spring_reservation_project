@@ -1,51 +1,70 @@
 package kr.or.connect.reservation.model;
 
-import lombok.Data;
-
 import javax.annotation.Nonnull;
 import javax.persistence.*;
 
 @Entity
-@Data
 @Table(name = "reservation_info_price")
 public class ReservationInfoPrice {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
-    @Column(name = "reservation_info_id")
-    private long reservationInfoId;
-    @Column(name = "count")
-    private long count;
-    @ManyToOne
-    @JoinColumn(name = "product_price_id")
-    private ProductPrice productPrice;
 
-    public ReservationInfoPrice() {
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
-    public ReservationInfoPrice(long reservationInfoId, long count, @Nonnull ProductPrice productPrice) {
-        this.reservationInfoId = reservationInfoId;
-        this.count = count;
-        this.productPrice = productPrice;
-    }
+	@Column(name = "reservation_info_id")
+	private long reservationInfoId;
+	
+	@Column(name = "count")
+	private long count;
 
-    public ReservationInfoPrice(long reservationInfoId, long count) {
-        this.reservationInfoId = reservationInfoId;
-        this.count = count;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public static ReservationInfoPrice createReservationInfoPrice(long reservationInfoId, long count, @Nonnull ProductPrice productPrice) {
-        return new ReservationInfoPrice(reservationInfoId, count, productPrice);
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    @Nonnull
-    public ProductPrice getProductPrice() {
-        return productPrice;
-    }
+	public long getReservationInfoId() {
+		return reservationInfoId;
+	}
 
-    public void setProductPrice(@Nonnull ProductPrice productPrice) {
-        this.productPrice = productPrice;
-    }
+	public void setReservationInfoId(long reservationInfoId) {
+		this.reservationInfoId = reservationInfoId;
+	}
+
+	public long getCount() {
+		return count;
+	}
+
+	public void setCount(long count) {
+		this.count = count;
+	}
+
+	@Nonnull
+	@ManyToOne
+	@JoinColumn(name = "product_price_id")
+	private ProductPrice productPrice;
+
+	@Nonnull
+	public ProductPrice getProductPrice() {
+		return productPrice;
+	}
+
+	public void setProductPrice(@Nonnull ProductPrice productPrice) {
+		this.productPrice = productPrice;
+	}
+
+	public ReservationInfoPrice() {
+	}
+
+	public ReservationInfoPrice(Long id, long reservationInfoId, long count, @Nonnull ProductPrice productPrice) {
+		super();
+		this.id = id;
+		this.reservationInfoId = reservationInfoId;
+		this.count = count;
+		this.productPrice = productPrice;
+	}
 
 }

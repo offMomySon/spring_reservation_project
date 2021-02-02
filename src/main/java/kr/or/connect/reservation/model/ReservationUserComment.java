@@ -1,104 +1,117 @@
 package kr.or.connect.reservation.model;
 
-import javax.annotation.Nonnull;
-import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 @Entity
 @Table(name = "reservation_user_comment")
 public class ReservationUserComment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
-    @Column(name = "product_id")
-    private long productId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    @Column(name = "reservation_info_id")
-    private long reservationInfoId;
+	@Column(name = "product_id")
+	private long productId;
 
-    private double score;
+	@Column(name = "reservation_info_id")
+	private long reservationInfoId;
 
-    private String comment;
+	private double score;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date")
-    private Date createDate;
+	private String comment;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modify_date")
-    private Date modifyDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_date")
+	private Date createDate;
 
-    public long getId() {
-        return id;
-    }
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modify_date")
+	private Date modifyDate;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public long getProductId() {
-        return productId;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public long getReservationInfoId() {
-        return reservationInfoId;
-    }
+	public long getProductId() {
+		return productId;
+	}
 
-    public void setReservationInfoId(long reservationInfoId) {
-        this.reservationInfoId = reservationInfoId;
-    }
+	public long getReservationInfoId() {
+		return reservationInfoId;
+	}
 
-    public void setProductId(long productId) {
-        this.productId = productId;
-    }
+	public void setReservationInfoId(long reservationInfoId) {
+		this.reservationInfoId = reservationInfoId;
+	}
 
-    public double getScore() {
-        return score;
-    }
+	public void setProductId(long productId) {
+		this.productId = productId;
+	}
 
-    public void setScore(double score) {
-        this.score = score;
-    }
+	public double getScore() {
+		return score;
+	}
 
-    public String getComment() {
-        return comment;
-    }
+	public void setScore(double score) {
+		this.score = score;
+	}
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+	public String getComment() {
+		return comment;
+	}
 
-    public Date getCreateDate() {
-        return createDate;
-    }
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	public Date getCreateDate() {
+		return createDate;
+	}
 
-    public Date getModifyDate() {
-        return modifyDate;
-    }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
+	public Date getModifyDate() {
+		return modifyDate;
+	}
 
-    @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "reservation_user_comment_id")
-    private Set<ReservationUserCommentImage> reservationUserCommentImages = new HashSet<>();
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
+	}
 
-    @Nonnull
-    public Set<ReservationUserCommentImage> getReservationUserCommentImages() {
-        return reservationUserCommentImages;
-    }
+	@Nonnull
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "reservation_user_comment_id")
+	private Set<ReservationUserCommentImage> reservationUserCommentImages = new HashSet<>();
 
-    public void setReservationUserCommentImages(@Nonnull Set<ReservationUserCommentImage> reservationUserCommentImages) {
-        this.reservationUserCommentImages = reservationUserCommentImages;
-    }
+	@Nonnull
+	public Set<ReservationUserCommentImage> getReservationUserCommentImages() {
+		return reservationUserCommentImages;
+	}
+
+	public void setReservationUserCommentImages(@Nonnull Set<ReservationUserCommentImage> reservationUserCommentImages) {
+		this.reservationUserCommentImages = reservationUserCommentImages;
+	}
 
 }
