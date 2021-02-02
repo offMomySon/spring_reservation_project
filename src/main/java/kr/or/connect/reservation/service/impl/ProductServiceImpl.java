@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.service.impl;
 
-import kr.or.connect.reservation.dto.ProductRs;
+import kr.or.connect.reservation.dto.ProductResult;
 import kr.or.connect.reservation.model.Product;
 import kr.or.connect.reservation.repository.ProductRepository;
 import kr.or.connect.reservation.service.ProductService;
@@ -15,51 +15,47 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+    @Autowired
+    private ProductRepository productRepository;
 
-	@Autowired
-	private ProductRepository productRep;
+    @Override
+    public long getProductCountAtCategory(long categoryId) {
+        if (categoryId == 0) {
+            return productRepository.countWithDisplayInfo();
+        }
+        return productRepository.countWithCategoryId(categoryId);
+    }
 
-	@Override
-	public long getProductCountAtCategory(long categoryId) {
-		if (categoryId == 0) {
-			return productRep.countWithDisplayInfo();
-		}
-		return productRep.countWithCategoryId(categoryId);
-	}
+    @Nonnull
+    @Transactional
+    @Override
+    public List<ProductResult> getProductListAtCategory(long categoryId, long startPageNum) {
+        PageRequest pageRequest = PageRequest.of((int) (startPageNum / SELECT_COUNT_LIMIT), (int) SELECT_COUNT_LIMIT);
+        List<ProductResult> productRsList = new ArrayList();
 
-	@Nonnull
-	@Transactional
-	@Override
-	public List<ProductRs> getProductListAtCategory(long categoryId, long startPageNum) {
-		PageRequest pageRequest = PageRequest.of((int) (startPageNum/SELECT_COUNT_LIMIT), (int) SELECT_COUNT_LIMIT);
-		List<ProductRs> productRsList = new ArrayList();
-		
-		if (categoryId == 0) {
-			List<Product> productList = productRep.selectWithTypeTH(pageRequest).getContent();
-			
-			for(Product product : productList ) {
-				productRsList.add(makeProductRs(product));
-			}
-			
-			return productRsList;
-		}
-		
-		List<Product> productList = productRep.selectWithCategoryId(categoryId, pageRequest).getContent();
-		for(Product product : productList ) {
-			productRsList.add(makeProductRs(product));
-		}
-		
-		return productRsList;
-	}
-	
-	private ProductRs makeProductRs(Product product) {
-		return new ProductRs(
-				product.getDisplayInfos().stream().findFirst().get().getId(), 
-				product.getId(),
-				product.getDescription(),
-				product.getDisplayInfos().stream().findFirst().get().getPlaceName(),
-				product.getContent(), 
-				product.getProductImages().stream().findFirst().get().getFileInfo().getSaveFileName());
-	}
+        if (categoryId == 0) {
+            List<Product> products = productRepository.selectWithTypeTH(pageRequest).getContent();
+            for (Product product : products) {
+                productRsList.add(makeProductResult(product));
+            }
+            return productRsList;
+        }
+
+        List<Product> products = productRepository.selectWithCategoryId(categoryId, pageRequest).getContent();
+        for (Product product : products) {
+            productRsList.add(makeProductResult(product));
+        }
+        return productRsList;
+    }
+
+    private ProductResult makeProductResult(Product product) {
+        return new ProductResult(
+                product.getDisplayInfos().stream().findFirst().get().getId(),
+                product.getId(),
+                product.getDescription(),
+                product.getDisplayInfos().stream().findFirst().get().getPlaceName(),
+                product.getContent(),
+                product.getProductImages().stream().findFirst().get().getFileInfo().getSaveFileName());
+    }
 
 }

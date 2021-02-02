@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Nonnull;
 import java.util.Date;
 
-public class ReservationResponseRs {
+public class ReservationResponseResult {
 	private long reservationInfoId;
 	private long productId;
 	private long displayInfoId;
@@ -18,15 +18,15 @@ public class ReservationResponseRs {
 	private Boolean cancelFlag;
 	private Date createDate;
 	private Date modifyDate;
-	private DisplayInfoRs displayInfoRs;
+	private DisplayInfoResult displayInfoResult;
 	private Long totalPrice;
 
-	public ReservationResponseRs() {
+	public ReservationResponseResult() {
 	}
 
-	public ReservationResponseRs(long reservationInfoId, long productId, long displayInfoId, String reservationName,
-			String reservationTel, String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate,
-			Date modifyDate) {
+	public ReservationResponseResult(long reservationInfoId, long productId, long displayInfoId, String reservationName,
+									 String reservationTel, String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate,
+									 Date modifyDate) {
 		super();
 		this.reservationInfoId = reservationInfoId;
 		this.productId = productId;
@@ -128,21 +128,21 @@ public class ReservationResponseRs {
 		this.modifyDate = modifyDate;
 	}
 
-	public DisplayInfoRs getDisplayInfo() {
-		return displayInfoRs;
+	public DisplayInfoResult getDisplayInfo() {
+		return displayInfoResult;
 	}
 
-	public void setDisplayInfo(@Nonnull DisplayInfoRs displayInfoRs) {
-		this.displayInfoRs = displayInfoRs;
+	public void setDisplayInfo(@Nonnull DisplayInfoResult displayInfoResult) {
+		this.displayInfoResult = displayInfoResult;
 	}
 
 	@Override
 	public String toString() {
-		return "ReservationResponseRs [reservationInfoId=" + reservationInfoId + ", productId=" + productId
+		return "ReservationResponseResult [reservationInfoId=" + reservationInfoId + ", productId=" + productId
 				+ ", displayInfoId=" + displayInfoId + ", reservationName=" + reservationName + ", reservationTel="
 				+ reservationTel + ", reservationEmail=" + reservationEmail + ", reservationDate=" + reservationDate
 				+ ", cancelFlag=" + cancelFlag + ", createDate=" + createDate + ", modifyDate=" + modifyDate
-				+ ", displayInfoRs=" + displayInfoRs + ", totalPrice=" + totalPrice + "]";
+				+ ", displayInfoResult=" + displayInfoResult + ", totalPrice=" + totalPrice + "]";
 	}
 
 }

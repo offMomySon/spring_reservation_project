@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
-	@Nonnull
-	@Query("SELECT "
-			+ "pd "
-			+ "FROM Product pd "
-			+ "JOIN  pd.promotions pm "
-			+ "JOIN  pd.productImages pi "
-			+ "JOIN  pi.fileInfo fi "
-			+ "where pi.type = 'th' ")
-	public List<Product> selectAll();
+    @Nonnull
+    @Query("SELECT "
+            + "pd "
+            + "FROM Product pd "
+            + "JOIN  pd.promotions pm "
+            + "JOIN  pd.productImages pi "
+            + "JOIN  pi.fileInfo fi "
+            + "where pi.type = 'th' ")
+    public List<Product> selectAll();
 }

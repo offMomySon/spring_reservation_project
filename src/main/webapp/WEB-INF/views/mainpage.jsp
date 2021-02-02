@@ -27,12 +27,12 @@
 				</h1>
 
 				<c:choose>
-					<c:when test="${sessionScope.rsvEmail == null}">
+					<c:when test="${sessionScope.reservationEmail == null}">
 					<a href="./bookinglogin.html" class="btn_my"> <span
 							class="viewReservation" title="예약확인">예약확인</span></a>
 					</c:when>
-					<c:otherwise>	<a href="./myreservation.html?resrv_email=${sessionScope.rsvEmail}" class="btn_my"> <span
-							class="viewReservation" title="예약확인">${sessionScope.rsvEmail}</span></a></c:otherwise>
+					<c:otherwise>	<a href="./myreservation.html?resrv_email=${sessionScope.reservationEmail}" class="btn_my"> <span
+							class="viewReservation" title="예약확인">${sessionScope.reservationEmail}</span></a></c:otherwise>
 				</c:choose>
 
 			</header>

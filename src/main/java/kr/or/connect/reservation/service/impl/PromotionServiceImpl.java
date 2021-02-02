@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.service.impl;
 
-import kr.or.connect.reservation.dto.PromotionRs;
+import kr.or.connect.reservation.dto.PromotionResult;
 import kr.or.connect.reservation.model.Product;
 import kr.or.connect.reservation.repository.PromotionRepository;
 import kr.or.connect.reservation.service.PromotionService;
@@ -16,25 +16,23 @@ import java.util.List;
 @Slf4j
 @Service
 public class PromotionServiceImpl implements PromotionService {
-	
-	@Autowired
-	private PromotionRepository promotionRep;
-	
-	@Nonnull
-	@Override
-	@Transactional
-	public List<PromotionRs> getPromotionList() {
-		List<Product> productList = promotionRep.selectAll();
-		List<PromotionRs> promotionRsList = new ArrayList();
-		
-		for(Product product: productList) {
-			long promotionId = product.getPromotions().stream().findFirst().get().getId();
-			long productId = product.getId();			
-			String saveFileName = product.getProductImages().stream().findFirst().get().getFileInfo().getSaveFileName();
+    @Autowired
+    private PromotionRepository promotionRepository;
 
-			promotionRsList.add(new PromotionRs(promotionId, productId, saveFileName ));
-		}
+    @Nonnull
+    @Override
+    @Transactional
+    public List<PromotionResult> getPromotionList() {
+        List<Product> products = promotionRepository.selectAll();
+        List<PromotionResult> promotionResults = new ArrayList();
 
-		return promotionRsList;
-	}
+        for (Product product : products) {
+            long promotionId = product.getPromotions().stream().findFirst().get().getId();
+            long productId = product.getId();
+            String saveFileName = product.getProductImages().stream().findFirst().get().getFileInfo().getSaveFileName();
+
+            promotionResults.add(new PromotionResult(promotionId, productId, saveFileName));
+        }
+        return promotionResults;
+    }
 }

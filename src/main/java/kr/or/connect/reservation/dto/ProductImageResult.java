@@ -2,7 +2,7 @@ package kr.or.connect.reservation.dto;
 
 import java.util.Date;
 
-public class ProductImageRs {
+public class ProductImageResult {
 	private long productId;
 	private long productImageId;
 	private String type;
@@ -14,11 +14,11 @@ public class ProductImageRs {
 	private Date createDate;
 	private Date modifyDate;
 
-	public ProductImageRs() {
+	public ProductImageResult() {
 	}
 	
-	public ProductImageRs(long productId, long productImageId, String type, long fileInfoId, String fileName,
-			String saveFileName, String contentType, Boolean deleteFlag, Date createDate, Date modifyDate) {
+	public ProductImageResult(long productId, long productImageId, String type, long fileInfoId, String fileName,
+							  String saveFileName, String contentType, Boolean deleteFlag, Date createDate, Date modifyDate) {
 		super();
 		this.productId = productId;
 		this.productImageId = productImageId;
@@ -114,7 +114,7 @@ public class ProductImageRs {
 
 	@Override
 	public String toString() {
-		return "ProductImageRs [productId=" + productId + ", productImageId=" + productImageId + ", type=" + type
+		return "ProductImageResult [productId=" + productId + ", productImageId=" + productImageId + ", type=" + type
 				+ ", fileInfoId=" + fileInfoId + ", fileName=" + fileName + ", saveFileName=" + saveFileName
 				+ ", contentType=" + contentType + ", deleteFlag=" + deleteFlag + ", createDate=" + createDate
 				+ ", modifyDate=" + modifyDate + "]";
