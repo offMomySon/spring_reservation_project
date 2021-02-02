@@ -1,16 +1,16 @@
 package kr.or.connect.reservation.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import kr.or.connect.reservation.dto.Price;
-import kr.or.connect.reservation.objmapper.ReservationDateDeserializer;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationRequest {
 
     private long displayInfoId;
@@ -18,16 +18,7 @@ public class ReservationRequest {
     private long productId;
     private String reservationEmail;
     private String reservationName;
-    @JsonProperty("reservationTelephone")
-    private String reservationTel;
-    private Date reservationDate;
-
-    public ReservationRequest() {
-    }
-
-    @JsonSetter("reservationYearMonthDay")
-    @JsonDeserialize(using = ReservationDateDeserializer.class)
-    public void setReservationDate(Date reservationDate) {
-        this.reservationDate = reservationDate;
-    }
+    private String reservationTelephone;
+    @JsonFormat(pattern = "yyyy.MM.dd")
+    private Date reservationYearMonthDay;
 }

@@ -1,6 +1,7 @@
 package kr.or.connect.reservation.controller;
 
 import kr.or.connect.reservation.dto.Price;
+import kr.or.connect.reservation.dto.ReservationCancleResult;
 import kr.or.connect.reservation.dto.ReservationRequestResult;
 import kr.or.connect.reservation.dto.ReservationResponseResult;
 import kr.or.connect.reservation.dto.request.ReservationRequest;
@@ -21,8 +22,8 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
+import static kr.or.connect.reservation.dto.response.ReservationCancleResponse.createReservationCancleResponse;
 import static kr.or.connect.reservation.dto.response.ReservationPostApiResponse.createReservationPostApiResponse;
-import static kr.or.connect.reservation.dto.response.ReservationRequestResponse.createReservationRequestResponse;
 
 @Slf4j
 @RestController
@@ -98,10 +99,10 @@ public class ReservationApiController {
             throw new ParamNotValidException();
         }
 
-        ReservationRequestResult reservationRequestResult = reservationService.cancleReservation(reservationId);
+        ReservationCancleResult reservationCancleResult = reservationService.cancleReservation(reservationId);
         List<Price> prices = reservationService.selectPriceList(reservationId);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(createReservationRequestResponse(reservationRequestResult, prices));
+        return ResponseEntity.status(HttpStatus.CREATED).body(createReservationCancleResponse(reservationCancleResult, prices));
     }
 
     private boolean isNotCancleBookParamValid(long reservationId) {

@@ -3,15 +3,13 @@ package kr.or.connect.reservation.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kr.or.connect.reservation.dto.CategoryResult;
 import lombok.AccessLevel;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryApiResponse {
     @JsonProperty("items")
