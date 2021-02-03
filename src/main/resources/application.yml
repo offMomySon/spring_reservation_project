@@ -17,12 +17,9 @@ spring:
     username: connectuser
     password: connect123!@#
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://34.123.231.69:3306/connectdb?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8
-    dbcp2:
-      initial-size: 100
-      max-idle: 100
-      max-total: 100
-      min-idle: 100
+    jdbcUrl: jdbc:mysql://34.123.231.69:3306/connectdb?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8
+    maximumPoolSize: 100
+    minimumIdle: 100
 
   devtools:
     livereload:
