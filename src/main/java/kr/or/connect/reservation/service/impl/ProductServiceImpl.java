@@ -7,13 +7,14 @@ import kr.or.connect.reservation.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
@@ -27,7 +28,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Nonnull
-    @Transactional
     @Override
     public List<ProductResult> getProductListAtCategory(long categoryId, long startPageNum) {
         PageRequest pageRequest = PageRequest.of((int) (startPageNum / SELECT_COUNT_LIMIT), (int) SELECT_COUNT_LIMIT);
@@ -57,5 +57,4 @@ public class ProductServiceImpl implements ProductService {
                 product.getContent(),
                 product.getProductImages().stream().findFirst().get().getFileInfo().getSaveFileName());
     }
-
 }

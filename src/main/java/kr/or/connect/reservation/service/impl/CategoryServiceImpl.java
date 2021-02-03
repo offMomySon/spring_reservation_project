@@ -6,6 +6,7 @@ import kr.or.connect.reservation.repository.CategoryRepository;
 import kr.or.connect.reservation.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import javax.persistence.Tuple;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;

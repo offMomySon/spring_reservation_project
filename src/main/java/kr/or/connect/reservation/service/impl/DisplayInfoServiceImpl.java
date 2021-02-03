@@ -8,30 +8,27 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class DisplayInfoServiceImpl implements DisplayInfoService {
     @Autowired
     private DisplayInfoRepository displayInfoRepository;
 
-    @Transactional
     @Override
     public boolean isExistDisplayInfoId(long displayInfoId) {
         return displayInfoRepository.existsById(displayInfoId);
     }
 
     @Nonnull
-    @Transactional
     @Override
     public DisplayInfoResult getDisplayInfo(long displayInfoId) {
-        log.debug("GET. displayInfoId = {}.", displayInfoId);
-
         Product product = displayInfoRepository.selectDisplayInfo(displayInfoId);
 
         return makeDisplayInfoResult(product);
@@ -51,14 +48,12 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     }
 
     @Nonnull
-    @Transactional
     @Override
     public List<ProductImageResult> getProductImageList(long displayInfoId) {
         PageRequest pageRequest = PageRequest.of(FIRST_PAGE, (int) SELECT_IMAGE_COUNT_LIMIT);
-
         List<Product> products = displayInfoRepository.selectProductImageList(displayInfoId, pageRequest).getContent();
-        List<ProductImageResult> productImageResults = new ArrayList();
 
+        List<ProductImageResult> productImageResults = new ArrayList();
         for (Product product : products) {
             productImageResults.add(makeProductImageRs(product));
         }
@@ -80,14 +75,12 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     }
 
     @Nonnull
-    @Transactional
     @Override
     public DisplayInfoImageResult getDisplayInfoImage(long displayInfoId) {
         return makeDisplayInfoImageResult(displayInfoRepository.selectDisplayInfoImage(displayInfoId));
     }
 
     private DisplayInfoImageResult makeDisplayInfoImageResult(DisplayInfo displayInfo) {
-
         DisplayInfoImage displayInfoImage = displayInfo.getDisplayinfoImages().stream().findFirst().get();
         FileInfo fileInfo = displayInfoImage.getFileInfo();
         return new DisplayInfoImageResult(displayInfoImage.getId(), displayInfo.getId(),
@@ -96,7 +89,6 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     }
 
     @Nonnull
-    @Transactional
     @Override
     public List<CommentResult> getCommentList(long displayInfoId) {
         List<Product> products = displayInfoRepository.selectComment(displayInfoId);
@@ -145,7 +137,6 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
                 fileInfo.getCreateDate(),
                 fileInfo.getModifyDate());
     }
-
 
     @Nonnull
     @Override

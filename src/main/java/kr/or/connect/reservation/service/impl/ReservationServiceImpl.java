@@ -27,6 +27,7 @@ import static kr.or.connect.reservation.model.ReservationInfoPrice.createReserva
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
@@ -37,7 +38,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Nonnull
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public ReservationRequestResult addReservation(@Nonnull ReservationRequest reservationRequest) {
         ReservationRequestResult reservationRequestResult = createReservationRequestResult(reservationRequest);
 
@@ -84,10 +85,9 @@ public class ReservationServiceImpl implements ReservationService {
         return count * price;
     }
 
-
     @Nonnull
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public ReservationCancleResult cancleReservation(long reservationId) {
         if (!reservationRepository.existsById(reservationId)) {
             throw new ReservationIdNotExistException(reservationId);
@@ -96,14 +96,11 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.cancleAtId(reservationId);
         ReservationCancleResult reservationCancleResult = createReservationCancleResult(reservationRepository.selectAtId(reservationId));
 
-        log.info("{}", reservationCancleResult);
         return reservationCancleResult;
     }
 
-
     @Nonnull
     @Override
-    @Transactional(readOnly = false)
     public List<Price> selectPriceList(long reservationId) {
         return makePriceList(reservationInfoPriceRepository.selectPriceList(reservationId));
     }

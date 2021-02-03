@@ -15,17 +15,17 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class PromotionServiceImpl implements PromotionService {
     @Autowired
     private PromotionRepository promotionRepository;
 
     @Nonnull
     @Override
-    @Transactional
     public List<PromotionResult> getPromotionList() {
-        List<Product> products = promotionRepository.selectAll();
         List<PromotionResult> promotionResults = new ArrayList();
 
+        List<Product> products = promotionRepository.selectAll();
         for (Product product : products) {
             long promotionId = product.getPromotions().stream().findFirst().get().getId();
             long productId = product.getId();
