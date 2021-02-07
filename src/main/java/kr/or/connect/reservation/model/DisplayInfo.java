@@ -1,5 +1,7 @@
 package kr.or.connect.reservation.model;
 
+import lombok.Data;
+
 import javax.annotation.Nonnull;
 import javax.persistence.*;
 import java.util.Date;
@@ -7,14 +9,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Data
 @Table(name = "display_info")
 public class DisplayInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "product_id")
-    private Long productId;
 
     @Column(name = "opening_hours")
     private String openingHours;
@@ -34,6 +34,10 @@ public class DisplayInfo {
 
     private String email;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -42,98 +46,9 @@ public class DisplayInfo {
     @Column(name = "modify_date")
     private Date modifyDate;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getOpeningHours() {
-        return openingHours;
-    }
-
-    public void setOpeningHours(String openingHours) {
-        this.openingHours = openingHours;
-    }
-
-    public String getPlaceName() {
-        return placeName;
-    }
-
-    public void setPlaceName(String placeName) {
-        this.placeName = placeName;
-    }
-
-    public String getPlaceLot() {
-        return placeLot;
-    }
-
-    public void setPlaceLot(String placeLot) {
-        this.placeLot = placeLot;
-    }
-
-    public String getPlaceStreet() {
-        return placeStreet;
-    }
-
-    public void setPlaceStreet(String placeStreet) {
-        this.placeStreet = placeStreet;
-    }
-
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    public String getHomepage() {
-        return homepage;
-    }
-
-    public void setHomepage(String homepage) {
-        this.homepage = homepage;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
-
     @Nonnull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "display_info_id")
+    @OneToMany(fetch = FetchType.LAZY)
     private Set<DisplayInfoImage> displayinfoImages = new HashSet<>();
-
-    public long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
 
     @Nonnull
     public Set<DisplayInfoImage> getDisplayinfoImages() {
@@ -142,12 +57,5 @@ public class DisplayInfo {
 
     public void setDisplayinfoImages(@Nonnull Set<DisplayInfoImage> displayinfoImages) {
         this.displayinfoImages = displayinfoImages;
-    }
-
-    @Override
-    public String toString() {
-        return "DisplayInfoResult [id=" + id + ", productId=" + productId + ", openingHours=" + openingHours + ", placeName="
-                + placeName + ", placeLot=" + placeLot + ", placeStreet=" + placeStreet + ", tel=" + tel + ", homepage="
-                + homepage + ", email=" + email + "]";
     }
 }

@@ -1,8 +1,13 @@
 package kr.or.connect.reservation.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Data
 @Table(name = "category")
 public class Category {
     @Id
@@ -11,25 +16,6 @@ public class Category {
 
     private String name;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "CategoryResult [id=" + id + ", name=" + name + "]";
-    }
-
+    @OneToMany(mappedBy = "category")
+    private List<Product> products = new ArrayList();
 }

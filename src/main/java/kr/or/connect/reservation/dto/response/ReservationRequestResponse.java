@@ -5,23 +5,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.sun.istack.NotNull;
 import kr.or.connect.reservation.dto.Price;
 import kr.or.connect.reservation.dto.ReservationRequestResult;
 import kr.or.connect.reservation.objmapper.ReservationDateDeserializer;
 import kr.or.connect.reservation.objmapper.ReservationDateSerializer;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
 public class ReservationRequestResponse {
-    @Min(value = 0)
     private long reservationInfoId;
-    @Min(value = 0)
+
     private long productId;
-    @Min(value = 0)
+
     private long displayInfoId;
     @NotNull
     private String reservationName;
