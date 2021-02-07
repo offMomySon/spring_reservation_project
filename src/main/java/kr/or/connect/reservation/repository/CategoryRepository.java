@@ -18,4 +18,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             + "JOIN pr.displayInfos di "
             + "GROUP BY ca.id, ca.name ")
     public List<Tuple> selectAll();
+
 }

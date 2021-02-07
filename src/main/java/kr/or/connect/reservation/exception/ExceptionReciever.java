@@ -2,6 +2,7 @@ package kr.or.connect.reservation.exception;
 
 import kr.or.connect.reservation.exception.list.ApiCommonException;
 import kr.or.connect.reservation.exception.list.DisplayInfoIdNotExistException;
+import kr.or.connect.reservation.exception.list.RelatedEntityAbsentException;
 import kr.or.connect.reservation.exception.list.ReservationIdNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -59,6 +60,14 @@ public class ExceptionReciever {
     protected ResponseEntity<ApiErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("handleHttpRequestMethodNotSupportedException", e);
         ErrorCode errorCode = ErrorCode.METHOD_NOT_ALLOWED;
+        ApiErrorResponse response = new ApiErrorResponse(errorCode.getError(), errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getStatus()).body(response);
+    }
+
+    @ExceptionHandler(RelatedEntityAbsentException.class)
+    public ResponseEntity<ApiErrorResponse> handleRelatedEntityAbsentException(RelatedEntityAbsentException ex) {
+        log.debug("handleRelatedEntityAbsentException is called");
+        ErrorCode errorCode = ex.getErrorCode();
         ApiErrorResponse response = new ApiErrorResponse(errorCode.getError(), errorCode.getMessage());
         return ResponseEntity.status(errorCode.getStatus()).body(response);
     }

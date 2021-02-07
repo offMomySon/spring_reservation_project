@@ -1,9 +1,16 @@
+buildscript {
+    dependencies {
+        classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
+    }
+}
+
 plugins {
-    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'org.springframework.boot' version '2.3.7.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
 }
 
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
 apply plugin: 'war'
 
 bootWar {
@@ -31,7 +38,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.github.ben-manes.caffeine:caffeine:2.8.2'
 
-    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
 
@@ -44,15 +51,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.10.1'
 
-    implementation 'org.springframework:spring-context:5.2.5.RELEASE'
-    implementation 'org.springframework:spring-jdbc:5.2.5.RELEASE'
-    implementation 'org.springframework:spring-webmvc:5.2.5.RELEASE'
-    implementation 'org.springframework:spring-tx:5.2.5.RELEASE'
-
     // connection pool
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.3.2'
-    implementation 'mysql:mysql-connector-java:8.0.11'
-    implementation 'org.apache.commons:commons-dbcp2:2.7.0'
+    implementation 'mysql:mysql-connector-java'
 
     compile('javax.servlet:jstl:1.2')
     compile('org.apache.tomcat.embed:tomcat-embed-jasper')
@@ -60,24 +61,47 @@ dependencies {
     compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
     compileOnly 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.1'
 
-    implementation 'org.springframework:spring-test:5.2.5.RELEASE'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
-    implementation 'org.javatuples:javatuples:1.2'
 
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
     implementation 'org.springframework.boot:spring-boot-devtools'
+
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-all:1.9.5'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
+
+    //query queryDsl
+    implementation 'com.querydsl:querydsl-jpa'
+    implementation 'com.querydsl:querydsl-apt'
 
     implementation "javax.xml.bind:jaxb-api:2.3.0"
     implementation "com.sun.xml.bind:jaxb-core:2.3.0"
     implementation "com.sun.xml.bind:jaxb-impl:2.3.0"
     implementation "javax.activation:activation:1.1.1"
+}
+
+//querydsl 추가
+//def querydslDir = 'src/main/generated'
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+    library = "com.querydsl:querydsl-apt"
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', querydslDir]
+        }
+    }
+}
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+    querydsl.extendsFrom compileClasspath
 }

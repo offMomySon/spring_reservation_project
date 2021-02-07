@@ -7,7 +7,7 @@ import java.util.List;
 public interface ProductService {
     public static final long SELECT_COUNT_LIMIT = 4;
 
-    public long getProductCountAtCategory(long categoryId);
+    public long getProductCount(long categoryId);
 
     public List<ProductResult> getProductListAtCategory(long categoryId, long start);
 }

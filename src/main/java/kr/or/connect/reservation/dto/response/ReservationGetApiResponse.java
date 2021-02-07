@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -18,7 +17,7 @@ public class ReservationGetApiResponse {
     private List<ReservationResponseResult> reservationResponseResults;
     private long size;
 
-    public ReservationGetApiResponse(@NotNull List<ReservationResponseResult> reservationResponseResults, long size) {
+    public ReservationGetApiResponse(@Nonnull List<ReservationResponseResult> reservationResponseResults, long size) {
         this.reservationResponseResults = reservationResponseResults;
         this.size = size;
     }

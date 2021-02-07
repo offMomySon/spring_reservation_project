@@ -31,7 +31,7 @@ public class ProductApiController {
             throw new ParamNotValidException();
         }
 
-        long totalCount = productService.getProductCountAtCategory(categoryId);
+        long totalCount = productService.getProductCount(categoryId);
         List<ProductResult> products = productService.getProductListAtCategory(categoryId, start);
 
         return ResponseEntity.ok().body(createProductsApiResponse(totalCount, products));
