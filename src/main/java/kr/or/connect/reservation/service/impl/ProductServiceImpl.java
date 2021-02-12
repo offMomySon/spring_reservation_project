@@ -56,9 +56,9 @@ public class ProductServiceImpl implements ProductService {
         List<ProductImage> productImages;
         if (categoryId == 0) {
             PageRequest pageRequest = PageRequest.of((int) (startPageNum / SELECT_COUNT_LIMIT), (int) SELECT_COUNT_LIMIT, Sort.by(Sort.Direction.ASC, "productId"));
-            productImages = productImageRepository.findByType("th", pageRequest).getContent();
+            productImages = productImageRepository.findAllByType("th", pageRequest).getContent();
         } else {
-            QueryResults<ProductImage> productImageQueryResults = productImageRepository.findByTypeAndCategoryId("th", categoryId, startPageNum, SELECT_COUNT_LIMIT);
+            QueryResults<ProductImage> productImageQueryResults = productImageRepository.findAllByTypeAndCategoryId("th", categoryId, startPageNum, SELECT_COUNT_LIMIT);
             productImages = productImageQueryResults.getResults();
         }
 

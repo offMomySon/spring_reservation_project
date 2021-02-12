@@ -12,7 +12,7 @@ import java.util.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "description")
     private String description;
@@ -47,9 +47,8 @@ public class Product {
     @JoinColumn(name = "product_id")
     private Set<ProductPrice> productPrices = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Set<Promotion> promotions = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    private List<Promotion> promotions = new ArrayList();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -82,14 +81,6 @@ public class Product {
         this.productPrices = productPrices;
     }
 
-    @Nonnull
-    public Set<Promotion> getPromotions() {
-        return promotions;
-    }
-
-    public void setPromotions(@Nonnull Set<Promotion> promotions) {
-        this.promotions = promotions;
-    }
 
     @Nonnull
     public Category getCategory() {

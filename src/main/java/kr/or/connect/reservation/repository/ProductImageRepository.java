@@ -11,8 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProductImageRepository extends JpaRepository<ProductImage, Long>, ProductImageRepositoryCustom {
     @EntityGraph(attributePaths = {"product", "product.category"}, type = EntityGraph.EntityGraphType.LOAD)
-    Page<ProductImage> findByType(String type, Pageable pageable);
-
+    Page<ProductImage> findAllByType(String type, Pageable pageable);
 
     @Query(value = "SELECT "
             + "pr "
