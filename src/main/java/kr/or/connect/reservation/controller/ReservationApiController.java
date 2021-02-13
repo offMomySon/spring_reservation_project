@@ -5,6 +5,7 @@ import kr.or.connect.reservation.dto.ReservationCancleResult;
 import kr.or.connect.reservation.dto.ReservationRequestResult;
 import kr.or.connect.reservation.dto.ReservationResponseResult;
 import kr.or.connect.reservation.dto.request.ReservationRequest;
+import kr.or.connect.reservation.dto.response.ReservationGetApiResponse;
 import kr.or.connect.reservation.exception.list.ParamNotValidException;
 import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ReservationService;
@@ -52,34 +53,15 @@ public class ReservationApiController {
         }
         return true;
     }
-//
-//    @GetMapping
-//    public ResponseEntity<?> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session) {
-//        List<ReservationResponseResult> reservationResponseResults = makeRsvResponseRsList(reservationService.getReservation(reservationEmail));
-//
-//        storeEmailInfoIfNeeded(reservationResponseResults, session, reservationEmail);
-//
-//        return ResponseEntity.ok().body(ReservationGetApiResponse.createReservationGetApiResponse(reservationResponseResults));
-//    }
-//
-//    @Nonnull
-//    private List<ReservationResponseResult> makeRsvResponseRsList(@Nonnull List<ReservationInfo> reservationResponses) {
-//        List<ReservationResponseResult> reservationResponseResults = new ArrayList();
-//
-//        for (ReservationInfo reservationInfo : reservationResponses) {
-//            ReservationResponseResult requestResult = new ReservationResponseResult(reservationInfo.getId(), reservationInfo.getProduct().getId(),
-//                    reservationInfo.getDisplayInfo().getId(), reservationInfo.getReservationName(), reservationInfo.getReservationTel(),
-//                    reservationInfo.getReservationEmail(), reservationInfo.getReservationDate(), reservationInfo.getCancelFlag(),
-//                    reservationInfo.getCreateDate(), reservationInfo.getModifyDate());
-//
-//            requestResult.setDisplayInfo(displayInfoService.getDisplayInfo(reservationInfo.getDisplayInfo().getId()));
-//            requestResult.setTotalPrice(reservationService.getRsvTicketTotalPrice(reservationInfo.getId()));
-//
-//            reservationResponseResults.add(requestResult);
-//        }
-//
-//        return reservationResponseResults;
-//    }
+
+    @GetMapping
+    public ResponseEntity<?> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session) {
+        List<ReservationResponseResult> reservationResponseResults = reservationService.getReservation(reservationEmail);
+
+        storeEmailInfoIfNeeded(reservationResponseResults, session, reservationEmail);
+
+        return ResponseEntity.ok().body(ReservationGetApiResponse.createReservationGetApiResponse(reservationResponseResults));
+    }
 
     private void storeEmailInfoIfNeeded(@ParametersAreNonnullByDefault List<ReservationResponseResult> reservationResponseResults,
                                         @ParametersAreNonnullByDefault HttpSession session,

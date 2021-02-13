@@ -13,6 +13,7 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Long
     @EntityGraph(attributePaths = {"product", "product.category"}, type = EntityGraph.EntityGraphType.LOAD)
     Page<ProductImage> findAllByType(String type, Pageable pageable);
 
+    //for fetch, page test
     @Query(value = "SELECT "
             + "pr "
             + "FROM ProductImage pr "

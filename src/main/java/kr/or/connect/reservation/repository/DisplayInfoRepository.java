@@ -74,6 +74,4 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
             + "JOIN pr.category ca "
             + "Where di.id = ?1")
     Product selectDisplayInfo(long displayInfoId);
-
-    DisplayInfo findFirstByProductId(long productId);
 }

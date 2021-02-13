@@ -1,15 +1,16 @@
 package kr.or.connect.reservation.service.impl;
 
-import kr.or.connect.reservation.dto.Price;
-import kr.or.connect.reservation.dto.ReservationCancleResult;
-import kr.or.connect.reservation.dto.ReservationRequestResult;
+import kr.or.connect.reservation.dto.*;
 import kr.or.connect.reservation.dto.request.ReservationRequest;
 import kr.or.connect.reservation.exception.list.DisplayInfoIdNotExistException;
 import kr.or.connect.reservation.exception.list.ProductIdNotExistException;
 import kr.or.connect.reservation.exception.list.ProductPriceIdNotExistException;
 import kr.or.connect.reservation.exception.list.ReservationIdNotExistException;
 import kr.or.connect.reservation.model.*;
-import kr.or.connect.reservation.repository.*;
+import kr.or.connect.reservation.repository.DisplayInfoRepository;
+import kr.or.connect.reservation.repository.ProductPriceRepository;
+import kr.or.connect.reservation.repository.ProductRepository;
+import kr.or.connect.reservation.repository.ReservationInfoRepository;
 import kr.or.connect.reservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,6 @@ import static kr.or.connect.reservation.model.ReservationInfoPrice.createReserva
 public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private ReservationInfoRepository reservationInfoRepository;
-    @Autowired
-    private ReservationInfoPriceRepository reservationInfoPriceRepository;
     @Autowired
     private ProductPriceRepository productPriceRepository;
     @Autowired
@@ -70,24 +69,24 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Nonnull
     @Override
-    public List<ReservationInfo> getReservation(@Nonnull String email) {
-        return reservationInfoRepository.selectAtEmail(email);
-    }
+    public List<ReservationResponseResult> getReservation(@Nonnull String email) {
+        List<ReservationInfo> reservationInfos = reservationInfoRepository.findByReservationEmail(email);
 
-    @Override
-    public long getRsvTicketTotalPrice(long reservationInfoId) {
-        log.debug("reservationInfoId = {}", reservationInfoId);
-        long totalPrice = 0;
-//        List<ReservationInfoPrice> reservationInfoPrices = reservationInfoRepository.selectTicketAtReservationInfoId(reservationInfoId);
-//
-//        for (ReservationInfoPrice reservationInfoPrice : reservationInfoPrices) {
-//            totalPrice += calTicketPrice(reservationInfoPrice.getCount(), reservationInfoPrice.getProductPrice().getPrice());
-//        }
-        return totalPrice;
-    }
+        List<ReservationResponseResult> reservationResponseResults = reservationInfos
+                .stream()
+                .map(reservationInfo -> {
+                    DisplayInfoResult displayInfoResult = DisplayInfoResult.makeDisplayInfoResult(reservationInfo);
+                    Long totalPrice = reservationInfo.getReservationInfoPrices()
+                            .stream()
+                            .map(reservationInfoPrice -> reservationInfoPrice.getCount() * reservationInfoPrice.getProductPrice().getPrice())
+                            .reduce(0L, Long::sum);
 
-    long calTicketPrice(long count, long price) {
-        return count * price;
+                    ReservationResponseResult reservationResponseResult = ReservationResponseResult.makeReservationResponseResult(reservationInfo, displayInfoResult, totalPrice);
+                    return reservationResponseResult;
+                })
+                .collect(Collectors.toList());
+
+        return reservationResponseResults;
     }
 
     @Nonnull
