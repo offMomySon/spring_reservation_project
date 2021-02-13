@@ -17,10 +17,12 @@ public enum ErrorCode {
     DISPLAYINFO_ID_NOT_EXIST(HttpStatus.NOT_FOUND, "error-0005", "The DisplayInfo id is not exist."),
     RESERVATION_ID_NOT_EXIST(HttpStatus.BAD_REQUEST, "error-0006", "The Reservation id is not exist."),
     CATEGORY_ID_NOT_EXIST(HttpStatus.BAD_REQUEST, "error-0007", "The Category id is not exist."),
+    PRODUCT_ID_NOT_EXIST(HttpStatus.BAD_REQUEST, "error-0008", "The Product id is not exist."),
+    PRODUCT_PRICE_ID_NOT_EXIST(HttpStatus.BAD_REQUEST, "error-0009", "The Product_PRICE id is not exist."),
 
     //COMPLETABLEFUTURE EXCEPTION
-    PRODUCT_COMPLETABLE_FUTURE_INTERRUPT_EXCEPTION(HttpStatus.BAD_REQUEST, "error-0008", "While making product api response, problem happen."),
-    PRODUCT_COMPLETABLE_FUTURE_EXECUTION_EXCEPTION(HttpStatus.BAD_REQUEST, "error-0009", "While making product api response, problem happen.");
+    PRODUCT_COMPLETABLE_FUTURE_INTERRUPT_EXCEPTION(HttpStatus.BAD_REQUEST, "error-0010", "While making product api response, problem happen."),
+    PRODUCT_COMPLETABLE_FUTURE_EXECUTION_EXCEPTION(HttpStatus.BAD_REQUEST, "error-0011", "While making product api response, problem happen.");
 
     private HttpStatus status;
     private String error;

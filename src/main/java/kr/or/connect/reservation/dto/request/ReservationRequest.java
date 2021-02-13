@@ -14,8 +14,8 @@ import java.util.List;
 public class ReservationRequest {
 
     private long displayInfoId;
-    private List<Price> prices;
     private long productId;
+    private List<Price> prices;
     private String reservationEmail;
     private String reservationName;
     private String reservationTelephone;

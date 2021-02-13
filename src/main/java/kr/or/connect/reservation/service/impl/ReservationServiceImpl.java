@@ -4,13 +4,12 @@ import kr.or.connect.reservation.dto.Price;
 import kr.or.connect.reservation.dto.ReservationCancleResult;
 import kr.or.connect.reservation.dto.ReservationRequestResult;
 import kr.or.connect.reservation.dto.request.ReservationRequest;
+import kr.or.connect.reservation.exception.list.DisplayInfoIdNotExistException;
+import kr.or.connect.reservation.exception.list.ProductIdNotExistException;
+import kr.or.connect.reservation.exception.list.ProductPriceIdNotExistException;
 import kr.or.connect.reservation.exception.list.ReservationIdNotExistException;
-import kr.or.connect.reservation.model.ProductPrice;
-import kr.or.connect.reservation.model.ReservationInfo;
-import kr.or.connect.reservation.model.ReservationInfoPrice;
-import kr.or.connect.reservation.repository.ProductPriceRepository;
-import kr.or.connect.reservation.repository.ReservationInfoPriceRepository;
-import kr.or.connect.reservation.repository.ReservationRepository;
+import kr.or.connect.reservation.model.*;
+import kr.or.connect.reservation.repository.*;
 import kr.or.connect.reservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static kr.or.connect.reservation.dto.ReservationCancleResult.createReservationCancleResult;
-import static kr.or.connect.reservation.dto.ReservationRequestResult.createReservationRequestResult;
+import static kr.or.connect.reservation.dto.ReservationRequestResult.makeReservationRequestResult;
 import static kr.or.connect.reservation.model.ReservationInfoPrice.createReservationInfoPrice;
 
 @Slf4j
@@ -35,32 +35,38 @@ public class ReservationServiceImpl implements ReservationService {
     private ReservationInfoPriceRepository reservationInfoPriceRepository;
     @Autowired
     private ProductPriceRepository productPriceRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private DisplayInfoRepository displayInfoRepository;
 
     @Nonnull
     @Override
     @Transactional
     public ReservationRequestResult addReservation(@Nonnull ReservationRequest reservationRequest) {
-        ReservationRequestResult reservationRequestResult = createReservationRequestResult(reservationRequest);
+        Product product = productRepository.findById(reservationRequest.getProductId())
+                .orElseThrow(() -> {
+                    throw new ProductIdNotExistException(reservationRequest.getProductId());
+                });
+        DisplayInfo displayInfo = displayInfoRepository.findById(reservationRequest.getDisplayInfoId())
+                .orElseThrow(() -> {
+                    throw new DisplayInfoIdNotExistException(reservationRequest.getDisplayInfoId());
+                });
+        List<ReservationInfoPrice> reservationInfoPrices = reservationRequest.getPrices()
+                .stream()
+                .map(price -> {
+                    ProductPrice productPrice = productPriceRepository.findById(price.getProductPriceId()).orElseThrow(() -> {
+                        throw new ProductPriceIdNotExistException(price.getProductPriceId());
+                    });
+                    return createReservationInfoPrice(productPrice, price.getCount());
+                })
+                .collect(Collectors.toList());
 
-        ReservationInfo reservationInfo = ReservationInfo.createReservationInfo(reservationRequestResult);
+        ReservationInfo reservationInfo = ReservationInfo.makeReservationInfo(product, displayInfo, reservationInfoPrices, reservationRequest);
         reservationInfo = reservationRepository.save(reservationInfo);
-        reservationRequestResult.setReservationInfoId(reservationInfo.getId());
-
-        savePriceList(reservationInfo.getId(), reservationRequestResult.getPrices());
-
+        
+        ReservationRequestResult reservationRequestResult = makeReservationRequestResult(reservationInfo);
         return reservationRequestResult;
-    }
-
-    private void savePriceList(long reservationInfoId, @Nonnull List<Price> prices) {
-        for (Price price : prices) {
-            ProductPrice productPrice = productPriceRepository.findById(price.getProductPriceId()).orElseThrow(() -> new ReservationIdNotExistException(1));
-
-            ReservationInfoPrice reservationInfoPrice = createReservationInfoPrice(reservationInfoId, price.getCount(), productPrice);
-            reservationInfoPrice = reservationInfoPriceRepository.save(reservationInfoPrice);
-
-            price.setReservationInfoId(reservationInfoId);
-            price.setReservationInfoPriceId(reservationInfoPrice.getId());
-        }
     }
 
     @Nonnull
@@ -73,11 +79,11 @@ public class ReservationServiceImpl implements ReservationService {
     public long getRsvTicketTotalPrice(long reservationInfoId) {
         log.debug("reservationInfoId = {}", reservationInfoId);
         long totalPrice = 0;
-        List<ReservationInfoPrice> reservationInfoPrices = reservationRepository.selectTicketAtReservationInfoId(reservationInfoId);
-
-        for (ReservationInfoPrice reservationInfoPrice : reservationInfoPrices) {
-            totalPrice += calTicketPrice(reservationInfoPrice.getCount(), reservationInfoPrice.getProductPrice().getPrice());
-        }
+//        List<ReservationInfoPrice> reservationInfoPrices = reservationRepository.selectTicketAtReservationInfoId(reservationInfoId);
+//
+//        for (ReservationInfoPrice reservationInfoPrice : reservationInfoPrices) {
+//            totalPrice += calTicketPrice(reservationInfoPrice.getCount(), reservationInfoPrice.getProductPrice().getPrice());
+//        }
         return totalPrice;
     }
 
@@ -102,7 +108,8 @@ public class ReservationServiceImpl implements ReservationService {
     @Nonnull
     @Override
     public List<Price> selectPriceList(long reservationId) {
-        return makePriceList(reservationInfoPriceRepository.selectPriceList(reservationId));
+//        makePriceList(reservationInfoPriceRepository.selectPriceList(reservationId))
+        return null;
     }
 
     @Nonnull
@@ -110,7 +117,7 @@ public class ReservationServiceImpl implements ReservationService {
         List<Price> prices = new ArrayList();
 
         for (ReservationInfoPrice reservationInfoPrice : reservationInfoPrices) {
-            prices.add(new Price(reservationInfoPrice.getId(), reservationInfoPrice.getReservationInfoId(),
+            prices.add(new Price(reservationInfoPrice.getId(), reservationInfoPrice.getReservationInfo().getId(),
                     reservationInfoPrice.getProductPrice().getId(), reservationInfoPrice.getCount()));
         }
         return prices;

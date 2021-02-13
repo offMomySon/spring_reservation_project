@@ -1,14 +1,14 @@
 package kr.or.connect.reservation.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import kr.or.connect.reservation.dto.request.ReservationRequest;
+import kr.or.connect.reservation.model.ReservationInfo;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nonnull;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,7 +28,8 @@ public class ReservationRequestResult {
     private Date modifyDate;
     private List<Price> prices;
 
-    protected ReservationRequestResult(long productId, long displayInfoId, String reservationName, String reservationTel, String reservationEmail, Date reservationDate, Date createDate, Date modifyDate, List<Price> prices, Boolean cancelFlag) {
+    protected ReservationRequestResult(long reservationInfoId, long productId, long displayInfoId, String reservationName, String reservationTel, String reservationEmail, Date reservationDate, Date createDate, Date modifyDate, List<Price> prices, Boolean cancelFlag) {
+        this.reservationInfoId = reservationInfoId;
         this.productId = productId;
         this.displayInfoId = displayInfoId;
         this.reservationName = reservationName;
@@ -41,20 +42,23 @@ public class ReservationRequestResult {
         this.cancelFlag = cancelFlag;
     }
 
-    public static ReservationRequestResult createReservationRequestResult(@Nonnull ReservationRequest reservationRequest) {
-        Date date = new Date();
+    public static ReservationRequestResult makeReservationRequestResult(ReservationInfo reservationInfo) {
         ReservationRequestResult reservationRequestResult = new ReservationRequestResult(
-                reservationRequest.getProductId(),
-                reservationRequest.getDisplayInfoId(),
-                reservationRequest.getReservationName(),
-                reservationRequest.getReservationTelephone(),
-                reservationRequest.getReservationEmail(),
-                date,
-                date,
-                date,
-                reservationRequest.getPrices(),
-                false
-        );
+                reservationInfo.getId(),
+                reservationInfo.getProduct().getId(),
+                reservationInfo.getDisplayInfo().getId(),
+                reservationInfo.getReservationName(),
+                reservationInfo.getReservationTel(),
+                reservationInfo.getReservationEmail(),
+                reservationInfo.getReservationDate(),
+                reservationInfo.getCreateDate(),
+                reservationInfo.getModifyDate(),
+                reservationInfo.getReservationInfoPrices()
+                        .stream()
+                        .map(Price::makePrice)
+                        .collect(Collectors.toList()),
+                reservationInfo.getCancelFlag());
+
         return reservationRequestResult;
     }
 }

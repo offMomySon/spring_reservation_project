@@ -2,8 +2,8 @@ package kr.or.connect.reservation.service.impl;
 
 import com.querydsl.core.QueryResults;
 import kr.or.connect.reservation.dto.ProductResult;
+import kr.or.connect.reservation.exception.list.CategoryIdNotExistException;
 import kr.or.connect.reservation.exception.list.RelatedEntityAbsentException;
-import kr.or.connect.reservation.exception.list.ReservationIdNotExistException;
 import kr.or.connect.reservation.model.*;
 import kr.or.connect.reservation.repository.CategoryRepository;
 import kr.or.connect.reservation.repository.DisplayInfoRepository;
@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
             return displayInfoRepository.count();
         }
 
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ReservationIdNotExistException(1));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryIdNotExistException(categoryId));
         long count = 0;
         for (Product product : category.getProducts()) {
             count += product.getDisplayInfos().size();

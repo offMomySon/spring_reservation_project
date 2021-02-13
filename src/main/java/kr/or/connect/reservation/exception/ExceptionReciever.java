@@ -1,9 +1,6 @@
 package kr.or.connect.reservation.exception;
 
-import kr.or.connect.reservation.exception.list.ApiCommonException;
-import kr.or.connect.reservation.exception.list.DisplayInfoIdNotExistException;
-import kr.or.connect.reservation.exception.list.RelatedEntityAbsentException;
-import kr.or.connect.reservation.exception.list.ReservationIdNotExistException;
+import kr.or.connect.reservation.exception.list.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,7 +83,25 @@ public class ExceptionReciever {
         log.debug("handleRsvIdNotExistException is called");
         ErrorCode errorCode = ex.getErrorCode();
         ApiErrorResponse response = new ApiErrorResponse(errorCode.getError(),
-                errorCode.getMessage() + "\nselected RsvId = " + ex.getReservationId());
+                errorCode.getMessage() + "\nselected ReservationID = " + ex.getReservationId());
+        return ResponseEntity.status(errorCode.getStatus()).body(response);
+    }
+
+    @ExceptionHandler(ProductIdNotExistException.class)
+    public ResponseEntity<ApiErrorResponse> handleProductIdNotExistException(ProductIdNotExistException ex) {
+        log.debug("handleProductIdNotExistException is called");
+        ErrorCode errorCode = ex.getErrorCode();
+        ApiErrorResponse response = new ApiErrorResponse(errorCode.getError(),
+                errorCode.getMessage() + "\nselected ProductID = " + ex.getProductId());
+        return ResponseEntity.status(errorCode.getStatus()).body(response);
+    }
+
+    @ExceptionHandler(ProductPriceIdNotExistException.class)
+    public ResponseEntity<ApiErrorResponse> handleProductPriceIdNotExistException(ProductPriceIdNotExistException ex) {
+        log.debug("handleProductPriceIdNotExistException is called");
+        ErrorCode errorCode = ex.getErrorCode();
+        ApiErrorResponse response = new ApiErrorResponse(errorCode.getError(),
+                errorCode.getMessage() + "\nselected ProductPriceID = " + ex.getProductPriceId());
         return ResponseEntity.status(errorCode.getStatus()).body(response);
     }
 

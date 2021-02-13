@@ -1,58 +1,35 @@
 package kr.or.connect.reservation.dto;
 
+import kr.or.connect.reservation.model.ReservationInfoPrice;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.annotation.Nonnull;
+
+@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Price {
 
     private Long reservationInfoPriceId;
     private Long reservationInfoId;
     private Long productPriceId;
     private Long count;
-	    
-    public Price() {
-	}
 
-	public Price(Long reservationInfoPriceId, Long reservationInfoId, Long productPriceId, Long count) {
-		super();
-		this.reservationInfoPriceId = reservationInfoPriceId;
-		this.reservationInfoId = reservationInfoId;
-		this.productPriceId = productPriceId;
-		this.count = count;
-	}
+    public Price(Long reservationInfoPriceId, Long reservationInfoId, Long productPriceId, Long count) {
+        this.reservationInfoPriceId = reservationInfoPriceId;
+        this.reservationInfoId = reservationInfoId;
+        this.productPriceId = productPriceId;
+        this.count = count;
+    }
 
-	public Long getReservationInfoPriceId() {
-		return reservationInfoPriceId;
-	}
+    public static Price makePrice(@Nonnull ReservationInfoPrice reservationInfoPrice) {
+        Price price = new Price();
+        price.setReservationInfoPriceId(reservationInfoPrice.getId());
+        price.setReservationInfoId(reservationInfoPrice.getReservationInfo().getId());
+        price.setReservationInfoId(reservationInfoPrice.getProductPrice().getId());
+        price.setCount(reservationInfoPrice.getCount());
 
-	public void setReservationInfoPriceId(Long reservationInfoPriceId) {
-		this.reservationInfoPriceId = reservationInfoPriceId;
-	}
-
-	public Long getReservationInfoId() {
-		return reservationInfoId;
-	}
-
-	public void setReservationInfoId(Long reservationInfoId) {
-		this.reservationInfoId = reservationInfoId;
-	}
-
-	public Long getProductPriceId() {
-		return productPriceId;
-	}
-
-	public void setProductPriceId(Long productPriceId) {
-		this.productPriceId = productPriceId;
-	}
-
-	public Long getCount() {
-		return count;
-	}
-
-	public void setCount(Long count) {
-		this.count = count;
-	}
-
-	@Override
-	public String toString() {
-		return "Price [reservationInfoPriceId=" + reservationInfoPriceId + ", reservationInfoId=" + reservationInfoId
-				+ ", productPriceId=" + productPriceId + ", count=" + count + "]";
-	}
+        return price;
+    }
 }

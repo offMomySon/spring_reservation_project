@@ -13,6 +13,10 @@ public class DisplayInfoImage {
     @Column(name = "display_info_id")
     private long displayInfoId;
 
+    @ManyToOne
+    @JoinColumn(name = "file_id")
+    private FileInfo fileInfo;
+
     public long getId() {
         return id;
     }
@@ -20,11 +24,6 @@ public class DisplayInfoImage {
     public void setId(long id) {
         this.id = id;
     }
-
-    @Nonnull
-    @ManyToOne
-    @JoinColumn(name = "file_id")
-    private FileInfo fileInfo;
 
     @Nonnull
     public FileInfo getFileInfo() {

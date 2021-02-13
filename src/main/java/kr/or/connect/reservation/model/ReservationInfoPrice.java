@@ -1,51 +1,35 @@
 package kr.or.connect.reservation.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.annotation.Nonnull;
 import javax.persistence.*;
 
 @Entity
 @Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "reservation_info_price")
 public class ReservationInfoPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
-    @Column(name = "reservation_info_id")
-    private long reservationInfoId;
+    private Long id;
     @Column(name = "count")
     private long count;
     @ManyToOne
     @JoinColumn(name = "product_price_id")
     private ProductPrice productPrice;
+    @ManyToOne
+    @JoinColumn(name = "reservation_info_id")
+    private ReservationInfo reservationInfo;
 
-    public ReservationInfoPrice() {
+    public static ReservationInfoPrice createReservationInfoPrice(@Nonnull ProductPrice productPrice, long count) {
+        ReservationInfoPrice reservationInfoPrice = new ReservationInfoPrice();
+        reservationInfoPrice.setProductPrice(productPrice);
+        reservationInfoPrice.setCount(count);
+
+        return reservationInfoPrice;
     }
-
-    public ReservationInfoPrice(long reservationInfoId, long count, @Nonnull ProductPrice productPrice) {
-        this.reservationInfoId = reservationInfoId;
-        this.count = count;
-        this.productPrice = productPrice;
-    }
-
-    public ReservationInfoPrice(long reservationInfoId, long count) {
-        this.reservationInfoId = reservationInfoId;
-        this.count = count;
-    }
-
-    public static ReservationInfoPrice createReservationInfoPrice(long reservationInfoId, long count, @Nonnull ProductPrice productPrice) {
-        return new ReservationInfoPrice(reservationInfoId, count, productPrice);
-    }
-
-    @Nonnull
-    public ProductPrice getProductPrice() {
-        return productPrice;
-    }
-
-    public void setProductPrice(@Nonnull ProductPrice productPrice) {
-        this.productPrice = productPrice;
-    }
-
 }

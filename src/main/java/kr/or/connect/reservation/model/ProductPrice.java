@@ -1,11 +1,17 @@
 package kr.or.connect.reservation.model;
 
+import kr.or.connect.reservation.model.audite.BaseEntity;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
+@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product_price")
-public class ProductPrice {
+public class ProductPrice extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,82 +28,11 @@ public class ProductPrice {
     @Column(name = "discount_rate")
     private double discountRate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date")
-    private Date createDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modify_date")
-    private Date modifyDate;
-
-    public ProductPrice() {
-    }
-
-    public ProductPrice(long id, long productId, String priceTypeName, long price, double discountRate, Date createDate,
-                        Date modifyDate) {
-        super();
+    public ProductPrice(long id, long productId, String priceTypeName, long price, double discountRate) {
         this.id = id;
         this.productId = productId;
         this.priceTypeName = priceTypeName;
         this.price = price;
         this.discountRate = discountRate;
-        this.createDate = createDate;
-        this.modifyDate = modifyDate;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(long productId) {
-        this.productId = productId;
-    }
-
-    public String getPriceTypeName() {
-        return priceTypeName;
-    }
-
-    public void setPriceTypeName(String priceTypeName) {
-        this.priceTypeName = priceTypeName;
-    }
-
-    public long getPrice() {
-        return price;
-    }
-
-    public void setPrice(long price) {
-        this.price = price;
-    }
-
-    public double getDiscountRate() {
-        return discountRate;
-    }
-
-    public void setDiscountRate(double discountRate) {
-        this.discountRate = discountRate;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
     }
 }

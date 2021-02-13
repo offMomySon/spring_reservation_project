@@ -44,8 +44,8 @@ public class ReservationCancleResult {
     public static ReservationCancleResult createReservationCancleResult(@Nonnull ReservationInfo reservationInfo) {
         ReservationCancleResult reservationCancleResult = new ReservationCancleResult(
                 reservationInfo.getId(),
-                reservationInfo.getProductId(),
-                reservationInfo.getDisplayInfoId(),
+                reservationInfo.getProduct().getId(),
+                reservationInfo.getDisplayInfo().getId(),
                 reservationInfo.getReservationName(),
                 reservationInfo.getReservationTel(),
                 reservationInfo.getReservationEmail(),

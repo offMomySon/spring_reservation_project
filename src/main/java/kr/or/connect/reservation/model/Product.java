@@ -1,15 +1,22 @@
 package kr.or.connect.reservation.model;
 
+import kr.or.connect.reservation.model.audite.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.annotation.Nonnull;
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product")
-public class Product {
+public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,21 +30,14 @@ public class Product {
     @Column(name = "event")
     private String event;
 
-    @Column(name = "create_date")
-    private Date createDate;
-
-    @Column(name = "modify_date")
-    private Date modifyDate;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private List<ProductImage> productImages = new ArrayList();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private List<DisplayInfo> displayInfos = new ArrayList();
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Set<ReservationInfo> reservationInfos = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    private List<ReservationInfo> reservationInfos = new ArrayList();
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -53,15 +53,6 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
-
-    @Nonnull
-    public Set<ReservationInfo> getReservationInfos() {
-        return reservationInfos;
-    }
-
-    public void setReservationInfos(@Nonnull Set<ReservationInfo> reservationInfos) {
-        this.reservationInfos = reservationInfos;
-    }
 
     @Nonnull
     public Set<ReservationUserComment> getReservationUserComments() {
