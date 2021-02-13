@@ -66,4 +66,16 @@ public class DisplayInfoResult {
                 displayInfo.getPlaceStreet(), displayInfo.getTel(), displayInfo.getHomepage(), displayInfo.getEmail(),
                 displayInfo.getCreateDate(), displayInfo.getModifyDate(), displayInfo.getOpeningHours());
     }
+
+    public static DisplayInfoResult makeDisplayInfoResult(@Nonnull DisplayInfo displayInfo) {
+        Product product = displayInfo.getProduct();
+        Category category = product.getCategory();
+
+        return new DisplayInfoResult(
+                product.getId(), category.getId(), displayInfo.getId(),
+                category.getName(), product.getDescription(), product.getContent(),
+                product.getEvent(), displayInfo.getPlaceName(), displayInfo.getPlaceLot(),
+                displayInfo.getPlaceStreet(), displayInfo.getTel(), displayInfo.getHomepage(), displayInfo.getEmail(),
+                displayInfo.getCreateDate(), displayInfo.getModifyDate(), displayInfo.getOpeningHours());
+    }
 }

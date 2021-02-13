@@ -1,8 +1,10 @@
 package kr.or.connect.reservation.model;
 
-import javax.annotation.Nonnull;
+import lombok.Data;
+
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "reservation_user_comment_image")
 public class ReservationUserCommentImage {
@@ -10,48 +12,15 @@ public class ReservationUserCommentImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "reservation_info_id")
-    private String reservationInfoId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_info_id")
+    private ReservationInfo reservationInfo;
 
-    @Column(name = "reservation_user_comment_id")
-    private String reservationUserCommentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_user_comment_id")
+    private ReservationUserComment reservationUserComment;
 
-    @Nonnull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
     private FileInfo fileInfo;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getReservationInfoId() {
-        return reservationInfoId;
-    }
-
-    public void setReservationInfoId(String reservationInfoId) {
-        this.reservationInfoId = reservationInfoId;
-    }
-
-    public String getReservationUserCommentId() {
-        return reservationUserCommentId;
-    }
-
-    public void setReservationUserCommentId(String reservationUserCommentId) {
-        this.reservationUserCommentId = reservationUserCommentId;
-    }
-
-    @Nonnull
-    public FileInfo getFileInfo() {
-        return fileInfo;
-    }
-
-    public void setFileInfo(@Nonnull FileInfo fileInfo) {
-        this.fileInfo = fileInfo;
-    }
-
 }

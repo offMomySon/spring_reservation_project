@@ -1,8 +1,7 @@
 package kr.or.connect.reservation.controller;
 
-import kr.or.connect.reservation.dto.*;
+import kr.or.connect.reservation.dto.ProductResult;
 import kr.or.connect.reservation.dto.response.ProductsApiAtDisplayInfoIdResponse;
-import kr.or.connect.reservation.exception.list.DisplayInfoIdNotExistException;
 import kr.or.connect.reservation.exception.list.ParamNotValidException;
 import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ProductService;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import static kr.or.connect.reservation.dto.response.ProductsApiResponse.createProductsApiResponse;
 
@@ -49,25 +47,10 @@ public class ProductApiController {
         if (isNotGetDispalyInfoParamValid(displayInfoId)) {
             throw new ParamNotValidException();
         }
-        if (!displayInfoService.isExistDisplayInfoId(displayInfoId)) {
-            throw new DisplayInfoIdNotExistException(displayInfoId);
-        }
 
-        CompletableFuture<Double> avgScoreFuture = CompletableFuture.supplyAsync(() -> displayInfoService.getAverageScore(displayInfoId));
-        CompletableFuture<DisplayInfoResult> displayInfoFuture = CompletableFuture.supplyAsync(() -> displayInfoService.getDisplayInfo(displayInfoId));
-        CompletableFuture<DisplayInfoImageResult> dpInfoImgRsFuture = CompletableFuture.supplyAsync(() -> displayInfoService.getDisplayInfoImage(displayInfoId));
-        CompletableFuture<List<CommentResult>> commentRsListFuture = CompletableFuture.supplyAsync(() -> displayInfoService.getCommentList(displayInfoId));
-        CompletableFuture<List<ProductImageResult>> pdImgRsListFuture = CompletableFuture.supplyAsync(() -> displayInfoService.getProductImageList(displayInfoId));
-        CompletableFuture<List<ProductPriceResult>> pdPriceRsListFuture = CompletableFuture.supplyAsync(() -> displayInfoService.getProductPriceList(displayInfoId));
-        CompletableFuture.allOf(displayInfoFuture, pdImgRsListFuture, dpInfoImgRsFuture, commentRsListFuture, avgScoreFuture, pdPriceRsListFuture);
+        ProductsApiAtDisplayInfoIdResponse productsApiAtDisplayInfoIdResponse = displayInfoService.getDisplayInfo(displayInfoId);
 
-        return ResponseEntity.ok().body(ProductsApiAtDisplayInfoIdResponse.createProductsApiAtDisplayInfoIdResponse(
-                avgScoreFuture,
-                displayInfoFuture,
-                dpInfoImgRsFuture,
-                commentRsListFuture,
-                pdImgRsListFuture,
-                pdPriceRsListFuture));
+        return ResponseEntity.ok().body(productsApiAtDisplayInfoIdResponse);
     }
 
     private boolean isNotGetDispalyInfoParamValid(long displayInfoId) {

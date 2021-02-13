@@ -1,125 +1,63 @@
 package kr.or.connect.reservation.dto;
 
+import kr.or.connect.reservation.exception.list.RelatedEntityAbsentException;
+import kr.or.connect.reservation.model.FileInfo;
+import kr.or.connect.reservation.model.ReservationUserComment;
+import kr.or.connect.reservation.model.ReservationUserCommentImage;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.annotation.Nonnull;
 import java.util.Date;
 
+@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentImageResult {
-	private Long imageId;
-	private Long reservationInfoId;
-	private Long reservationUserCommentId;
-	private Long fileId;
-	private String fileName;
-	private String saveFileName;
-	private String contentType;
-	private Boolean deleteFlag;
-	private Date createDate;
-	private Date modifyDate;
+    private Long imageId;
+    private Long reservationInfoId;
+    private Long reservationUserCommentId;
+    private Long fileId;
+    private String fileName;
+    private String saveFileName;
+    private String contentType;
+    private Boolean deleteFlag;
+    private Date createDate;
+    private Date modifyDate;
 
-	public CommentImageResult() {
-	}
-
-	public CommentImageResult(Long imageId, Long reservationInfoId, Long reservationUserCommentId, Long fileId,
-							  String fileName, String saveFileName, String contentType, Boolean deleteFlag, Date createDate,
-							  Date modifyDate) {
-		super();
-		this.imageId = imageId;
-		this.reservationInfoId = reservationInfoId;
-		this.reservationUserCommentId = reservationUserCommentId;
-		this.fileId = fileId;
-		this.fileName = fileName;
-		this.saveFileName = saveFileName;
-		this.contentType = contentType;
-		this.deleteFlag = deleteFlag;
-		this.createDate = createDate;
-		this.modifyDate = modifyDate;
-	}
+    public CommentImageResult(Long imageId, Long reservationInfoId, Long reservationUserCommentId, Long fileId,
+                              String fileName, String saveFileName, String contentType, Boolean deleteFlag, Date createDate,
+                              Date modifyDate) {
+        super();
+        this.imageId = imageId;
+        this.reservationInfoId = reservationInfoId;
+        this.reservationUserCommentId = reservationUserCommentId;
+        this.fileId = fileId;
+        this.fileName = fileName;
+        this.saveFileName = saveFileName;
+        this.contentType = contentType;
+        this.deleteFlag = deleteFlag;
+        this.createDate = createDate;
+        this.modifyDate = modifyDate;
+    }
 
 
+    public static CommentImageResult makeCommentImageResult(@Nonnull ReservationUserComment reservationUserComment) {
+        ReservationUserCommentImage reservationUserCommentImage = reservationUserComment.getReservationUserCommentImages().stream().findFirst().orElseThrow(() -> {
+            throw new RelatedEntityAbsentException();
+        });
+        FileInfo fileInfo = reservationUserCommentImage.getFileInfo();
 
-	public Long getImageId() {
-		return imageId;
-	}
-
-	public void setImageId(Long imageId) {
-		this.imageId = imageId;
-	}
-
-	public Long getReservationInfoId() {
-		return reservationInfoId;
-	}
-
-	public void setReservationInfoId(Long reservationInfoId) {
-		this.reservationInfoId = reservationInfoId;
-	}
-
-	public Long getReservationUserCommentId() {
-		return reservationUserCommentId;
-	}
-
-	public void setReservationUserCommentId(Long reservationUserCommentId) {
-		this.reservationUserCommentId = reservationUserCommentId;
-	}
-
-	public Long getFileId() {
-		return fileId;
-	}
-
-	public void setFileId(Long fileId) {
-		this.fileId = fileId;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	public String getSaveFileName() {
-		return saveFileName;
-	}
-
-	public void setSaveFileName(String saveFileName) {
-		this.saveFileName = saveFileName;
-	}
-
-	public String getContentType() {
-		return contentType;
-	}
-
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
-	public Boolean getDeleteFlag() {
-		return deleteFlag;
-	}
-
-	public void setDeleteFlag(Boolean deleteFlag) {
-		this.deleteFlag = deleteFlag;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public Date getModifyDate() {
-		return modifyDate;
-	}
-
-	public void setModifyDate(Date modifyDate) {
-		this.modifyDate = modifyDate;
-	}
-
-	@Override
-	public String toString() {
-		return "CommentImageResult [imageId=" + imageId + ", reservationInfoId=" + reservationInfoId
-				+ ", reservationUserCommentId=" + reservationUserCommentId + ", fileId=" + fileId + ", fileName="
-				+ fileName + ", saveFileName=" + saveFileName + ", contentType=" + contentType + ", deleteFlag="
-				+ deleteFlag + ", createDate=" + createDate + ", modifyDate=" + modifyDate + "]";
-	}
+        return new CommentImageResult(
+                reservationUserCommentImage.getId(),
+                reservationUserComment.getReservationInfo().getId(),
+                reservationUserComment.getId(),
+                fileInfo.getId(),
+                fileInfo.getFileName(),
+                fileInfo.getSaveFileName(),
+                fileInfo.getContentType(),
+                fileInfo.getDeleteFlag(),
+                fileInfo.getCreateDate(),
+                fileInfo.getModifyDate());
+    }
 }

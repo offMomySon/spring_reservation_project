@@ -16,8 +16,9 @@ public class ProductPrice extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "product_id")
-    private long productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Column(name = "price_type_name")
     private String priceTypeName;
@@ -28,11 +29,4 @@ public class ProductPrice extends BaseEntity {
     @Column(name = "discount_rate")
     private double discountRate;
 
-    public ProductPrice(long id, long productId, String priceTypeName, long price, double discountRate) {
-        this.id = id;
-        this.productId = productId;
-        this.priceTypeName = priceTypeName;
-        this.price = price;
-        this.discountRate = discountRate;
-    }
 }

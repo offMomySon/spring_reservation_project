@@ -2,7 +2,6 @@ package kr.or.connect.reservation.service.impl;
 
 import kr.or.connect.reservation.dto.CategoryResult;
 import kr.or.connect.reservation.model.Category;
-import kr.or.connect.reservation.model.DisplayInfo;
 import kr.or.connect.reservation.model.Product;
 import kr.or.connect.reservation.repository.CategoryRepository;
 import kr.or.connect.reservation.service.CategoryService;
@@ -28,11 +27,14 @@ public class CategoryServiceImpl implements CategoryService {
         List<CategoryResult> categoryResults = categories
                 .stream()
                 .map(category -> {
-                    long count = 0;
-                    for (Product product : category.getProducts()) {
-                        List<DisplayInfo> displayInfos = product.getDisplayInfos();
-                        count += displayInfos.size();
-                    }
+                    //데이터 커지면 통계쿼리 처리가 좋을수도 있음.
+                    List<Product> products = category.getProducts();
+
+                    int count = products
+                            .stream()
+                            .map(product -> product.getDisplayInfos().size())
+                            .reduce(0, Integer::sum);
+
                     return new CategoryResult(category.getId(), category.getName(), count);
                 })
                 .collect(Collectors.toList());

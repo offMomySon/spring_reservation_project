@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,19 +18,19 @@ public class ReservationUserComment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "product_id")
-    private long productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    @Column(name = "reservation_info_id")
-    private long reservationInfoId;
+    @ManyToOne
+    @JoinColumn(name = "reservation_info_id")
+    private ReservationInfo reservationInfo;
 
     private double score;
 
     private String comment;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservation_user_comment_id")
-    private Set<ReservationUserCommentImage> reservationUserCommentImages = new HashSet<>();
-
-
+    private List<ReservationUserCommentImage> reservationUserCommentImages = new ArrayList();
 }

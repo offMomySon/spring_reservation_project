@@ -40,9 +40,8 @@ public class ReservationInfo extends ReservationBaseEntity {
     @Column(name = "cancel_flag")
     private Boolean cancelFlag;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_info_id")
-    private List<ReservationUserComment> userComments = new ArrayList();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reservationInfo")
+    private List<ReservationUserComment> reservationUserComments = new ArrayList();
 
     // cascade = persist, delete 를 전파한다.
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "reservationInfo")

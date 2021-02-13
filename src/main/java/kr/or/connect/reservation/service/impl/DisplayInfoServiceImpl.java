@@ -1,18 +1,21 @@
 package kr.or.connect.reservation.service.impl;
 
 import kr.or.connect.reservation.dto.*;
+import kr.or.connect.reservation.dto.response.ProductsApiAtDisplayInfoIdResponse;
+import kr.or.connect.reservation.exception.list.DisplayInfoIdNotExistException;
+import kr.or.connect.reservation.exception.list.RelatedEntityAbsentException;
 import kr.or.connect.reservation.model.*;
 import kr.or.connect.reservation.repository.DisplayInfoRepository;
 import kr.or.connect.reservation.service.DisplayInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -21,155 +24,92 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     @Autowired
     private DisplayInfoRepository displayInfoRepository;
 
-    @Override
-    public boolean isExistDisplayInfoId(long displayInfoId) {
-        return displayInfoRepository.existsById(displayInfoId);
-    }
-
     @Nonnull
     @Override
-    public DisplayInfoResult getDisplayInfo(long displayInfoId) {
-        Product product = displayInfoRepository.selectDisplayInfo(displayInfoId);
+    public ProductsApiAtDisplayInfoIdResponse getDisplayInfo(long displayInfoId) {
+        DisplayInfo displayInfo = displayInfoRepository.findById(displayInfoId).orElseThrow(() -> {
+            throw new DisplayInfoIdNotExistException(displayInfoId);
+        });
 
-        return makeDisplayInfoResult(product);
+        double getAverageScore = getGetAverageScore(displayInfo);
+
+        DisplayInfoResult displayInfoResult = DisplayInfoResult.makeDisplayInfoResult(displayInfo);
+
+        DisplayInfoImageResult displayInfoImageResult = getDisplayInfoImageResult(displayInfo);
+
+        List<CommentResult> commentResults = getCommentResults(displayInfo);
+
+        List<ProductImageResult> productImageResults = getProductImageResults(displayInfo);
+
+        List<ProductPriceResult> productPriceResults = getProductPriceResults(displayInfo.getProduct());
+
+        return ProductsApiAtDisplayInfoIdResponse.makeProductsApiAtDisplayInfoIdResponse(getAverageScore, displayInfoResult, displayInfoImageResult, commentResults, productImageResults, productPriceResults);
     }
 
-    private DisplayInfoResult makeDisplayInfoResult(Product product) {
-
-        Category category = product.getCategory();
-        DisplayInfo displayInfo = product.getDisplayInfos().stream().findFirst().get();
-
-        return new DisplayInfoResult
-                (product.getId(), category.getId(), displayInfo.getId(),
-                        category.getName(), product.getDescription(), product.getContent(),
-                        product.getEvent(), displayInfo.getPlaceName(), displayInfo.getPlaceLot(),
-                        displayInfo.getPlaceStreet(), displayInfo.getTel(), displayInfo.getHomepage(), displayInfo.getEmail(),
-                        displayInfo.getCreateDate(), displayInfo.getModifyDate(), displayInfo.getOpeningHours());
+    private List<ProductImageResult> getProductImageResults(DisplayInfo displayInfo) {
+        return displayInfo.getProduct().getProductImages()
+                .stream()
+                .limit(SELECT_IMAGE_COUNT_LIMIT)
+                .filter(productImage -> productImage.getType().equalsIgnoreCase("ma") || productImage.getType().equalsIgnoreCase("et"))
+                .map(productImage -> ProductImageResult.makeProductImageResult(productImage))
+                .collect(Collectors.toList());
     }
 
-    @Nonnull
-    @Override
-    public List<ProductImageResult> getProductImageList(long displayInfoId) {
-        PageRequest pageRequest = PageRequest.of(FIRST_PAGE, (int) SELECT_IMAGE_COUNT_LIMIT);
-        List<Product> products = displayInfoRepository.selectProductImageList(displayInfoId, pageRequest).getContent();
+    private double getGetAverageScore(DisplayInfo displayInfo) {
+        double commentScoreSum = displayInfo.getProduct().getReservationUserComments()
+                .stream()
+                .map(ReservationUserComment::getScore)
+                .reduce((double) 0, Double::sum);
 
-        List<ProductImageResult> productImageResults = new ArrayList();
-        for (Product product : products) {
-            productImageResults.add(makeProductImageRs(product));
-        }
+        double commentCount = displayInfo.getProduct().getReservationUserComments().size();
 
-        return productImageResults;
+        double getAverageScore = 0;
+        if (commentCount == 0)
+            getAverageScore = 0;
+        else
+            getAverageScore = commentScoreSum / commentCount;
+        return getAverageScore;
     }
 
-    private ProductImageResult makeProductImageRs(Product product) {
-
-        ProductImage productImage = product.getProductImages().stream().findFirst().get();
-        FileInfo fileInfo = productImage.getFileInfo();
-
-        return new ProductImageResult(
-                product.getId(),
-                productImage.getId(),
-                productImage.getType(),
-                fileInfo.getId(), fileInfo.getFileName(), fileInfo.getSaveFileName(), fileInfo.getContentType(),
-                fileInfo.getDeleteFlag(), fileInfo.getCreateDate(), fileInfo.getModifyDate());
-    }
-
-    @Nonnull
-    @Override
-    public DisplayInfoImageResult getDisplayInfoImage(long displayInfoId) {
-        return makeDisplayInfoImageResult(displayInfoRepository.selectDisplayInfoImage(displayInfoId));
-    }
-
-    private DisplayInfoImageResult makeDisplayInfoImageResult(DisplayInfo displayInfo) {
-        DisplayInfoImage displayInfoImage = displayInfo.getDisplayinfoImages().stream().findFirst().get();
+    private DisplayInfoImageResult getDisplayInfoImageResult(DisplayInfo displayInfo) {
+        DisplayInfoImage displayInfoImage = displayInfo.getDisplayinfoImages().stream().findFirst().orElseThrow(() -> {
+            throw new RelatedEntityAbsentException();
+        });
         FileInfo fileInfo = displayInfoImage.getFileInfo();
-        return new DisplayInfoImageResult(displayInfoImage.getId(), displayInfo.getId(),
-                fileInfo.getId(), fileInfo.getFileName(), fileInfo.getSaveFileName(), fileInfo.getContentType(),
-                fileInfo.getDeleteFlag(), fileInfo.getCreateDate(), fileInfo.getModifyDate());
+        return DisplayInfoImageResult.makeDisplayInfoImageResult(displayInfo, displayInfoImage, fileInfo);
     }
 
-    @Nonnull
-    @Override
-    public List<CommentResult> getCommentList(long displayInfoId) {
-        List<Product> products = displayInfoRepository.selectComment(displayInfoId);
-        List<CommentResult> comments = new ArrayList();
+    private List<CommentResult> getCommentResults(DisplayInfo displayInfo) {
+        Product product = displayInfo.getProduct();
 
-        for (Product product : products) {
-            comments.add(makeCommentResult(product));
-        }
+        List<CommentResult> commentResults = new ArrayList();
+        product.getReservationInfos()
+                .stream()
+                .filter(reservationInfo -> reservationInfo.getReservationUserComments().size() > 0)
+                .forEach(reservationInfo -> {
+                    CommentResult commentResult = CommentResult.makeCommentResult(reservationInfo);
 
-        for (CommentResult commentResult : comments) {
-            List<ReservationInfo> reservationInfos = displayInfoRepository.selectCommentImageList(commentResult.getCommentId());
+                    List<CommentImageResult> commentImageResults = new ArrayList();
+                    reservationInfo.getReservationUserComments()
+                            .stream()
+                            .filter(reservationUserComment -> reservationUserComment.getReservationUserCommentImages().size() > 0)
+                            .forEach(reservationUserComment -> {
+                                commentImageResults.add(CommentImageResult.makeCommentImageResult(reservationUserComment));
+                            });
+                    commentResult.setCommentImageResults(commentImageResults);
 
-            List<CommentImageResult> commentImageResults = new ArrayList();
-            for (ReservationInfo reservationInfo : reservationInfos) {
-                commentImageResults.add(makeCommentImageResult(reservationInfo));
-            }
-            commentResult.setCommentImages(commentImageResults);
-        }
-        return comments;
+                    commentResults.add(commentResult);
+                });
+        return commentResults;
     }
 
-    private CommentResult makeCommentResult(Product product) {
-        ReservationInfo reservationInfo = product.getReservationInfos().stream().findFirst().get();
-        ReservationUserComment reservationUserComment = reservationInfo.getUserComments().stream().findFirst().get();
-
-        return new CommentResult(reservationUserComment.getId(), product.getId(), reservationInfo.getId(),
-                reservationUserComment.getScore(), reservationUserComment.getComment(),
-                reservationInfo.getReservationName(), reservationInfo.getReservationTel(), reservationInfo.getReservationEmail(), reservationInfo.getReservationDate(),
-                reservationUserComment.getCreateDate(), reservationUserComment.getModifyDate());
-    }
-
-    private CommentImageResult makeCommentImageResult(ReservationInfo reservationInfo) {
-        ReservationUserComment reservationUserComment = reservationInfo.getUserComments().stream().findFirst().get();
-        ReservationUserCommentImage reservationUserCommentImg = reservationUserComment.getReservationUserCommentImages().stream().findFirst().get();
-        FileInfo fileInfo = reservationUserCommentImg.getFileInfo();
-
-        return new CommentImageResult(
-                reservationUserCommentImg.getId(),
-                reservationInfo.getId(),
-                reservationUserComment.getId(),
-                fileInfo.getId(),
-                fileInfo.getFileName(),
-                fileInfo.getSaveFileName(),
-                fileInfo.getContentType(),
-                fileInfo.getDeleteFlag(),
-                fileInfo.getCreateDate(),
-                fileInfo.getModifyDate());
-    }
-
-    @Nonnull
-    @Override
-    public double getAverageScore(long displayInfoId) {
-        double scoreSum = 0;
-
-        List<Double> scores = displayInfoRepository.selectScore(displayInfoId);
-        for (Double score : scores) {
-            scoreSum += score;
-        }
-
-        if (scores.size() == 0)
-            return 0;
-        return scoreSum / scores.size();
-    }
-
-    @Nonnull
-    @Override
-    public List<ProductPriceResult> getProductPriceList(long displayInfoId) {
-        List<Product> products = displayInfoRepository.selectProductPrice(displayInfoId);
-        List<ProductPriceResult> productPrices = new ArrayList();
-
-        for (Product product : products) {
-            productPrices.add(makeProductPriceResult(product));
-        }
-        return productPrices;
-    }
-
-    private ProductPriceResult makeProductPriceResult(Product product) {
-        ProductPrice productPrice = product.getProductPrices().stream().findFirst().get();
-        return new ProductPriceResult
-                (productPrice.getId(), product.getId(), productPrice.getPriceTypeName(),
-                        productPrice.getPrice(), productPrice.getDiscountRate(),
-                        productPrice.getCreateDate(), productPrice.getModifyDate());
+    private List<ProductPriceResult> getProductPriceResults(Product product) {
+        List<ProductPriceResult> productPriceResults = new ArrayList();
+        product.getProductPrices()
+                .stream()
+                .forEach(productPrice -> {
+                    productPriceResults.add(ProductPriceResult.makeProductPriceResult(productPrice));
+                });
+        return productPriceResults;
     }
 }

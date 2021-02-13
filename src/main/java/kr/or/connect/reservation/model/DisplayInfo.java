@@ -5,12 +5,9 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nonnull;
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -46,15 +43,7 @@ public class DisplayInfo extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "displayInfo")
     private List<ReservationInfo> reservationInfos = new ArrayList();
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private Set<DisplayInfoImage> displayinfoImages = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "displayInfo")
+    private List<DisplayInfoImage> displayinfoImages = new ArrayList<>();
 
-    @Nonnull
-    public Set<DisplayInfoImage> getDisplayinfoImages() {
-        return displayinfoImages;
-    }
-
-    public void setDisplayinfoImages(@Nonnull Set<DisplayInfoImage> displayinfoImages) {
-        this.displayinfoImages = displayinfoImages;
-    }
 }

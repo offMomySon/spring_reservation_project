@@ -8,7 +8,6 @@ import kr.or.connect.reservation.model.*;
 import kr.or.connect.reservation.repository.CategoryRepository;
 import kr.or.connect.reservation.repository.DisplayInfoRepository;
 import kr.or.connect.reservation.repository.ProductImageRepository;
-import kr.or.connect.reservation.repository.ProductRepository;
 import kr.or.connect.reservation.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,6 @@ import static kr.or.connect.reservation.dto.ProductResult.makeProductResult;
 @Service
 @Transactional(readOnly = true)
 public class ProductServiceImpl implements ProductService {
-    @Autowired
-    private ProductRepository productRepository;
     @Autowired
     private DisplayInfoRepository displayInfoRepository;
     @Autowired

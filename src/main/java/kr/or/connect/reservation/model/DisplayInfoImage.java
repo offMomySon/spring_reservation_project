@@ -1,36 +1,26 @@
 package kr.or.connect.reservation.model;
 
-import javax.annotation.Nonnull;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "display_info_image")
 public class DisplayInfoImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "display_info_id")
-    private long displayInfoId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "display_info_id")
+    private DisplayInfo displayInfo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
     private FileInfo fileInfo;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    @Nonnull
-    public FileInfo getFileInfo() {
-        return fileInfo;
-    }
-
-    public void setFileInfo(@Nonnull FileInfo fileInfo) {
-        this.fileInfo = fileInfo;
-    }
 }
+
