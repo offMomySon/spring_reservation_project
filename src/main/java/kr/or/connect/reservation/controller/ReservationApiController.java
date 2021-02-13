@@ -97,8 +97,7 @@ public class ReservationApiController {
         }
 
         ReservationCancleResult reservationCancleResult = reservationService.cancleReservation(reservationId);
-        List<Price> prices = null;
-//                = reservationService.selectPriceList(reservationId);
+        List<Price> prices = reservationService.selectPriceList(reservationId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createReservationCancleResponse(reservationCancleResult, prices));
     }

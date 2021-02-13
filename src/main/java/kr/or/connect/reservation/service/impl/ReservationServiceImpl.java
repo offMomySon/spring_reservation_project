@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +29,7 @@ import static kr.or.connect.reservation.model.ReservationInfoPrice.createReserva
 @Transactional(readOnly = true)
 public class ReservationServiceImpl implements ReservationService {
     @Autowired
-    private ReservationRepository reservationRepository;
+    private ReservationInfoRepository reservationInfoRepository;
     @Autowired
     private ReservationInfoPriceRepository reservationInfoPriceRepository;
     @Autowired
@@ -63,8 +62,8 @@ public class ReservationServiceImpl implements ReservationService {
                 .collect(Collectors.toList());
 
         ReservationInfo reservationInfo = ReservationInfo.makeReservationInfo(product, displayInfo, reservationInfoPrices, reservationRequest);
-        reservationInfo = reservationRepository.save(reservationInfo);
-        
+        reservationInfo = reservationInfoRepository.save(reservationInfo);
+
         ReservationRequestResult reservationRequestResult = makeReservationRequestResult(reservationInfo);
         return reservationRequestResult;
     }
@@ -72,14 +71,14 @@ public class ReservationServiceImpl implements ReservationService {
     @Nonnull
     @Override
     public List<ReservationInfo> getReservation(@Nonnull String email) {
-        return reservationRepository.selectAtEmail(email);
+        return reservationInfoRepository.selectAtEmail(email);
     }
 
     @Override
     public long getRsvTicketTotalPrice(long reservationInfoId) {
         log.debug("reservationInfoId = {}", reservationInfoId);
         long totalPrice = 0;
-//        List<ReservationInfoPrice> reservationInfoPrices = reservationRepository.selectTicketAtReservationInfoId(reservationInfoId);
+//        List<ReservationInfoPrice> reservationInfoPrices = reservationInfoRepository.selectTicketAtReservationInfoId(reservationInfoId);
 //
 //        for (ReservationInfoPrice reservationInfoPrice : reservationInfoPrices) {
 //            totalPrice += calTicketPrice(reservationInfoPrice.getCount(), reservationInfoPrice.getProductPrice().getPrice());
@@ -95,31 +94,27 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public ReservationCancleResult cancleReservation(long reservationId) {
-        if (!reservationRepository.existsById(reservationId)) {
+        ReservationInfo reservationInfo = reservationInfoRepository.findById(reservationId).orElseThrow(() -> {
             throw new ReservationIdNotExistException(reservationId);
-        }
+        });
+        reservationInfo.setCancelFlag(true);
 
-        reservationRepository.cancleAtId(reservationId);
-        ReservationCancleResult reservationCancleResult = createReservationCancleResult(reservationRepository.selectAtId(reservationId));
-
+        ReservationCancleResult reservationCancleResult = createReservationCancleResult(reservationInfo);
         return reservationCancleResult;
     }
 
     @Nonnull
     @Override
     public List<Price> selectPriceList(long reservationId) {
-//        makePriceList(reservationInfoPriceRepository.selectPriceList(reservationId))
-        return null;
-    }
+        ReservationInfo reservationInfo = reservationInfoRepository.findById(reservationId).orElseThrow(() -> {
+            throw new ReservationIdNotExistException(reservationId);
+        });
 
-    @Nonnull
-    private List<Price> makePriceList(@Nonnull List<ReservationInfoPrice> reservationInfoPrices) {
-        List<Price> prices = new ArrayList();
+        List<Price> prices = reservationInfo.getReservationInfoPrices()
+                .stream()
+                .map(Price::makePrice)
+                .collect(Collectors.toList());
 
-        for (ReservationInfoPrice reservationInfoPrice : reservationInfoPrices) {
-            prices.add(new Price(reservationInfoPrice.getId(), reservationInfoPrice.getReservationInfo().getId(),
-                    reservationInfoPrice.getProductPrice().getId(), reservationInfoPrice.getCount()));
-        }
         return prices;
     }
 }

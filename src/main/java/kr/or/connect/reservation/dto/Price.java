@@ -27,7 +27,7 @@ public class Price {
         Price price = new Price();
         price.setReservationInfoPriceId(reservationInfoPrice.getId());
         price.setReservationInfoId(reservationInfoPrice.getReservationInfo().getId());
-        price.setReservationInfoId(reservationInfoPrice.getProductPrice().getId());
+        price.setProductPriceId(reservationInfoPrice.getProductPrice().getId());
         price.setCount(reservationInfoPrice.getCount());
 
         return price;
