@@ -6,6 +6,7 @@ import kr.or.connect.reservation.exception.list.ParamNotValidException;
 import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +20,7 @@ public class ProductApiController {
     @Autowired
     private DisplayInfoService displayInfoService;
 
-    //
-//    @Cacheable(cacheNames = "product_cache")
+    @Cacheable(cacheNames = "product_cache")
     @GetMapping
     public ResponseEntity<?> getProduct(@RequestParam(defaultValue = "0") long categoryId, @RequestParam(defaultValue = "0") long start) {
         if (isNotProductParamValid(categoryId, start)) {

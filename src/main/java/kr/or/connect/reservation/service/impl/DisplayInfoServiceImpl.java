@@ -2,9 +2,13 @@ package kr.or.connect.reservation.service.impl;
 
 import kr.or.connect.reservation.dto.*;
 import kr.or.connect.reservation.dto.response.ProductsApiAtDisplayInfoIdResponse;
+import kr.or.connect.reservation.dto.statistic.DisplayInfoCommentStatic;
 import kr.or.connect.reservation.exception.list.DisplayInfoIdNotExistException;
 import kr.or.connect.reservation.exception.list.RelatedEntityAbsentException;
-import kr.or.connect.reservation.model.*;
+import kr.or.connect.reservation.model.DisplayInfo;
+import kr.or.connect.reservation.model.DisplayInfoImage;
+import kr.or.connect.reservation.model.FileInfo;
+import kr.or.connect.reservation.model.Product;
 import kr.or.connect.reservation.repository.DisplayInfoRepository;
 import kr.or.connect.reservation.service.DisplayInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -56,19 +60,9 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     }
 
     private double getGetAverageScore(DisplayInfo displayInfo) {
-        double commentScoreSum = displayInfo.getProduct().getReservationUserComments()
-                .stream()
-                .map(ReservationUserComment::getScore)
-                .reduce((double) 0, Double::sum);
+        DisplayInfoCommentStatic displayInfoCommentStatic = displayInfoRepository.countReservationUserComment(displayInfo.getId());
 
-        double commentCount = displayInfo.getProduct().getReservationUserComments().size();
-
-        double getAverageScore = 0;
-        if (commentCount == 0)
-            getAverageScore = 0;
-        else
-            getAverageScore = commentScoreSum / commentCount;
-        return getAverageScore;
+        return displayInfoCommentStatic.getCommentScoreSum() / displayInfoCommentStatic.getCommentCount();
     }
 
     private DisplayInfoImageResult getDisplayInfoImageResult(DisplayInfo displayInfo) {
