@@ -12,9 +12,9 @@ import java.util.Optional;
 public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> {
 
     @EntityGraph(attributePaths = {"product", "product.category"}, type = EntityGraph.EntityGraphType.LOAD)
-    Optional<DisplayInfo> findById(long displayInfoId);
+    Optional<DisplayInfo> findOneById(long displayInfoId);
 
-    Optional<DisplayInfo> findByProductId(long productId);
+    Optional<DisplayInfo> findOneByProductId(long productId);
 
     @Query("SELECT new kr.or.connect.reservation.dto.statistic.DisplayInfoCommentStatic( count(reservationUserComments.id), sum(reservationUserComments.score)) " +
             "FROM DisplayInfo displayInfo " +

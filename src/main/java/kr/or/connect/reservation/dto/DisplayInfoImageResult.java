@@ -7,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nonnull;
 import java.util.Date;
 
 @Data
@@ -36,7 +35,7 @@ public class DisplayInfoImageResult {
         this.modifyDate = modifyDate;
     }
 
-    public static DisplayInfoImageResult makeDisplayInfoImageResult(@Nonnull DisplayInfo displayInfo, @Nonnull DisplayInfoImage displayInfoImage, @Nonnull FileInfo fileInfo) {
+    public static DisplayInfoImageResult makeDisplayInfoImageResult(DisplayInfo displayInfo, DisplayInfoImage displayInfoImage, FileInfo fileInfo) {
         return new DisplayInfoImageResult(displayInfoImage.getId(), displayInfo.getId(),
                 fileInfo.getId(), fileInfo.getFileName(), fileInfo.getSaveFileName(), fileInfo.getContentType(),
                 fileInfo.getDeleteFlag(), fileInfo.getCreateDate(), fileInfo.getModifyDate());

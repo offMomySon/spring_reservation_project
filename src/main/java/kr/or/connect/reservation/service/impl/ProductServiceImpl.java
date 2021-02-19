@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDisplayInfo> productDisplayInfos = productImages.stream()
                 .map(productImage -> {
                     Product product = productImage.getProduct();
-                    DisplayInfo displayInfo = displayInfoRepository.findByProductId(product.getId()).orElseGet(() -> {
+                    DisplayInfo displayInfo = displayInfoRepository.findOneByProductId(product.getId()).orElseGet(() -> {
                         log.info("Product Id = %d 의 displayInfo 가 존재하지 않음.", product.getId());
                         return null;
                     });

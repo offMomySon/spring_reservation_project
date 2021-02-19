@@ -10,4 +10,6 @@ public interface ReservationInfoRepository extends JpaRepository<ReservationInfo
 
     @EntityGraph(attributePaths = {"displayInfo", "product", "product.category"}, type = EntityGraph.EntityGraphType.LOAD)
     List<ReservationInfo> findByReservationEmail(String reservationEmail);
+
+    List<ReservationInfo> findByProductId(long productId);
 }

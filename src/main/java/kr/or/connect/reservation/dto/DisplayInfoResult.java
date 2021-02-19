@@ -67,10 +67,7 @@ public class DisplayInfoResult {
                 displayInfo.getCreateDate(), displayInfo.getModifyDate(), displayInfo.getOpeningHours());
     }
 
-    public static DisplayInfoResult makeDisplayInfoResult(@Nonnull DisplayInfo displayInfo) {
-        Product product = displayInfo.getProduct();
-        Category category = product.getCategory();
-
+    public static DisplayInfoResult makeDisplayInfoResult(DisplayInfo displayInfo, Product product, Category category) {
         return new DisplayInfoResult(
                 product.getId(), category.getId(), displayInfo.getId(),
                 category.getName(), product.getDescription(), product.getContent(),
