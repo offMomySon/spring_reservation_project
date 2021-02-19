@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import static kr.or.connect.reservation.dto.CommentImageResult.makeCommentImageResult;
 import static kr.or.connect.reservation.dto.CommentResult.makeCommentResult;
 import static kr.or.connect.reservation.dto.ProductImageResult.makeProductImageResult;
+import static kr.or.connect.reservation.dto.ProductPriceResult.makeProductPriceResult;
 
 @Slf4j
 @Service
@@ -39,6 +40,8 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     private ReservationUserCommentImageRepository reservationUserCommentImageRepository;
     @Autowired
     private ProductImageRepository productImageRepository;
+    @Autowired
+    private ProductPriceRepository productPriceRepository;
 
     @Nonnull
     @Override
@@ -109,22 +112,21 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
 
     private List<ProductImageResult> getProductImageResults(DisplayInfo displayInfo) {
         PageRequest pageRequest = PageRequest.of((int) (FIRST_PAGE / SELECT_IMAGE_COUNT_LIMIT), (int) SELECT_IMAGE_COUNT_LIMIT, Sort.by(Sort.Direction.ASC, "product"));
-        List<ProductImage> productImages = productImageRepository.findByTypesAndProductId(displayInfo.getProduct().getId(), pageRequest, "ma", "et");
 
-        List<ProductImageResult> productImageResults = productImages
+        List<ProductImage> productImages = productImageRepository.findByTypesAndProductId(displayInfo.getProduct().getId(), pageRequest, "ma", "et");
+        return productImages
                 .stream()
                 .map(productImage -> makeProductImageResult(productImage, productImage.getFileInfo()))
                 .collect(Collectors.toList());
-        return productImageResults;
     }
 
     private List<ProductPriceResult> getProductPriceResults(Product product) {
         List<ProductPriceResult> productPriceResults = new ArrayList();
-        product.getProductPrices()
+
+        List<ProductPrice> productPrices = productPriceRepository.findByProductId(product.getId());
+        productPrices
                 .stream()
-                .forEach(productPrice -> {
-                    productPriceResults.add(ProductPriceResult.makeProductPriceResult(productPrice));
-                });
+                .forEach(productPrice -> productPriceResults.add(makeProductPriceResult(productPrice)));
         return productPriceResults;
     }
 }
