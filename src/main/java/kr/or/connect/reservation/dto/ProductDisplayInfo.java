@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProductResult {
+public class ProductDisplayInfo {
     private Long displayInfoId;
     private Long productId;
     private String productDescription;
@@ -17,8 +17,8 @@ public class ProductResult {
     private String productContent;
     private String productImageUrl;
 
-    public ProductResult(Long displayInfoId, Long productId, String productDescription, String placeName,
-                         String productContent, String productImageUrl) {
+    public ProductDisplayInfo(Long displayInfoId, Long productId, String productDescription, String placeName,
+                              String productContent, String productImageUrl) {
         super();
         this.displayInfoId = displayInfoId;
         this.productId = productId;
@@ -28,8 +28,8 @@ public class ProductResult {
         this.productImageUrl = productImageUrl;
     }
 
-    public static ProductResult makeProductResult(Product product, DisplayInfo displayInfo, FileInfo fileInfo) {
-        ProductResult productResult = new ProductResult(
+    public static ProductDisplayInfo makeProductResult(Product product, DisplayInfo displayInfo, FileInfo fileInfo) {
+        ProductDisplayInfo productDisplayInfo = new ProductDisplayInfo(
                 displayInfo.getId(),
                 product.getId(),
                 product.getDescription(),
@@ -37,7 +37,7 @@ public class ProductResult {
                 product.getContent(),
                 fileInfo.getSaveFileName()
         );
-        return productResult;
+        return productDisplayInfo;
     }
 
 }

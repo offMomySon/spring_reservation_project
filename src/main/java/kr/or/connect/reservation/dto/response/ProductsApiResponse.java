@@ -1,7 +1,7 @@
 package kr.or.connect.reservation.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import kr.or.connect.reservation.dto.ProductResult;
+import kr.or.connect.reservation.dto.ProductDisplayInfo;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,10 +14,10 @@ import java.util.List;
 public class ProductsApiResponse {
     long totalCount;
     @JsonProperty("items")
-    List<ProductResult> Products;
+    List<ProductDisplayInfo> Products;
 
     @Nonnull
-    public static ProductsApiResponse createProductsApiResponse(long totalCount, @Nonnull List<ProductResult> products) {
+    public static ProductsApiResponse createProductsApiResponse(long totalCount, @Nonnull List<ProductDisplayInfo> products) {
         ProductsApiResponse productsApiResponse = new ProductsApiResponse();
         productsApiResponse.setTotalCount(totalCount);
         productsApiResponse.setProducts(products);

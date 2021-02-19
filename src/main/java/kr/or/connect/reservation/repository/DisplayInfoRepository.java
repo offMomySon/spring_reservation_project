@@ -10,4 +10,6 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 
     @EntityGraph(attributePaths = {"product", "product.category"}, type = EntityGraph.EntityGraphType.LOAD)
     Optional<DisplayInfo> findById(long displayInfoId);
+
+    Optional<DisplayInfo> findByProductId(long productId);
 }
