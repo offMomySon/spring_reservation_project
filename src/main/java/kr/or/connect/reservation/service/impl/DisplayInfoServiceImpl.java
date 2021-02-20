@@ -10,7 +10,6 @@ import kr.or.connect.reservation.service.DisplayInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +65,10 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     }
 
     private double getGetAverageScore(DisplayInfo displayInfo) {
+        if (!displayInfoRepository.existsFirstReservationUserCommnet(displayInfo.getId())) {
+            return 0d;
+        }
+
         DisplayInfoCommentStatic displayInfoCommentStatic = displayInfoRepository.countReservationUserComment(displayInfo.getId());
         return displayInfoCommentStatic.getCommentScoreSum() / displayInfoCommentStatic.getCommentCount();
     }
@@ -83,35 +86,37 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     }
 
     private List<CommentResult> getCommentResults(DisplayInfo displayInfo) {
-        Product product = displayInfo.getProduct();
-
         List<CommentResult> commentResults = new ArrayList();
 
-        List<ReservationInfo> reservationInfos = reservationInfoRepository.findByProductId(product.getId());
-
+        List<ReservationInfo> reservationInfos = reservationInfoRepository.findByProductId(displayInfo.getProduct().getId());
         for (ReservationInfo reservationInfo : reservationInfos) {
             List<ReservationUserComment> reservationUserComments = reservationUserCommentRepository.findByReservationInfoId(reservationInfo.getId());
             if (reservationUserComments.size() <= 0)
                 continue;
 
-            CommentResult commentResult = makeCommentResult(reservationInfo, reservationUserComments.get(0));
-            List<CommentImageResult> commentImageResults = new ArrayList();
-            for (ReservationUserComment reservationUserComment : reservationUserComments) {
-                reservationUserCommentImageRepository.findOneByReservationUserCommentId(reservationUserComment.getId()).ifPresent(reservationUserCommentImage -> {
-                    FileInfo fileInfo = reservationUserCommentImage.getFileInfo();
-
-                    commentImageResults.add(makeCommentImageResult(reservationUserComment, reservationUserCommentImage, fileInfo));
-                });
-            }
-            commentResult.setCommentImageResults(commentImageResults);
-
+            CommentResult commentResult = getCommentResult(reservationInfo, reservationUserComments);
             commentResults.add(commentResult);
         }
         return commentResults;
     }
 
+    private CommentResult getCommentResult(ReservationInfo reservationInfo, List<ReservationUserComment> reservationUserComments) {
+        CommentResult commentResult = makeCommentResult(reservationInfo, reservationUserComments.get(0));
+
+        List<CommentImageResult> commentImageResults = new ArrayList();
+        for (ReservationUserComment reservationUserComment : reservationUserComments) {
+            reservationUserCommentImageRepository.findOneByReservationUserCommentId(reservationUserComment.getId()).ifPresent(reservationUserCommentImage -> {
+                FileInfo fileInfo = reservationUserCommentImage.getFileInfo();
+
+                commentImageResults.add(makeCommentImageResult(reservationUserComment, reservationUserCommentImage, fileInfo));
+            });
+        }
+        commentResult.setCommentImageResults(commentImageResults);
+        return commentResult;
+    }
+
     private List<ProductImageResult> getProductImageResults(DisplayInfo displayInfo) {
-        PageRequest pageRequest = PageRequest.of((int) (FIRST_PAGE / SELECT_IMAGE_COUNT_LIMIT), (int) SELECT_IMAGE_COUNT_LIMIT, Sort.by(Sort.Direction.ASC, "product"));
+        PageRequest pageRequest = PageRequest.of((int) (FIRST_PAGE / SELECT_IMAGE_COUNT_LIMIT), (int) SELECT_IMAGE_COUNT_LIMIT);
 
         List<ProductImage> productImages = productImageRepository.findByTypesAndProductId(displayInfo.getProduct().getId(), pageRequest, "ma", "et");
         return productImages

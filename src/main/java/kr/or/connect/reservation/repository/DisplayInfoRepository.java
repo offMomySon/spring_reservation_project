@@ -22,4 +22,11 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
             "JOIN product.reservationUserComments reservationUserComments " +
             "WHERE displayInfo.id = :displayInfoId")
     DisplayInfoCommentStatic countReservationUserComment(@Param("displayInfoId") long displayInfoId);
+
+    @Query("SELECT COUNT ( reservationUserComments.id ) > 0 " +
+            "FROM DisplayInfo displayInfo " +
+            "JOIN displayInfo.product product " +
+            "JOIN product.reservationUserComments reservationUserComments " +
+            "WHERE displayInfo.id = :displayInfoId ")
+    boolean existsFirstReservationUserCommnet(@Param("displayInfoId") long displayInfoId);
 }
