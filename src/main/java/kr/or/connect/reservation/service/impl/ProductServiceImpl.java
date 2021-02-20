@@ -1,16 +1,18 @@
 package kr.or.connect.reservation.service.impl;
 
-import com.querydsl.core.QueryResults;
-import kr.or.connect.reservation.dto.ProductResult;
-import kr.or.connect.reservation.exception.list.CategoryIdNotExistException;
-import kr.or.connect.reservation.exception.list.RelatedEntityAbsentException;
-import kr.or.connect.reservation.model.*;
+import kr.or.connect.reservation.dto.ProductDisplayInfo;
+import kr.or.connect.reservation.dto.ProductDisplayInfoResult;
+import kr.or.connect.reservation.model.DisplayInfo;
+import kr.or.connect.reservation.model.FileInfo;
+import kr.or.connect.reservation.model.Product;
+import kr.or.connect.reservation.model.ProductImage;
 import kr.or.connect.reservation.repository.CategoryRepository;
 import kr.or.connect.reservation.repository.DisplayInfoRepository;
 import kr.or.connect.reservation.repository.ProductImageRepository;
 import kr.or.connect.reservation.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static kr.or.connect.reservation.dto.ProductResult.makeProductResult;
+import static kr.or.connect.reservation.dto.ProductDisplayInfo.makeProductResult;
 
 @Slf4j
 @Service
@@ -38,39 +40,34 @@ public class ProductServiceImpl implements ProductService {
         if (categoryId == 0) {
             return displayInfoRepository.count();
         }
-
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryIdNotExistException(categoryId));
-        long count = 0;
-        for (Product product : category.getProducts()) {
-            count += product.getDisplayInfos().size();
-        }
-        return count;
+        return categoryRepository.countProductDisplayInfo(categoryId);
     }
 
     @Nonnull
     @Override
-    public List<ProductResult> getProductListAtCategory(long categoryId, long startPageNum) {
-        List<ProductImage> productImages;
+    public ProductDisplayInfoResult getProductDisplayInfo(long categoryId, long startPageNum) {
+        Page<ProductImage> productImagePage;
+        PageRequest pageRequest = PageRequest.of((int) (startPageNum / SELECT_COUNT_LIMIT), (int) SELECT_COUNT_LIMIT, Sort.by(Sort.Direction.ASC, "product"));
+
         if (categoryId == 0) {
-            PageRequest pageRequest = PageRequest.of((int) (startPageNum / SELECT_COUNT_LIMIT), (int) SELECT_COUNT_LIMIT, Sort.by(Sort.Direction.ASC, "productId"));
-            productImages = productImageRepository.findAllByType("th", pageRequest).getContent();
+            productImagePage = productImageRepository.findByType("th", pageRequest);
         } else {
-            QueryResults<ProductImage> productImageQueryResults = productImageRepository.findAllByTypeAndCategoryId("th", categoryId, startPageNum, SELECT_COUNT_LIMIT);
-            productImages = productImageQueryResults.getResults();
+            productImagePage = productImageRepository.findByTypeAndCategoryId("th", categoryId, pageRequest);
         }
 
-        List<ProductResult> productResults = productImages
-                .stream()
+        List<ProductImage> productImages = productImagePage.getContent();
+        List<ProductDisplayInfo> productDisplayInfos = productImages.stream()
                 .map(productImage -> {
                     Product product = productImage.getProduct();
-                    DisplayInfo displayInfo = product.getDisplayInfos().stream().findFirst().orElseThrow(() -> {
-                        throw new RelatedEntityAbsentException();
+                    DisplayInfo displayInfo = displayInfoRepository.findOneByProductId(product.getId()).orElseGet(() -> {
+                        log.info("Product Id = %d 의 displayInfo 가 존재하지 않음.", product.getId());
+                        return null;
                     });
                     FileInfo fileInfo = productImage.getFileInfo();
                     return makeProductResult(product, displayInfo, fileInfo);
                 })
                 .collect(Collectors.toList());
 
-        return productResults;
+        return ProductDisplayInfoResult.craeteProductDisplayInfoResult(productImagePage.getSize(), productDisplayInfos);
     }
 }

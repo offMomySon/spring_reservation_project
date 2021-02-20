@@ -46,7 +46,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .orElseThrow(() -> {
                     throw new ProductIdNotExistException(reservationRequest.getProductId());
                 });
-        DisplayInfo displayInfo = displayInfoRepository.findById(reservationRequest.getDisplayInfoId())
+        DisplayInfo displayInfo = displayInfoRepository.findOneById(reservationRequest.getDisplayInfoId())
                 .orElseThrow(() -> {
                     throw new DisplayInfoIdNotExistException(reservationRequest.getDisplayInfoId());
                 });

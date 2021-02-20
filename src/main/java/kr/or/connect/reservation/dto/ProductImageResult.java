@@ -38,9 +38,7 @@ public class ProductImageResult {
         this.modifyDate = modifyDate;
     }
 
-    public static ProductImageResult makeProductImageResult(@Nonnull ProductImage productImage) {
-        FileInfo fileInfo = productImage.getFileInfo();
-
+    public static ProductImageResult makeProductImageResult(@Nonnull ProductImage productImage, FileInfo fileInfo) {
         return new ProductImageResult(
                 productImage.getProduct().getId(),
                 productImage.getId(),
