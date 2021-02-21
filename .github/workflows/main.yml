@@ -19,7 +19,6 @@ on:
     branches:
       - master
       - develop
-      - release-*
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
