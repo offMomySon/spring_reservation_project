@@ -7,8 +7,6 @@ import kr.or.connect.reservation.repository.queryDsl.ProductImageRepositoryCusto
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import java.util.List;
-
 @Slf4j
 
 public class ProductImageRepositoryImpl extends QuerydslRepositorySupport implements ProductImageRepositoryCustom {
@@ -30,18 +28,5 @@ public class ProductImageRepositoryImpl extends QuerydslRepositorySupport implem
                 .limit(size)
                 .fetchResults();
         return productImageQueryResults;
-    }
-
-    @Override
-    public List<ProductImage> findAllByTypeFetchProduct(String type) {
-        final QProductImage productImage = QProductImage.productImage;
-
-        List<ProductImage> productImages = from(productImage)
-                .join(productImage.product).fetchJoin()
-                .where(productImage.type.eq(type))
-                .orderBy(productImage.product.id.asc())
-                .fetch();
-
-        return productImages;
     }
 }
