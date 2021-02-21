@@ -1,6 +1,5 @@
 package kr.or.connect.reservation.dto;
 
-import kr.or.connect.reservation.exception.list.RelatedEntityAbsentException;
 import kr.or.connect.reservation.model.FileInfo;
 import kr.or.connect.reservation.model.ReservationUserComment;
 import kr.or.connect.reservation.model.ReservationUserCommentImage;
@@ -42,12 +41,7 @@ public class CommentImageResult {
     }
 
 
-    public static CommentImageResult makeCommentImageResult(@Nonnull ReservationUserComment reservationUserComment) {
-        ReservationUserCommentImage reservationUserCommentImage = reservationUserComment.getReservationUserCommentImages().stream().findFirst().orElseThrow(() -> {
-            throw new RelatedEntityAbsentException();
-        });
-        FileInfo fileInfo = reservationUserCommentImage.getFileInfo();
-
+    public static CommentImageResult makeCommentImageResult(@Nonnull ReservationUserComment reservationUserComment, ReservationUserCommentImage reservationUserCommentImage, FileInfo fileInfo) {
         return new CommentImageResult(
                 reservationUserCommentImage.getId(),
                 reservationUserComment.getReservationInfo().getId(),

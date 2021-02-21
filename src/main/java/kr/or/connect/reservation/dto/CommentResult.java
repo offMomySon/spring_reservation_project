@@ -1,6 +1,5 @@
 package kr.or.connect.reservation.dto;
 
-import kr.or.connect.reservation.exception.list.RelatedEntityAbsentException;
 import kr.or.connect.reservation.model.ReservationInfo;
 import kr.or.connect.reservation.model.ReservationUserComment;
 import lombok.AccessLevel;
@@ -62,11 +61,7 @@ public class CommentResult {
         this.commentImageResults = commentImageResults;
     }
 
-    public static CommentResult makeCommentResult(@Nonnull ReservationInfo reservationInfo) {
-        ReservationUserComment reservationUserComment = reservationInfo.getReservationUserComments().stream().findFirst().orElseThrow(() -> {
-            throw new RelatedEntityAbsentException();
-        });
-
+    public static CommentResult makeCommentResult(@Nonnull ReservationInfo reservationInfo, ReservationUserComment reservationUserComment) {
         return new CommentResult(reservationUserComment.getId(), reservationInfo.getProduct().getId(), reservationInfo.getId(),
                 reservationUserComment.getScore(), reservationUserComment.getComment(),
                 reservationInfo.getReservationName(), reservationInfo.getReservationTel(), reservationInfo.getReservationEmail(), reservationInfo.getReservationDate(),

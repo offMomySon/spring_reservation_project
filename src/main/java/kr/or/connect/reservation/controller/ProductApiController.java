@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.controller;
 
-import kr.or.connect.reservation.dto.ProductResult;
+import kr.or.connect.reservation.dto.ProductDisplayInfoResult;
 import kr.or.connect.reservation.dto.response.ProductsApiAtDisplayInfoIdResponse;
 import kr.or.connect.reservation.exception.list.ParamNotValidException;
 import kr.or.connect.reservation.service.DisplayInfoService;
@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static kr.or.connect.reservation.dto.response.ProductsApiResponse.createProductsApiResponse;
 
@@ -29,10 +27,9 @@ public class ProductApiController {
             throw new ParamNotValidException();
         }
 
-        long totalCount = productService.getProductCount(categoryId);
-        List<ProductResult> products = productService.getProductListAtCategory(categoryId, start);
+        ProductDisplayInfoResult productDisplayInfo = productService.getProductDisplayInfo(categoryId, start);
 
-        return ResponseEntity.ok().body(createProductsApiResponse(totalCount, products));
+        return ResponseEntity.ok().body(createProductsApiResponse(productDisplayInfo.getProductDisplaySize(), productDisplayInfo.getProductDisplayInfos()));
     }
 
     private boolean isNotProductParamValid(long categoryId, long start) {
