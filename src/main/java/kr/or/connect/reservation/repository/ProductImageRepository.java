@@ -22,6 +22,14 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Long
                     "FROM DisplayInfo displayInfo ")
     Page<ProductImage> findByType(@Param("imgType") String type, Pageable pageable);
 
+    @Query("SELECT productImage " +
+            "FROM ProductImage productImage " +
+            "JOIN FETCH productImage.product " +
+            "JOIN FETCH productImage.fileInfo " +
+            "WHERE productImage.type = :imgType " +
+            "ORDER BY productImage.product.id ASC")
+    List<ProductImage> findByType(@Param("imgType") String type);
+
     @Query(value = "SELECT productImage " +
             "FROM ProductImage productImage " +
             "JOIN FETCH productImage.product product " +
