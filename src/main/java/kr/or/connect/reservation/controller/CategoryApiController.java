@@ -2,7 +2,7 @@ package kr.or.connect.reservation.controller;
 
 import kr.or.connect.reservation.dto.CategoryResult;
 import kr.or.connect.reservation.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +14,10 @@ import java.util.List;
 import static kr.or.connect.reservation.dto.response.CategoryApiResponse.createCategoryApiResponse;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/api/categories")
 public class CategoryApiController {
-    @Autowired
-    private CategoryService categoryService;
+    final private CategoryService categoryService;
 
     @Cacheable(cacheNames = "category_list_cache")
     @GetMapping
