@@ -7,6 +7,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    @Query("SELECT count(*) FROM Category category JOIN category.products products JOIN products.displayInfos displayinfos where category.id = :id")
+    @Query(value = "SELECT count(*) FROM category " +
+            "JOIN product on category.id = product.category_id " +
+            "JOIN display_info on product.id = display_info.product_id " +
+            "where category.id = :id", nativeQuery = true)
     long countProductDisplayInfo(@Param("id") long categoryId);
 }

@@ -2,7 +2,6 @@ package kr.or.connect.reservation.service.impl;
 
 import kr.or.connect.reservation.dto.*;
 import kr.or.connect.reservation.dto.response.ProductsApiAtDisplayInfoIdResponse;
-import kr.or.connect.reservation.dto.statistic.DisplayInfoCommentStatic;
 import kr.or.connect.reservation.exception.list.DisplayInfoIdNotExistException;
 import kr.or.connect.reservation.model.*;
 import kr.or.connect.reservation.repository.*;
@@ -63,12 +62,14 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     }
 
     private double getGetAverageScore(DisplayInfo displayInfo) {
-        if (!displayInfoRepository.existsFirstReservationUserCommnet(displayInfo.getId())) {
+        if (displayInfoRepository.existsFirstReservationUserCommnet(displayInfo.getId()) <= 0) {
             return 0d;
         }
 
-        DisplayInfoCommentStatic displayInfoCommentStatic = displayInfoRepository.countReservationUserComment(displayInfo.getId());
-        return displayInfoCommentStatic.getCommentScoreSum() / displayInfoCommentStatic.getCommentCount();
+        long commentCount = displayInfoRepository.countReservationUserComment(displayInfo.getId());
+        double commentScore = displayInfoRepository.sumReservationUserCommentScore(displayInfo.getId());
+
+        return commentScore / commentCount;
     }
 
     private DisplayInfoResult getDisplayInfoResult(DisplayInfo displayInfo) {

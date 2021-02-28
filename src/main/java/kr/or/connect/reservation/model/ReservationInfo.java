@@ -66,11 +66,6 @@ public class ReservationInfo extends ReservationBaseEntity {
         return reservationInfo;
     }
 
-    public void setProduct(@Nonnull Product product) {
-        this.product = product;
-        product.getReservationInfos().add(this);
-    }
-
     public void setDisplayInfo(@Nonnull DisplayInfo displayInfo) {
         this.displayInfo = displayInfo;
         displayInfo.getReservationInfos().add(this);

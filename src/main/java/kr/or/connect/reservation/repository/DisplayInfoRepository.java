@@ -1,6 +1,5 @@
 package kr.or.connect.reservation.repository;
 
-import kr.or.connect.reservation.dto.statistic.DisplayInfoCommentStatic;
 import kr.or.connect.reservation.model.DisplayInfo;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,17 +15,28 @@ public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> 
 
     Optional<DisplayInfo> findOneByProductId(long productId);
 
-    @Query("SELECT new kr.or.connect.reservation.dto.statistic.DisplayInfoCommentStatic( count(reservationUserComments.id), sum(reservationUserComments.score)) " +
-            "FROM DisplayInfo displayInfo " +
-            "JOIN displayInfo.product product " +
-            "JOIN product.reservationUserComments reservationUserComments " +
-            "WHERE displayInfo.id = :displayInfoId")
-    DisplayInfoCommentStatic countReservationUserComment(@Param("displayInfoId") long displayInfoId);
+    @Query(value = "SELECT " +
+            "sum(reservation_user_comment.score) " +
+            "FROM display_info " +
+            "JOIN product ON product.id = display_info.product_id " +
+            "JOIN reservation_user_comment ON reservation_user_comment.product_id = product.id " +
+            "WHERE display_info.id = :displayInfoId", nativeQuery = true)
+    double sumReservationUserCommentScore(@Param("displayInfoId") long displayInfoId);
 
-    @Query("SELECT COUNT ( reservationUserComments.id ) > 0 " +
-            "FROM DisplayInfo displayInfo " +
-            "JOIN displayInfo.product product " +
-            "JOIN product.reservationUserComments reservationUserComments " +
-            "WHERE displayInfo.id = :displayInfoId ")
-    boolean existsFirstReservationUserCommnet(@Param("displayInfoId") long displayInfoId);
+    @Query(value = "SELECT " +
+            "count(reservation_user_comment.id) " +
+            "FROM display_info " +
+            "JOIN product ON product.id = display_info.product_id " +
+            "JOIN reservation_user_comment ON reservation_user_comment.product_id = product.id " +
+            "WHERE display_info.id = :displayInfoId", nativeQuery = true)
+    long countReservationUserComment(@Param("displayInfoId") long displayInfoId);
+
+    @Query(value = "SELECT count(reservation_user_comment.id)>0  " +
+            "FROM display_info " +
+            "JOIN product ON product.id = display_info.product_id " +
+            "JOIN reservation_user_comment ON reservation_user_comment.product_id = product.id " +
+            "WHERE display_info.id = :displayInfoId " +
+            "LIMIT 1"
+            , nativeQuery = true)
+    long existsFirstReservationUserCommnet(@Param("displayInfoId") long displayInfoId);
 }
