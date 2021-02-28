@@ -5,9 +5,7 @@ import kr.or.connect.reservation.dto.ReservationCancleResult;
 import kr.or.connect.reservation.dto.ReservationRequestResult;
 import kr.or.connect.reservation.dto.ReservationResponseResult;
 import kr.or.connect.reservation.dto.request.ReservationRequest;
-import kr.or.connect.reservation.dto.response.ReservationGetApiResponse;
 import kr.or.connect.reservation.exception.list.ParamNotValidException;
-import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static kr.or.connect.reservation.dto.response.ReservationCancleResponse.createReservationCancleResponse;
+import static kr.or.connect.reservation.dto.response.ReservationGetApiResponse.createReservationGetApiResponse;
 import static kr.or.connect.reservation.dto.response.ReservationPostApiResponse.createReservationPostApiResponse;
 
 @Slf4j
@@ -29,8 +28,6 @@ import static kr.or.connect.reservation.dto.response.ReservationPostApiResponse.
 public class ReservationApiController {
     @Autowired
     private ReservationService reservationService;
-    @Autowired
-    private DisplayInfoService displayInfoService;
 
     @PostMapping
     public ResponseEntity<?> postBook(@RequestBody ReservationRequest reservationRequest) {
@@ -58,18 +55,9 @@ public class ReservationApiController {
     public ResponseEntity<?> getBook(@RequestParam(required = true) String reservationEmail, HttpSession session) {
         List<ReservationResponseResult> reservationResponseResults = reservationService.getReservation(reservationEmail);
 
-        storeEmailInfoIfNeeded(reservationResponseResults, session, reservationEmail);
-
-        return ResponseEntity.ok().body(ReservationGetApiResponse.createReservationGetApiResponse(reservationResponseResults));
-    }
-
-    private void storeEmailInfoIfNeeded(@ParametersAreNonnullByDefault List<ReservationResponseResult> reservationResponseResults,
-                                        @ParametersAreNonnullByDefault HttpSession session,
-                                        @ParametersAreNonnullByDefault String reservationEmail) {
-        if (reservationResponseResults.isEmpty()) {
-            return;
-        }
         session.setAttribute("reservationEmail", reservationEmail);
+
+        return ResponseEntity.ok().body(createReservationGetApiResponse(reservationResponseResults));
     }
 
     @PutMapping(path = "/{reservationId}")

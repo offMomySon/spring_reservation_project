@@ -24,6 +24,7 @@ public class ReservationResponseResult {
     private Boolean cancelFlag;
     private Date createDate;
     private Date modifyDate;
+    @JsonProperty("displayInfo")
     private DisplayInfoResult displayInfoResult;
     private Long totalPrice;
 
