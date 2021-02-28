@@ -1,7 +1,6 @@
 package kr.or.connect.reservation.repository;
 
 import kr.or.connect.reservation.model.ProductImage;
-import kr.or.connect.reservation.repository.queryDsl.ProductImageRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ProductImageRepository extends JpaRepository<ProductImage, Long>, ProductImageRepositoryCustom {
+public interface ProductImageRepository extends JpaRepository<ProductImage, Long> {
 
     @Query(value = "SELECT productImage " +
             "FROM ProductImage productImage " +
@@ -28,12 +27,11 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Long
             "JOIN FETCH productImage.fileInfo " +
             "WHERE productImage.type = :imgType " +
             "ORDER BY productImage.product.id ASC")
-    List<ProductImage> findByType(@Param("imgType") String type);
+    List<ProductImage> findByTypeLimit(@Param("imgType") String type, Pageable pageable);
 
     @Query(value = "SELECT productImage " +
             "FROM ProductImage productImage " +
             "JOIN FETCH productImage.product product " +
-            "JOIN product.category category " +
             "JOIN FETCH productImage.fileInfo fileInfo " +
             "JOIN FETCH product.category category " +
             "WHERE productImage.type = :imgType AND category.id = :categoryId",

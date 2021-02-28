@@ -26,5 +26,5 @@ public interface ReservationInfoRepository extends JpaRepository<ReservationInfo
             , nativeQuery = true)
     long sumTotalTicketPrice(@Param("reservationId") long reservationId);
 
-    List<ReservationInfo> findByProductId(long productId);
+    List<ReservationInfo> findByProductId(long productId, Pageable pageable);
 }

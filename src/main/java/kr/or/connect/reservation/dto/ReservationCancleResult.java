@@ -56,21 +56,4 @@ public class ReservationCancleResult {
         );
         return reservationCancleResult;
     }
-
-    @Override
-    public String toString() {
-        return "ReservationCancleResult{" +
-                "reservationInfoId=" + reservationInfoId +
-                ", productId=" + productId +
-                ", displayInfoId=" + displayInfoId +
-                ", reservationName='" + reservationName + '\'' +
-                ", reservationTel='" + reservationTel + '\'' +
-                ", reservationEmail='" + reservationEmail + '\'' +
-                ", reservationDate=" + reservationDate +
-                ", cancelFlag=" + cancelFlag +
-                ", createDate=" + createDate +
-                ", modifyDate=" + modifyDate +
-                ", prices=" + prices +
-                '}';
-    }
 }
