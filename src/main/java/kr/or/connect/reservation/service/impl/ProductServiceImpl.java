@@ -6,12 +6,11 @@ import kr.or.connect.reservation.model.DisplayInfo;
 import kr.or.connect.reservation.model.FileInfo;
 import kr.or.connect.reservation.model.Product;
 import kr.or.connect.reservation.model.ProductImage;
-import kr.or.connect.reservation.repository.CategoryRepository;
 import kr.or.connect.reservation.repository.DisplayInfoRepository;
 import kr.or.connect.reservation.repository.ProductImageRepository;
 import kr.or.connect.reservation.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,25 +22,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static kr.or.connect.reservation.dto.ProductDisplayInfo.makeProductResult;
+import static kr.or.connect.reservation.dto.ProductDisplayInfoResult.craeteProductDisplayInfoResult;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ProductServiceImpl implements ProductService {
-    @Autowired
-    private DisplayInfoRepository displayInfoRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ProductImageRepository productImageRepository;
-
-    @Override
-    public long getProductCount(long categoryId) {
-        if (categoryId == 0) {
-            return displayInfoRepository.count();
-        }
-        return categoryRepository.countProductDisplayInfo(categoryId);
-    }
+    final private DisplayInfoRepository displayInfoRepository;
+    final private ProductImageRepository productImageRepository;
 
     @Nonnull
     @Override
@@ -68,6 +57,6 @@ public class ProductServiceImpl implements ProductService {
                 })
                 .collect(Collectors.toList());
 
-        return ProductDisplayInfoResult.craeteProductDisplayInfoResult(productImagePage.getSize(), productDisplayInfos);
+        return craeteProductDisplayInfoResult(productImagePage.getSize(), productDisplayInfos);
     }
 }

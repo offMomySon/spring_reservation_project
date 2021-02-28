@@ -43,24 +43,6 @@ public class CommentResult {
         this.modifyDate = modifyDate;
     }
 
-    public CommentResult(Long commentId, Long productId, Long reservationInfoId, Double score, String comment,
-                         String reservationName, String reservationTelephone, String reservationEmail, Date reservationDate,
-                         Date createDate, Date modifyDate, List<CommentImageResult> commentImageResults) {
-        super();
-        this.commentId = commentId;
-        this.productId = productId;
-        this.reservationInfoId = reservationInfoId;
-        this.score = score;
-        this.comment = comment;
-        this.reservationName = reservationName;
-        this.reservationTelephone = reservationTelephone;
-        this.reservationEmail = reservationEmail;
-        this.reservationDate = reservationDate;
-        this.createDate = createDate;
-        this.modifyDate = modifyDate;
-        this.commentImageResults = commentImageResults;
-    }
-
     public static CommentResult makeCommentResult(@Nonnull ReservationInfo reservationInfo, ReservationUserComment reservationUserComment) {
         return new CommentResult(reservationUserComment.getId(), reservationInfo.getProduct().getId(), reservationInfo.getId(),
                 reservationUserComment.getScore(), reservationUserComment.getComment(),

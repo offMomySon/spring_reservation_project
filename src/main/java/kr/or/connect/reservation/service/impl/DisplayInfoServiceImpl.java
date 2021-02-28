@@ -7,9 +7,10 @@ import kr.or.connect.reservation.exception.list.DisplayInfoIdNotExistException;
 import kr.or.connect.reservation.model.*;
 import kr.or.connect.reservation.repository.*;
 import kr.or.connect.reservation.service.DisplayInfoService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,27 +21,24 @@ import java.util.stream.Collectors;
 
 import static kr.or.connect.reservation.dto.CommentImageResult.makeCommentImageResult;
 import static kr.or.connect.reservation.dto.CommentResult.makeCommentResult;
+import static kr.or.connect.reservation.dto.DisplayInfoImageResult.makeDisplayInfoImageResult;
+import static kr.or.connect.reservation.dto.DisplayInfoResult.makeDisplayInfoResult;
 import static kr.or.connect.reservation.dto.ProductImageResult.makeProductImageResult;
 import static kr.or.connect.reservation.dto.ProductPriceResult.makeProductPriceResult;
+import static kr.or.connect.reservation.dto.response.ProductsApiAtDisplayInfoIdResponse.makeProductsApiAtDisplayInfoIdResponse;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class DisplayInfoServiceImpl implements DisplayInfoService {
-    @Autowired
-    private DisplayInfoRepository displayInfoRepository;
-    @Autowired
-    private DisplayInfoImageRepository displayInfoImageRepository;
-    @Autowired
-    private ReservationInfoRepository reservationInfoRepository;
-    @Autowired
-    private ReservationUserCommentRepository reservationUserCommentRepository;
-    @Autowired
-    private ReservationUserCommentImageRepository reservationUserCommentImageRepository;
-    @Autowired
-    private ProductImageRepository productImageRepository;
-    @Autowired
-    private ProductPriceRepository productPriceRepository;
+    final private DisplayInfoRepository displayInfoRepository;
+    final private DisplayInfoImageRepository displayInfoImageRepository;
+    final private ReservationInfoRepository reservationInfoRepository;
+    final private ReservationUserCommentRepository reservationUserCommentRepository;
+    final private ReservationUserCommentImageRepository reservationUserCommentImageRepository;
+    final private ProductImageRepository productImageRepository;
+    final private ProductPriceRepository productPriceRepository;
 
     @Nonnull
     @Override
@@ -61,7 +59,7 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
 
         List<ProductPriceResult> productPriceResults = getProductPriceResults(displayInfo.getProduct());
 
-        return ProductsApiAtDisplayInfoIdResponse.makeProductsApiAtDisplayInfoIdResponse(getAverageScore, displayInfoResult, displayInfoImageResult, commentResults, productImageResults, productPriceResults);
+        return makeProductsApiAtDisplayInfoIdResponse(getAverageScore, displayInfoResult, displayInfoImageResult, commentResults, productImageResults, productPriceResults);
     }
 
     private double getGetAverageScore(DisplayInfo displayInfo) {
@@ -76,22 +74,22 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     private DisplayInfoResult getDisplayInfoResult(DisplayInfo displayInfo) {
         Product product = displayInfo.getProduct();
         Category category = product.getCategory();
-        return DisplayInfoResult.makeDisplayInfoResult(displayInfo, product, category);
+        return makeDisplayInfoResult(displayInfo, product, category);
     }
 
     private DisplayInfoImageResult getDisplayInfoImageResult(DisplayInfo displayInfo) {
         DisplayInfoImage displayInfoImage = displayInfoImageRepository.findOneByDisplayInfoId(displayInfo.getId()).orElseGet(null);
         FileInfo fileInfo = displayInfoImage.getFileInfo();
-        return DisplayInfoImageResult.makeDisplayInfoImageResult(displayInfo, displayInfoImage, fileInfo);
+        return makeDisplayInfoImageResult(displayInfo, displayInfoImage, fileInfo);
     }
 
     private List<CommentResult> getCommentResults(DisplayInfo displayInfo) {
         List<CommentResult> commentResults = new ArrayList();
 
-        List<ReservationInfo> reservationInfos = reservationInfoRepository.findByProductId(displayInfo.getProduct().getId());
+        List<ReservationInfo> reservationInfos = reservationInfoRepository.findByProductId(displayInfo.getProduct().getId(), PageRequest.of(0, SELECT_RESERVATION_INFO_COUNT_LIMIT, Sort.by("id")));
         for (ReservationInfo reservationInfo : reservationInfos) {
-            List<ReservationUserComment> reservationUserComments = reservationUserCommentRepository.findByReservationInfoId(reservationInfo.getId());
-            if (reservationUserComments.size() <= 0)
+            List<ReservationUserComment> reservationUserComments = reservationUserCommentRepository.findByReservationInfoId(reservationInfo.getId(), PageRequest.of(0, SELECT_RESERVATION_USER_COMMENT_COUNT_LIMIT, Sort.by("id")));
+            if (reservationUserComments.isEmpty())
                 continue;
 
             CommentResult commentResult = getCommentResult(reservationInfo, reservationUserComments);
@@ -105,11 +103,11 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
 
         List<CommentImageResult> commentImageResults = new ArrayList();
         for (ReservationUserComment reservationUserComment : reservationUserComments) {
-            reservationUserCommentImageRepository.findOneByReservationUserCommentId(reservationUserComment.getId()).ifPresent(reservationUserCommentImage -> {
-                FileInfo fileInfo = reservationUserCommentImage.getFileInfo();
-
-                commentImageResults.add(makeCommentImageResult(reservationUserComment, reservationUserCommentImage, fileInfo));
-            });
+            reservationUserCommentImageRepository.findOneByReservationUserCommentId(reservationUserComment.getId())
+                    .ifPresent(reservationUserCommentImage -> {
+                        FileInfo fileInfo = reservationUserCommentImage.getFileInfo();
+                        commentImageResults.add(makeCommentImageResult(reservationUserComment, reservationUserCommentImage, fileInfo));
+                    });
         }
         commentResult.setCommentImageResults(commentImageResults);
         return commentResult;
@@ -128,7 +126,7 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     private List<ProductPriceResult> getProductPriceResults(Product product) {
         List<ProductPriceResult> productPriceResults = new ArrayList();
 
-        List<ProductPrice> productPrices = productPriceRepository.findByProductId(product.getId());
+        List<ProductPrice> productPrices = productPriceRepository.findByProductId(product.getId(), PageRequest.of(0, SELECT_PRODUCT_PRICE_COUNT_LIMIT, Sort.by("id")));
         productPrices
                 .stream()
                 .forEach(productPrice -> productPriceResults.add(makeProductPriceResult(productPrice)));

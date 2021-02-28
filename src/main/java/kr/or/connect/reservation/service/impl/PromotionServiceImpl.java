@@ -6,8 +6,10 @@ import kr.or.connect.reservation.model.Promotion;
 import kr.or.connect.reservation.repository.ProductImageRepository;
 import kr.or.connect.reservation.repository.PromotionRepository;
 import kr.or.connect.reservation.service.PromotionService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,20 +22,19 @@ import static kr.or.connect.reservation.dto.PromotionResult.makePromotionResult;
 @Slf4j
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class PromotionServiceImpl implements PromotionService {
-    @Autowired
-    private ProductImageRepository productImageRepository;
-    @Autowired
-    private PromotionRepository promotionRepository;
+    final private ProductImageRepository productImageRepository;
+    final private PromotionRepository promotionRepository;
 
     @Nonnull
     @Override
     public List<PromotionResult> getPromotionList() {
         List<PromotionResult> promotionResults = new ArrayList();
 
-        List<ProductImage> productImages = productImageRepository.findByType("th");
+        List<ProductImage> productImages = productImageRepository.findByTypeLimit("th", PageRequest.of(0, SELECT_PRODUCT_LIMIT, Sort.by("id")));
         for (ProductImage productImage : productImages) {
-            List<Promotion> promotions = promotionRepository.findByProductId(productImage.getProduct().getId());
+            List<Promotion> promotions = promotionRepository.findByProductId(productImage.getProduct().getId(), PageRequest.of(0, SELECT_PROMOTION_LIMIT, Sort.by("id")));
 
             for (Promotion promotion : promotions) {
                 promotionResults.add(makePromotionResult(promotion.getId(), productImage.getProduct().getId(), productImage.getFileInfo().getSaveFileName()));
