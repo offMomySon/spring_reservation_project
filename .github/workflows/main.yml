@@ -22,7 +22,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
-  GCE_INSTANCE: rsv  # TODO: update to instance name
+  GCE_INSTANCE: reservation # TODO: update to instance name
   GCE_INSTANCE_ZONE: us-central1-a   # TODO: update to instance zone
 
 jobs:
