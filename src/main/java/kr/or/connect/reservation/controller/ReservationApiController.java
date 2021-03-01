@@ -7,8 +7,8 @@ import kr.or.connect.reservation.dto.ReservationResponseResult;
 import kr.or.connect.reservation.dto.request.ReservationRequest;
 import kr.or.connect.reservation.exception.list.ParamNotValidException;
 import kr.or.connect.reservation.service.ReservationService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +24,10 @@ import static kr.or.connect.reservation.dto.response.ReservationPostApiResponse.
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/api/reservations")
 public class ReservationApiController {
-    @Autowired
-    private ReservationService reservationService;
+    final private ReservationService reservationService;
 
     @PostMapping
     public ResponseEntity<?> postBook(@RequestBody ReservationRequest reservationRequest) {

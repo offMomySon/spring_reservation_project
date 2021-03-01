@@ -5,7 +5,7 @@ import kr.or.connect.reservation.dto.response.ProductsApiAtDisplayInfoIdResponse
 import kr.or.connect.reservation.exception.list.ParamNotValidException;
 import kr.or.connect.reservation.service.DisplayInfoService;
 import kr.or.connect.reservation.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import static kr.or.connect.reservation.dto.response.ProductsApiResponse.createProductsApiResponse;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/api/products")
 public class ProductApiController {
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private DisplayInfoService displayInfoService;
+    final private ProductService productService;
+    final private DisplayInfoService displayInfoService;
 
     @Cacheable(cacheNames = "product_cache")
     @GetMapping

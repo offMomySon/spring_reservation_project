@@ -10,12 +10,14 @@ import javax.annotation.Nonnull;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
 @Table(name = "reservation_info")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationInfo extends ReservationBaseEntity {
+    public static final long DUMMY_ENTITY = -1;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -66,6 +68,12 @@ public class ReservationInfo extends ReservationBaseEntity {
         return reservationInfo;
     }
 
+    public static ReservationInfo makeDummyReservationInfo() {
+        ReservationInfo reservationInfo = new ReservationInfo();
+        reservationInfo.setId((long) -1);
+        return reservationInfo;
+    }
+
     public void setDisplayInfo(@Nonnull DisplayInfo displayInfo) {
         this.displayInfo = displayInfo;
         displayInfo.getReservationInfos().add(this);
@@ -74,5 +82,18 @@ public class ReservationInfo extends ReservationBaseEntity {
     public void addReservationInfoPrice(@Nonnull ReservationInfoPrice reservationInfoPrice) {
         this.reservationInfoPrices.add(reservationInfoPrice);
         reservationInfoPrice.setReservationInfo(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ReservationInfo)) return false;
+        ReservationInfo that = (ReservationInfo) o;
+        return Objects.equals(id, that.id) && Objects.equals(reservationName, that.reservationName) && Objects.equals(reservationTel, that.reservationTel) && Objects.equals(reservationEmail, that.reservationEmail) && Objects.equals(cancelFlag, that.cancelFlag);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, reservationName, reservationTel, reservationEmail, cancelFlag);
     }
 }
