@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -38,4 +39,18 @@ public class ProductsApiAtDisplayInfoIdResponse {
 
         return productsApiAtDisplayInfoIdResponse;
     }
+
+    public static ProductsApiAtDisplayInfoIdResponse makeDummyProductsApiAtDisplayInfoIdResponse() {
+        ProductsApiAtDisplayInfoIdResponse productsApiAtDisplayInfoIdResponse = new ProductsApiAtDisplayInfoIdResponse(
+                0,
+                null,
+                null,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        return productsApiAtDisplayInfoIdResponse;
+    }
+
 }

@@ -2,7 +2,6 @@ package kr.or.connect.reservation.service.impl;
 
 import kr.or.connect.reservation.dto.ProductDisplayInfo;
 import kr.or.connect.reservation.dto.ProductDisplayInfoResult;
-import kr.or.connect.reservation.model.DisplayInfo;
 import kr.or.connect.reservation.model.FileInfo;
 import kr.or.connect.reservation.model.Product;
 import kr.or.connect.reservation.model.ProductImage;
@@ -18,8 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static kr.or.connect.reservation.dto.ProductDisplayInfo.makeProductResult;
 import static kr.or.connect.reservation.dto.ProductDisplayInfoResult.craeteProductDisplayInfoResult;
@@ -45,18 +44,20 @@ public class ProductServiceImpl implements ProductService {
         }
 
         List<ProductImage> productImages = productImagePage.getContent();
-        List<ProductDisplayInfo> productDisplayInfos = productImages.stream()
-                .map(productImage -> {
-                    Product product = productImage.getProduct();
-                    DisplayInfo displayInfo = displayInfoRepository.findOneByProductId(product.getId()).orElseGet(() -> {
-                        log.info("Product Id = %d 의 displayInfo 가 존재하지 않음.", product.getId());
-                        return null;
-                    });
-                    FileInfo fileInfo = productImage.getFileInfo();
-                    return makeProductResult(product, displayInfo, fileInfo);
-                })
-                .collect(Collectors.toList());
+        List<ProductDisplayInfo> productDisplayInfos = getProductDisplayInfos(productImages);
 
         return craeteProductDisplayInfoResult(productImagePage.getSize(), productDisplayInfos);
+    }
+
+    private List<ProductDisplayInfo> getProductDisplayInfos(List<ProductImage> productImages) {
+        List<ProductDisplayInfo> productDisplayInfos = new ArrayList();
+        for (ProductImage productImage : productImages) {
+            Product product = productImage.getProduct();
+            displayInfoRepository.findOneByProductId(product.getId()).ifPresent(displayInfo -> {
+                FileInfo fileInfo = productImage.getFileInfo();
+                productDisplayInfos.add(makeProductResult(product, displayInfo, fileInfo));
+            });
+        }
+        return productDisplayInfos;
     }
 }

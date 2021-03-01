@@ -5,7 +5,6 @@ import kr.or.connect.reservation.dto.request.ReservationRequest;
 import kr.or.connect.reservation.exception.list.DisplayInfoIdNotExistException;
 import kr.or.connect.reservation.exception.list.ProductIdNotExistException;
 import kr.or.connect.reservation.exception.list.ProductPriceIdNotExistException;
-import kr.or.connect.reservation.exception.list.ReservationIdNotExistException;
 import kr.or.connect.reservation.model.*;
 import kr.or.connect.reservation.repository.*;
 import kr.or.connect.reservation.service.ReservationService;
@@ -17,12 +16,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static kr.or.connect.reservation.dto.ReservationCancleResult.createDummyReservationCancleResult;
 import static kr.or.connect.reservation.dto.ReservationCancleResult.createReservationCancleResult;
 import static kr.or.connect.reservation.dto.ReservationRequestResult.makeReservationRequestResult;
 import static kr.or.connect.reservation.dto.ReservationResponseResult.makeReservationResponseResult;
+import static kr.or.connect.reservation.model.ReservationInfo.makeDummyReservationInfo;
 import static kr.or.connect.reservation.model.ReservationInfo.makeReservationInfo;
 import static kr.or.connect.reservation.model.ReservationInfoPrice.createReservationInfoPrice;
 
@@ -85,9 +87,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public ReservationCancleResult cancleReservation(long reservationId) {
-        ReservationInfo reservationInfo = reservationInfoRepository.findById(reservationId).orElseThrow(() -> {
-            throw new ReservationIdNotExistException(reservationId);
-        });
+        ReservationInfo reservationInfo = reservationInfoRepository.findById(reservationId).orElseGet(() -> makeDummyReservationInfo());
+        if (reservationInfo.getId() == ReservationInfo.DUMMY_ENTITY) {
+            return createDummyReservationCancleResult();
+        }
         reservationInfo.setCancelFlag(true);
 
         return createReservationCancleResult(reservationInfo);
@@ -96,9 +99,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Nonnull
     @Override
     public List<Price> selectPriceList(long reservationId) {
-        ReservationInfo reservationInfo = reservationInfoRepository.findById(reservationId).orElseThrow(() -> {
-            throw new ReservationIdNotExistException(reservationId);
-        });
+        ReservationInfo reservationInfo = reservationInfoRepository.findById(reservationId).orElseGet(() -> makeDummyReservationInfo());
+        if (reservationInfo.getId() == ReservationInfo.DUMMY_ENTITY) {
+            return new ArrayList();
+        }
 
         List<ReservationInfoPrice> reservationInfoPrices = reservationInfoPriceRepository.findByReservationInfoId(reservationInfo.getId(), PageRequest.of(0, SELECT_RESERVATION_INFO_PRICE_COUNT_LIMIT, Sort.by(Sort.Direction.ASC, "id")));
 

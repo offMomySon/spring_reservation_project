@@ -56,4 +56,20 @@ public class ReservationCancleResult {
         );
         return reservationCancleResult;
     }
+
+    public static ReservationCancleResult createDummyReservationCancleResult() {
+        ReservationCancleResult reservationCancleResult = new ReservationCancleResult(
+                0,
+                0,
+                0,
+                "",
+                "",
+                "",
+                null,
+                null,
+                null,
+                null
+        );
+        return reservationCancleResult;
+    }
 }

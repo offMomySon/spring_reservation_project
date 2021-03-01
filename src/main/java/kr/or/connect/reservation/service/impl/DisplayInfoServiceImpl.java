@@ -2,7 +2,6 @@ package kr.or.connect.reservation.service.impl;
 
 import kr.or.connect.reservation.dto.*;
 import kr.or.connect.reservation.dto.response.ProductsApiAtDisplayInfoIdResponse;
-import kr.or.connect.reservation.exception.list.DisplayInfoIdNotExistException;
 import kr.or.connect.reservation.model.*;
 import kr.or.connect.reservation.repository.*;
 import kr.or.connect.reservation.service.DisplayInfoService;
@@ -24,7 +23,9 @@ import static kr.or.connect.reservation.dto.DisplayInfoImageResult.makeDisplayIn
 import static kr.or.connect.reservation.dto.DisplayInfoResult.makeDisplayInfoResult;
 import static kr.or.connect.reservation.dto.ProductImageResult.makeProductImageResult;
 import static kr.or.connect.reservation.dto.ProductPriceResult.makeProductPriceResult;
+import static kr.or.connect.reservation.dto.response.ProductsApiAtDisplayInfoIdResponse.makeDummyProductsApiAtDisplayInfoIdResponse;
 import static kr.or.connect.reservation.dto.response.ProductsApiAtDisplayInfoIdResponse.makeProductsApiAtDisplayInfoIdResponse;
+import static kr.or.connect.reservation.model.DisplayInfo.makeDummyDisplayInfo;
 
 @Slf4j
 @Service
@@ -42,9 +43,10 @@ public class DisplayInfoServiceImpl implements DisplayInfoService {
     @Nonnull
     @Override
     public ProductsApiAtDisplayInfoIdResponse getDisplayInfo(long displayInfoId) {
-        DisplayInfo displayInfo = displayInfoRepository.findOneById(displayInfoId).orElseThrow(() -> {
-            throw new DisplayInfoIdNotExistException(displayInfoId);
-        });
+        DisplayInfo displayInfo = displayInfoRepository.findOneById(displayInfoId).orElseGet(() -> makeDummyDisplayInfo());
+        if (displayInfo.getId() == DisplayInfo.DUMMY_ENTITY) {
+            return makeDummyProductsApiAtDisplayInfoIdResponse();
+        }
 
         double getAverageScore = getGetAverageScore(displayInfo);
 
