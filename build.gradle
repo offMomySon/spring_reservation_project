@@ -1,4 +1,7 @@
 buildscript {
+    ext {
+        elasticsearchVersion = '7.10.0'
+    }
     dependencies {
         classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
     }
@@ -36,6 +39,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // cache
     implementation 'com.github.ben-manes.caffeine:caffeine:2.8.2'
 
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7'
@@ -50,6 +56,17 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.10.1'
+
+    /* kafka */
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    // elasticsearch
+    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:${elasticsearchVersion}")
+    implementation "org.elasticsearch.client:elasticsearch-rest-client:${elasticsearchVersion}"
+    implementation "org.elasticsearch:elasticsearch:${elasticsearchVersion}"
+
+    // https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '4.11'
 
     // connection pool
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.3.2'
