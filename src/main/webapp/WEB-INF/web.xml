@@ -11,8 +11,8 @@
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>kr.or.connect.reservation.config.ApplicationConfig
-		</param-value>
+		<param-value>kr.or.connect.reservation.infrastructure.config.ApplicationConfig
+        </param-value>
 	</context-param>
 
 	<context-param>
@@ -44,8 +44,8 @@
 		</init-param>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>kr.or.connect.reservation.config.WebMvcContextConfiguration
-			</param-value>
+			<param-value>kr.or.connect.reservation.infrastructure.config.WebMvcContextConfiguration
+            </param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
