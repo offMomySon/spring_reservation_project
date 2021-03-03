@@ -1,4 +1,7 @@
 buildscript {
+    ext {
+        elasticsearchVersion = '7.10.0'
+    }
     dependencies {
         classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
     }
@@ -50,6 +53,14 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.10.1'
+
+    // elasticsearch
+    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:${elasticsearchVersion}")
+    implementation "org.elasticsearch.client:elasticsearch-rest-client:${elasticsearchVersion}"
+    implementation "org.elasticsearch:elasticsearch:${elasticsearchVersion}"
+
+    // https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '4.11'
 
     // connection pool
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.3.2'

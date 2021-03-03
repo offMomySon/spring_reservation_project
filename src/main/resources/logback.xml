@@ -21,15 +21,20 @@
         </encoder>
     </appender>
 
-	<appender name="STDOUT"
-		class="ch.qos.logback.core.ConsoleAppender">
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>35.202.7.252:5000  </destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"></encoder>
+    </appender>
+
 	<root level="debug">
 		<appender-ref ref="ROLLING"/>
 		<appender-ref ref="STDOUT" />
+        <appender-ref ref="LOGSTASH"/>
 	</root>
 </configuration>

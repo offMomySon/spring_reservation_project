@@ -1,3 +1,7 @@
+elasticsearch:
+  host: http://35.202.7.252
+  port: 9200
+
 spring:
   #  redis:
   #    host: 34.122.84.61
