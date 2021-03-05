@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @Slf4j
 public class DataSourceConfig {
-
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {

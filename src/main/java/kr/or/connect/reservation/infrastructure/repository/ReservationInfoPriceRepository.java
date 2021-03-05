@@ -10,12 +10,10 @@ import java.util.List;
 
 public interface ReservationInfoPriceRepository extends JpaRepository<ReservationInfoPrice, Long> {
 
-
     @Query("SELECT reservationInfoPrice " +
             "FROM ReservationInfoPrice reservationInfoPrice " +
             "JOIN FETCH reservationInfoPrice.productPrice  productPrice " +
             "JOIN FETCH reservationInfoPrice.reservationInfo reservationInfo " +
             "WHERE reservationInfoPrice.reservationInfo.id = :reservationInfoId ")
     List<ReservationInfoPrice> findByReservationInfoId(@Param("reservationInfoId") long reservationInfoId, Pageable pageable);
-
 }

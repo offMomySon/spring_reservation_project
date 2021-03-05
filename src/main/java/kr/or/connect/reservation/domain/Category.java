@@ -3,8 +3,6 @@ package kr.or.connect.reservation.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -15,7 +13,4 @@ public class Category {
     private long id;
 
     private String name;
-
-    @OneToMany(mappedBy = "category")
-    private List<Product> products = new ArrayList();
 }

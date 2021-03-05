@@ -13,7 +13,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationCancleResult {
-
     private long reservationInfoId;
     private long productId;
     private long displayInfoId;
