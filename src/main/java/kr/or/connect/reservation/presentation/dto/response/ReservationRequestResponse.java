@@ -5,11 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.sun.istack.NotNull;
-import kr.or.connect.reservation.presentation.dto.Price;
-import kr.or.connect.reservation.presentation.dto.ReservationRequestResult;
 import kr.or.connect.reservation.infrastructure.objmapper.ReservationDateDeserializer;
 import kr.or.connect.reservation.infrastructure.objmapper.ReservationDateSerializer;
+import kr.or.connect.reservation.presentation.dto.Price;
+import kr.or.connect.reservation.presentation.dto.ReservationRequestResult;
 
 import javax.annotation.Nonnull;
 import java.util.Date;
@@ -17,27 +16,17 @@ import java.util.List;
 
 public class ReservationRequestResponse {
     private long reservationInfoId;
-
     private long productId;
-
     private long displayInfoId;
-    @NotNull
     private String reservationName;
-    @NotNull
     @JsonProperty("reservationTelephone")
     private String reservationTel;
-    @NotNull
     private String reservationEmail;
-    @NotNull
     private Date reservationDate;
-    @NotNull
     @JsonProperty("cancelYn")
     private Boolean cancelFlag;
-    @NotNull
     private Date createDate;
-    @NotNull
     private Date modifyDate;
-    @NotNull
     private List<Price> prices;
 
     protected ReservationRequestResponse(long reservationInfoId, long productId, long displayInfoId, String reservationName, String reservationTel, String reservationEmail, Date reservationDate, Boolean cancelFlag, Date createDate, Date modifyDate, List<Price> prices) {
@@ -82,5 +71,4 @@ public class ReservationRequestResponse {
     public void setReservationDate(Date reservationDate) {
         this.reservationDate = reservationDate;
     }
-
 }

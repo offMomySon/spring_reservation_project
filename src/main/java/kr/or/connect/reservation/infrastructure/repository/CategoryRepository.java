@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-
     @Query(value = "SELECT count(*) FROM category " +
             "JOIN product on category.id = product.category_id " +
             "JOIN display_info on product.id = display_info.product_id " +

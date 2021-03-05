@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -42,12 +40,6 @@ public class DisplayInfo extends BaseEntity {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "displayInfo")
-    private List<ReservationInfo> reservationInfos = new ArrayList();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "displayInfo")
-    private List<DisplayInfoImage> displayinfoImages = new ArrayList<>();
-
     public static DisplayInfo makeDummyDisplayInfo() {
         DisplayInfo displayInfo = new DisplayInfo();
         displayInfo.setId((long) -1);
@@ -59,7 +51,7 @@ public class DisplayInfo extends BaseEntity {
         if (this == o) return true;
         if (!(o instanceof DisplayInfo)) return false;
         DisplayInfo that = (DisplayInfo) o;
-        return Objects.equals(id, that.id) && Objects.equals(openingHours, that.openingHours) && Objects.equals(placeName, that.placeName) && Objects.equals(placeLot, that.placeLot) && Objects.equals(placeStreet, that.placeStreet) && Objects.equals(tel, that.tel) && Objects.equals(homepage, that.homepage) && Objects.equals(email, that.email) && Objects.equals(product, that.product) && Objects.equals(reservationInfos, that.reservationInfos) && Objects.equals(displayinfoImages, that.displayinfoImages);
+        return Objects.equals(id, that.id) && Objects.equals(openingHours, that.openingHours) && Objects.equals(placeName, that.placeName) && Objects.equals(placeLot, that.placeLot) && Objects.equals(placeStreet, that.placeStreet) && Objects.equals(tel, that.tel) && Objects.equals(homepage, that.homepage) && Objects.equals(email, that.email);
     }
 
     @Override

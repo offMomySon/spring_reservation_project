@@ -7,7 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ReservationUserCommentRepository extends JpaRepository<ReservationUserComment, Long> {
-    boolean existsByReservationInfoId(long reservationInfoId);
-
     List<ReservationUserComment> findByReservationInfoId(long reservationInfoId, Pageable pageable);
 }

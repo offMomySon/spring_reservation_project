@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -29,8 +27,4 @@ public class ReservationUserComment extends BaseEntity {
     private double score;
 
     private String comment;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_user_comment_id")
-    private List<ReservationUserCommentImage> reservationUserCommentImages = new ArrayList();
 }

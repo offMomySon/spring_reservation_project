@@ -1,4 +1,4 @@
-package kr.or.connect.reservation.application.service;
+package kr.or.connect.reservation.application.service.kafka;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

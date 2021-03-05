@@ -1,13 +1,12 @@
 package kr.or.connect.reservation.infrastructure.aop;
 
-import kr.or.connect.reservation.infrastructure.kafka.ReservationProducer;
+import kr.or.connect.reservation.application.service.kafka.ReservationProducer;
 import kr.or.connect.reservation.presentation.dto.ReservationRequestResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j

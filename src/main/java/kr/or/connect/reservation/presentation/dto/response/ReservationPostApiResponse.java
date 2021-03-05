@@ -57,5 +57,4 @@ public class ReservationPostApiResponse {
         );
         return reservationPostApiResponse;
     }
-
 }

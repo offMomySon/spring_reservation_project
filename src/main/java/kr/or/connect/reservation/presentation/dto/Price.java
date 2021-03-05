@@ -10,7 +10,6 @@ import javax.annotation.Nonnull;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Price {
-
     private Long reservationInfoPriceId;
     private Long reservationInfoId;
     private Long productPriceId;

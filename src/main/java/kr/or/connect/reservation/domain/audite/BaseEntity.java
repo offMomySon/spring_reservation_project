@@ -13,7 +13,6 @@ import java.util.Date;
 @MappedSuperclass
 @Getter
 public class BaseEntity {
-
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", updatable = false)
@@ -23,5 +22,4 @@ public class BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_date")
     private Date modifyDate;
-
 }

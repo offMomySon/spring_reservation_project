@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationRequestResult {
-
     private long reservationInfoId;
     private long productId;
     private long displayInfoId;

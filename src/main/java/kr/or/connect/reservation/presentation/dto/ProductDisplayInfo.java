@@ -39,5 +39,4 @@ public class ProductDisplayInfo {
         );
         return productDisplayInfo;
     }
-
 }
