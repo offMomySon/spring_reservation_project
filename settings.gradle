@@ -1,1 +1,9 @@
 rootProject.name = 'reservation'
+
+include 'module-reservation'
+include 'module-alarm'
+include 'module-reflectPromotion'
+include 'module-reservation'
+include 'module-reflectPromotion'
+include 'module-alarm'
+
