@@ -1,18 +1,19 @@
 package kr.or.connect.reservation.application.service.impl;
 
-import kr.or.connect.reservation.presentation.dto.ProductDisplayInfo;
-import kr.or.connect.reservation.presentation.dto.ProductDisplayInfoResult;
+import kr.or.connect.reservation.application.service.ProductService;
+import kr.or.connect.reservation.domain.DisplayInfo;
 import kr.or.connect.reservation.domain.FileInfo;
 import kr.or.connect.reservation.domain.Product;
 import kr.or.connect.reservation.domain.ProductImage;
+import kr.or.connect.reservation.infrastructure.exception.list.RelatedEntityAbsentException;
 import kr.or.connect.reservation.infrastructure.repository.DisplayInfoRepository;
 import kr.or.connect.reservation.infrastructure.repository.ProductImageRepository;
-import kr.or.connect.reservation.application.service.ProductService;
+import kr.or.connect.reservation.presentation.dto.ProductDisplayInfo;
+import kr.or.connect.reservation.presentation.dto.ProductDisplayInfoResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,30 +35,34 @@ public class ProductServiceImpl implements ProductService {
     @Nonnull
     @Override
     public ProductDisplayInfoResult getProductDisplayInfo(long categoryId, long startPageNum) {
-        Page<ProductImage> productImagePage;
-        PageRequest pageRequest = PageRequest.of((int) (startPageNum / SELECT_COUNT_LIMIT), (int) SELECT_COUNT_LIMIT, Sort.by(Sort.Direction.ASC, "product"));
+        Page<DisplayInfo> displayInfoPage;
 
+        PageRequest pageRequest = PageRequest.of((int) (startPageNum / SELECT_COUNT_LIMIT), (int) SELECT_COUNT_LIMIT);
         if (categoryId == 0) {
-            productImagePage = productImageRepository.findByType("th", pageRequest);
+            displayInfoPage = displayInfoRepository.findByImageTypeOrderByProductId("th", pageRequest);
         } else {
-            productImagePage = productImageRepository.findByTypeAndCategoryId("th", categoryId, pageRequest);
+            displayInfoPage = displayInfoRepository.findByImageTypeAndCategoryIdOrderByProductId("th", categoryId, pageRequest);
         }
 
-        List<ProductImage> productImages = productImagePage.getContent();
-        List<ProductDisplayInfo> productDisplayInfos = getProductDisplayInfos(productImages);
+        List<ProductDisplayInfo> productDisplayInfos = getProductDisplayInfos(displayInfoPage);
 
-        return craeteProductDisplayInfoResult(productImagePage.getSize(), productDisplayInfos);
+        return craeteProductDisplayInfoResult(displayInfoPage.getTotalElements(), productDisplayInfos);
     }
 
-    private List<ProductDisplayInfo> getProductDisplayInfos(List<ProductImage> productImages) {
+    private List<ProductDisplayInfo> getProductDisplayInfos(Page<DisplayInfo> displayInfoPage) {
         List<ProductDisplayInfo> productDisplayInfos = new ArrayList();
-        for (ProductImage productImage : productImages) {
-            Product product = productImage.getProduct();
-            displayInfoRepository.findOneByProductId(product.getId()).ifPresent(displayInfo -> {
-                FileInfo fileInfo = productImage.getFileInfo();
-                productDisplayInfos.add(makeProductResult(product, displayInfo, fileInfo));
-            });
-        }
+        displayInfoPage.getContent().stream()
+                .forEach(displayInfo -> {
+                    Product product = displayInfo.getProduct();
+                    List<ProductImage> productImages = productImageRepository.findByTypesAndProductId(product.getId(), PageRequest.of(0, 1), "th");
+
+                    if (productImages.isEmpty())
+                        throw new RelatedEntityAbsentException();
+
+                    ProductImage productImage = productImages.get(0);
+                    FileInfo fileInfo = productImage.getFileInfo();
+                    productDisplayInfos.add(makeProductResult(displayInfo.getId(), product.getId(), product.getDescription(), displayInfo.getPlaceName(), product.getContent(), fileInfo.getSaveFileName()));
+                });
         return productDisplayInfos;
     }
 }

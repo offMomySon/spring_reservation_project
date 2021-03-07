@@ -11,16 +11,6 @@ import java.util.List;
 
 public interface ProductImageRepository extends JpaRepository<ProductImage, Long> {
 
-    @Query(value = "SELECT productImage " +
-            "FROM ProductImage productImage " +
-            "JOIN FETCH productImage.product product " +
-            "JOIN FETCH productImage.fileInfo fileInfo " +
-            "JOIN FETCH product.category category " +
-            "WHERE productImage.type = :imgType",
-            countQuery = "SELECT COUNT(displayInfo) " +
-                    "FROM DisplayInfo displayInfo ")
-    Page<ProductImage> findByType(@Param("imgType") String type, Pageable pageable);
-
     @Query("SELECT productImage " +
             "FROM ProductImage productImage " +
             "JOIN FETCH productImage.product " +
@@ -28,20 +18,6 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Long
             "WHERE productImage.type = :imgType " +
             "ORDER BY productImage.product.id ASC")
     List<ProductImage> findByTypeLimit(@Param("imgType") String type, Pageable pageable);
-
-    @Query(value = "SELECT productImage " +
-            "FROM ProductImage productImage " +
-            "JOIN FETCH productImage.product product " +
-            "JOIN FETCH productImage.fileInfo fileInfo " +
-            "JOIN FETCH product.category category " +
-            "WHERE productImage.type = :imgType AND category.id = :categoryId",
-            countQuery = "SELECT COUNT(display_info.id) " +
-                    "FROM product_image " +
-                    "JOIN product ON product_image.product_id= product.id " +
-                    "JOIN category ON product.category_id= category.id " +
-                    "JOIN display_info ON display_info.product_id=product.id " +
-                    "WHERE product_image.type = :imgType AND category.id = :categoryId", nativeQuery = true)
-    Page<ProductImage> findByTypeAndCategoryId(@Param("imgType") String type, @Param("categoryId") long categoryId, Pageable pageable);
 
     @Query("SELECT productImage " +
             "FROM ProductImage productImage " +

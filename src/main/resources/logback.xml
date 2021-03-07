@@ -32,7 +32,7 @@
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"></encoder>
     </appender>
 
-	<root level="info">
+	<root level="debug">
 		<appender-ref ref="ROLLING"/>
 		<appender-ref ref="STDOUT" />
         <appender-ref ref="LOGSTASH"/>

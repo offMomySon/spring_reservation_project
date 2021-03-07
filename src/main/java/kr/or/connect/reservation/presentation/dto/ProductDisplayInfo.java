@@ -1,8 +1,5 @@
 package kr.or.connect.reservation.presentation.dto;
 
-import kr.or.connect.reservation.domain.DisplayInfo;
-import kr.or.connect.reservation.domain.FileInfo;
-import kr.or.connect.reservation.domain.Product;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,14 +25,14 @@ public class ProductDisplayInfo {
         this.productImageUrl = productImageUrl;
     }
 
-    public static ProductDisplayInfo makeProductResult(Product product, DisplayInfo displayInfo, FileInfo fileInfo) {
+    public static ProductDisplayInfo makeProductResult(Long displayInfoId, Long productId, String productDescription, String placeName, String productContent, String productImageUrl) {
         ProductDisplayInfo productDisplayInfo = new ProductDisplayInfo(
-                displayInfo.getId(),
-                product.getId(),
-                product.getDescription(),
-                displayInfo.getPlaceName(),
-                product.getContent(),
-                fileInfo.getSaveFileName()
+                displayInfoId,
+                productId,
+                productDescription,
+                placeName,
+                productContent,
+                productImageUrl
         );
         return productDisplayInfo;
     }
