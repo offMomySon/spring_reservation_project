@@ -15,8 +15,8 @@ spring:
     password: connect123!@#
     driver-class-name: com.mysql.cj.jdbc.Driver
     jdbcUrl: jdbc:mysql://34.123.231.69:3306/connectdb?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8
-    maximumPoolSize: 100
-    minimumIdle: 100
+    maximumPoolSize: 10
+    minimumIdle: 10
 
 server:
   port: 8975

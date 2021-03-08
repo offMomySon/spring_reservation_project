@@ -5,10 +5,14 @@ plugins {
 }
 
 group 'kr.or.connect.webapp'
-version '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
+}
+
+tasks.bootJar {
+    mainClassName = "com.module.ReflectionApplication"
+    archiveFileName.set("reflectPromotionServer.jar")
 }
 
 dependencies {
