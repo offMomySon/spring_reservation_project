@@ -1,25 +1,8 @@
-plugins {
-    id 'org.springframework.boot'
-    id 'io.spring.dependency-management'
-    id 'java'
+bootJar {
+    enabled = false
 }
-
-group 'kr.or.connect.webapp'
-
-repositories {
-    mavenCentral()
-}
-
-tasks.bootJar {
-    mainClassName = "com.module.AlarmApplication"
+jar {
+    enabled = true
     archiveFileName.set("alarmServer.jar")
 }
 
-dependencies {
-    compileOnly "org.projectlombok:lombok"
-    annotationProcessor "org.projectlombok:lombok"
-}
-
-test {
-    useJUnitPlatform()
-}

@@ -1,27 +1,27 @@
 buildscript {
     ext {
         springBootVersion = '2.3.7.RELEASE'
+        querydslPluginVersion = '1.0.10'
         elasticsearchVersion = '7.10.0'
     }
     repositories {
         mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" } // 플러그인 저장소
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
     }
-}
-
-
-allprojects {
-    group = 'kr.or.connect.webapp'
-    version = '0.0.1-SNAPSHOT'
 }
 
 subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'java'
+    apply plugin: 'idea'
 
+    group = 'kr.or.connect.webapp'
+    version = '0.0.1-SNAPSHOT'
     sourceCompatibility = '11'
     targetCompatibility = '11'
 
@@ -82,10 +82,6 @@ subprojects {
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
         annotationProcessor 'org.projectlombok:lombok'
 
-        //query queryDsl
-        implementation 'com.querydsl:querydsl-jpa'
-        implementation 'com.querydsl:querydsl-apt'
-
         //junit test
         testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
         testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
@@ -99,36 +95,69 @@ subprojects {
         implementation "com.sun.xml.bind:jaxb-impl:2.3.0"
         implementation "javax.activation:activation:1.1.1"
     }
+}
 
-    // 해당 task로 서브 모듈 추가시 기초적인 디렉토리를 자동으로 생성해줍니다.
-    task initSourceFolders {
-        sourceSets*.java.srcDirs*.each {
-            if (!it.exists()) {
-                it.mkdirs()
-            }
+project(':module-reservation') {
+    apply plugin: 'war'
+    springBoot {
+        mainClassName = 'kr.or.connect.reservation.Application'
+    }
+
+    dependencies {
+        compileOnly "org.projectlombok:lombok"
+        annotationProcessor "org.projectlombok:lombok"
+
+        //query queryDsl
+        implementation 'com.querydsl:querydsl-jpa'
+        implementation 'com.querydsl:querydsl-apt'
+
+        testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
+        testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
+        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
-        sourceSets*.resources.srcDirs*.each {
-            if (!it.exists()) {
-                it.mkdirs()
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    def querydslSrcDir = 'src/main/generated' // QClass 생성 위치
+    apply plugin: "com.ewerk.gradle.plugins.querydsl" // Plugin 적용
+
+    querydsl {
+        library = "com.querydsl:querydsl-apt"
+        jpa = true
+        querydslSourcesDir = querydslSrcDir
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['src/main/java', querydslSrcDir]
             }
         }
     }
+
+    compileQuerydsl {
+        options.annotationProcessorPath = configurations.querydsl
+    }
+    configurations {
+        querydsl.extendsFrom compileClasspath
+    }
 }
 
-//project(':module-reservation') {
-//    dependencies {
-//        compile project(':module-reservation')
-//    }
-//}
-//
-//project(':module-alarm') {
-//    dependencies {
-//        compile project(':module-alarm')
-//    }
-//}
-//
-//project(':module-reflectPromotion') {
-//    dependencies {
-//        compile project(':module-reflectPromotion')
-//    }
-//}
+project(':module-alarm') {
+    dependencies {
+        compileOnly "org.projectlombok:lombok"
+        annotationProcessor "org.projectlombok:lombok"
+    }
+}
+
+project(':module-reflectPromotion') {
+    dependencies {
+        compileOnly "org.projectlombok:lombok"
+        annotationProcessor "org.projectlombok:lombok"
+    }
+}
