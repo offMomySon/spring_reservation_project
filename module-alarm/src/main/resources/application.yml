@@ -24,3 +24,15 @@ server:
 elasticsearch:
   host: http://35.202.7.252
   port: 9200
+
+
+notification:
+  slack:
+    enabled: true
+    webhook:
+      url: https://hooks.slack.com/services/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
+    channel: '#test'
+    botName: incoming-webhook
+    icon:
+      emoji:
+      url:

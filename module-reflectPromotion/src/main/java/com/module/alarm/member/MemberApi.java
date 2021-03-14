@@ -1,4 +1,4 @@
-package com.module.member;
+package com.module.alarm.member;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
