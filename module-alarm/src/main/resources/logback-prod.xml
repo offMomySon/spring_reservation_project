@@ -2,7 +2,7 @@
 
 <configuration>
 	<property name="LOG_FILE" value="logback" />
-	<property name="LOG_DIR" value="/home/ohji100629/log" />
+	<property name="LOG_DIR" value="/home/ohji100629/alarm" />
 
     <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
