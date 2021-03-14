@@ -1,13 +1,13 @@
-package com.module;
+package com.module.alarm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ReflectionApplication {
+public class AlarmApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ReflectionApplication.class, args);
+        SpringApplication.run(AlarmApplication.class, args);
     }
 
 }

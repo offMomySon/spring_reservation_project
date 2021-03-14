@@ -1,4 +1,4 @@
-package com.module.infrastructure.config;
+package com.module.alarm.infrastructure.config;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
