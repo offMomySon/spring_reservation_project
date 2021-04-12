@@ -24,18 +24,4 @@ public class ReservationRequestResult {
     private Date createDate;
     private Date modifyDate;
     private List<Price> prices;
-
-//    protected ReservationRequestResult(long reservationInfoId, long productId, long displayInfoId, String reservationName, String reservationTel, String reservationEmail, Date reservationDate, Date createDate, Date modifyDate, List<Price> prices, Boolean cancelFlag) {
-//        this.reservationInfoId = reservationInfoId;
-//        this.productId = productId;
-//        this.displayInfoId = displayInfoId;
-//        this.reservationName = reservationName;
-//        this.reservationTel = reservationTel;
-//        this.reservationEmail = reservationEmail;
-//        this.reservationDate = reservationDate;
-//        this.createDate = createDate;
-//        this.modifyDate = modifyDate;
-//        this.prices = prices;
-//        this.cancelFlag = cancelFlag;
-//    }
 }

@@ -1,3 +1,8 @@
+kafka:
+  bootstrap-servers: "35.239.160.14:9092"
+  topic-name: "reservation"
+  group-id: "count-reservation-product"
+
 spring:
   kafka:
     consumer:
@@ -14,9 +19,9 @@ spring:
     username: connectuser
     password: connect123!@#
     driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbcUrl: jdbc:mysql://34.123.231.69:3306/connectdb?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8
-    maximumPoolSize: 10
-    minimumIdle: 10
+    jdbcUrl: jdbc:mysql://35.232.22.234:3306/connectdb?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8
+    maximumPoolSize: 50
+    minimumIdle: 50
 
 server:
   port: 8976

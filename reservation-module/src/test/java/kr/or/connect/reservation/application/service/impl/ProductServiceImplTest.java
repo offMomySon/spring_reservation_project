@@ -51,7 +51,14 @@ class ProductServiceImplTest {
             displayInfo.setId((long) th);
             displayInfos.add(displayInfo);
 
-            Product product = new Product((long) th, "testDescription" + th, "testcontent" + th, "", null);
+            Product product = Product.builder()
+                    .id((long) th)
+                    .description("testDescription" + th)
+                    .content("testcontent" + th)
+                    .event("")
+                    .reservedCount(0L)
+                    .build();
+
             displayInfo.setProduct(product);
 
             displayInfo.setPlaceName("testPlaceName" + th);

@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.domain;
 
-import kr.or.connect.reservation.domain.audite.ReservationBaseEntity;
+import kr.or.connect.reservation.core.domain.audite.ReservationBaseEntity;
 import kr.or.connect.reservation.presentation.dto.request.ReservationRequest;
 import lombok.AccessLevel;
 import lombok.Data;

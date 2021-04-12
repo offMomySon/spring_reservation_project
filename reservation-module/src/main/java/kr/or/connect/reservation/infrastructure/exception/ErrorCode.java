@@ -24,11 +24,11 @@ public enum ErrorCode {
     PRODUCT_COMPLETABLE_FUTURE_INTERRUPT_EXCEPTION(HttpStatus.BAD_REQUEST, "error-0010", "While making product api response, problem happen."),
     PRODUCT_COMPLETABLE_FUTURE_EXECUTION_EXCEPTION(HttpStatus.BAD_REQUEST, "error-0011", "While making product api response, problem happen.");
 
-    private HttpStatus status;
-    private String error;
-    private String message;
+    private final HttpStatus status;
+    private final String error;
+    private final String message;
 
-    private ErrorCode(HttpStatus status, String error, String message) {
+    ErrorCode(HttpStatus status, String error, String message) {
         this.status = status;
         this.error = error;
         this.message = message;

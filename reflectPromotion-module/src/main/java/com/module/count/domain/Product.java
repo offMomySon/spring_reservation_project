@@ -1,13 +1,15 @@
-package kr.or.connect.reservation.domain;
+package com.module.count.domain;
 
 import kr.or.connect.reservation.core.domain.audite.BaseEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product")
@@ -28,7 +30,7 @@ public class Product extends BaseEntity {
     @Column(name = "reserved_count")
     private Long reservedCount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @Column(name = "category_id")
+    private Long categoryId;
+
 }
