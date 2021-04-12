@@ -1,0 +1,38 @@
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: 35.239.160.14:9092
+      group-id: reservation-alarm
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+
+  jackson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+
+  datasource:
+    username: connectuser
+    password: connect123!@#
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://35.232.22.234:3306/connectdb?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8
+    maximumPoolSize: 100
+    minimumIdle: 100
+
+server:
+  port: 8975
+
+notification:
+  slack:
+    enabled: false
+    webhook:
+      url: https://hooks.slack.com/services/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
+    channel: '#test'
+    botName: incoming-webhook
+    icon:
+      emoji:
+      url:
