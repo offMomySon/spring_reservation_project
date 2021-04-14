@@ -15,6 +15,6 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
             "JOIN ProductImage AS productImage ON product.id = productImage.product.id " +
             "JOIN FETCh productImage.fileInfo AS fileInfo " +
             "WHERE productImage.type = 'th' " +
-            "ORDER BY promotion.product.id ASC")
+            "ORDER BY promotion.product.reservedCount DESC ")
     List<Object[]> findByProductId(Pageable pageable);
 }
