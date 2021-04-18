@@ -1,13 +1,12 @@
 package kr.or.connect.reservation.application.service.impl;
 
 import kr.or.connect.reservation.application.service.PromotionService;
-import kr.or.connect.reservation.domain.ProductImage;
-import kr.or.connect.reservation.domain.Promotion;
+import kr.or.connect.reservation.core.domain.ProductImage;
+import kr.or.connect.reservation.core.domain.Promotion;
 import kr.or.connect.reservation.infrastructure.repository.PromotionRepository;
-import kr.or.connect.reservation.presentation.dto.PromotionResult;
+import kr.or.connect.reservation.core.dto.PromotionResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

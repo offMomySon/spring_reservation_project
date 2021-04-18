@@ -2,9 +2,9 @@ package kr.or.connect.reservation.application.service;
 
 import kr.or.connect.reservation.core.dto.Price;
 import kr.or.connect.reservation.core.dto.ReservationRequestResult;
-import kr.or.connect.reservation.presentation.dto.ReservationCancleResult;
-import kr.or.connect.reservation.presentation.dto.ReservationResponseResult;
-import kr.or.connect.reservation.presentation.dto.request.ReservationRequest;
+import kr.or.connect.reservation.core.dto.ReservationCancleResult;
+import kr.or.connect.reservation.core.dto.ReservationResponseResult;
+import kr.or.connect.reservation.core.dto.request.ReservationRequest;
 
 import java.util.List;
 

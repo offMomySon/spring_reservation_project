@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.infrastructure.dao;
 
-import kr.or.connect.reservation.presentation.dto.PromotionResult;
+import kr.or.connect.reservation.core.dto.PromotionResult;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;

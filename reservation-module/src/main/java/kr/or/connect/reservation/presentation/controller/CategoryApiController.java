@@ -1,7 +1,7 @@
 package kr.or.connect.reservation.presentation.controller;
 
-import kr.or.connect.reservation.presentation.dto.CategoryResult;
 import kr.or.connect.reservation.application.service.CategoryService;
+import kr.or.connect.reservation.core.dto.CategoryResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static kr.or.connect.reservation.presentation.dto.response.CategoryApiResponse.createCategoryApiResponse;
+import static kr.or.connect.reservation.core.dto.response.CategoryApiResponse.createCategoryApiResponse;
 
 @RestController
 @RequiredArgsConstructor

@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.infrastructure.repository;
 
-import kr.or.connect.reservation.domain.ReservationUserCommentImage;
+import kr.or.connect.reservation.core.domain.ReservationUserCommentImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -101,8 +101,6 @@ subprojects {
 }
 
 project(":core-module") {
-//    version = '0.1.0'
-
     bootJar.enabled = false
     jar.enabled = true
 
@@ -155,8 +153,6 @@ project(':reservation-module') {
         }
 
         compile project(path: ':core-module', configuration: 'default')
-//        implementation project(':core-module')
-//        compile project(':core-module')
     }
 
     test {
@@ -189,15 +185,20 @@ project(':reservation-module') {
 }
 
 project(':alarm-module') {
+    springBoot {
+        mainClassName = 'com.module.count.AlarmApplication'
+    }
+//    com.module.count
+
     dependencies {
+        compileOnly "org.springframework.boot:spring-boot-configuration-processor"
         testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
         testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
         testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
-
-        compile project(':core-module')
+        compile project(path: ':core-module', configuration: 'default')
     }
 
     test {

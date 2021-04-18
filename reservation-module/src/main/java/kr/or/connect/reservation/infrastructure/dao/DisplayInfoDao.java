@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.infrastructure.dao;
 
-import kr.or.connect.reservation.presentation.dto.*;
+import kr.or.connect.reservation.core.dto.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;

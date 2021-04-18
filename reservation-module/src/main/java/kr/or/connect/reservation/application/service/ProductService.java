@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.application.service;
 
-import kr.or.connect.reservation.presentation.dto.ProductDisplayInfoResult;
+import kr.or.connect.reservation.core.dto.ProductDisplayInfoResult;
 
 public interface ProductService {
     public static final long SELECT_COUNT_LIMIT = 4;
