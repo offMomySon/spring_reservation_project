@@ -23,7 +23,6 @@ public class CategoryApiController {
     @GetMapping
     public ResponseEntity<?> getCategoryItems() {
         List<CategoryResult> categoryResults = categoryService.getCategoryList();
-
         return ResponseEntity.ok().body(createCategoryApiResponse(categoryResults));
     }
 }

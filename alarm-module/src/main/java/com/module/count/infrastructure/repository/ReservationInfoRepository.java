@@ -9,10 +9,10 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface ReservationInfoRepository extends JpaRepository<ReservationInfo,Long> {
+public interface ReservationInfoRepository extends JpaRepository<ReservationInfo, Long> {
     @Query("SELECT reservationInfo " +
             "FROM ReservationInfo AS reservationInfo " +
             "JOIN FETCH reservationInfo.displayInfo AS displayInfo " +
-            "WHERE displayInfo.openingHour BETWEEN :before and :after ")
-    List<ReservationInfo> findByTimePeriod(@Param("before") LocalDateTime before, @Param("after") LocalDateTime after);
+            "WHERE displayInfo.openingHour >= :startTimeInclusive and displayInfo.openingHour < :endTimeExclusive ")
+    List<ReservationInfo> findByTimePeriod(@Param("startTimeInclusive") LocalDateTime startTimeInclusive, @Param("endTimeExclusive") LocalDateTime endTimeExclusive);
 }
