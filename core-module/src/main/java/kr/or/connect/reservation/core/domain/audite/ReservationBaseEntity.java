@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -12,8 +13,7 @@ import java.util.Date;
 @Getter
 public class ReservationBaseEntity extends BaseEntity {
     @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "reservation_date", updatable = false)
-    private Date reservationDate;
+    private LocalDateTime reservationDate;
 }
 

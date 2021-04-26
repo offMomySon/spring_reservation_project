@@ -2,11 +2,11 @@ package kr.or.connect.reservation.presentation.controller;
 
 import kr.or.connect.reservation.application.service.ReservationService;
 import kr.or.connect.reservation.core.dto.Price;
+import kr.or.connect.reservation.core.dto.ReservationCancleResult;
 import kr.or.connect.reservation.core.dto.ReservationRequestResult;
+import kr.or.connect.reservation.core.dto.ReservationResponseResult;
+import kr.or.connect.reservation.core.dto.request.ReservationRequest;
 import kr.or.connect.reservation.infrastructure.exception.list.ParamNotValidException;
-import kr.or.connect.reservation.presentation.dto.ReservationCancleResult;
-import kr.or.connect.reservation.presentation.dto.ReservationResponseResult;
-import kr.or.connect.reservation.presentation.dto.request.ReservationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,9 +18,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static kr.or.connect.reservation.presentation.dto.response.ReservationCancleResponse.createReservationCancleResponse;
-import static kr.or.connect.reservation.presentation.dto.response.ReservationGetApiResponse.createReservationGetApiResponse;
-import static kr.or.connect.reservation.presentation.dto.response.ReservationPostApiResponse.createReservationPostApiResponse;
+import static kr.or.connect.reservation.core.dto.response.ReservationCancleResponse.createReservationCancleResponse;
+import static kr.or.connect.reservation.core.dto.response.ReservationGetApiResponse.createReservationGetApiResponse;
+import static kr.or.connect.reservation.core.dto.response.ReservationPostApiResponse.createReservationPostApiResponse;
+
 
 @Slf4j
 @RestController

@@ -16,6 +16,18 @@ spring:
           json:
             trusted:
               packages: '*'
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 1000
+        use_sql_comments: true
 
   jackson:
     date-format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
@@ -40,3 +52,17 @@ notification:
     icon:
       emoji:
       url:
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+
+coolsms:
+  api:
+    key: "NCSFFKZGLSBSZQDV"
+    secret: "OFB5SOC7XNFIAC7BLN8G9UNIJYV7YCZR"
+    send-no: "010-7173-1403"

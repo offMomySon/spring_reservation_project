@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.presentation.controller;
 
-import kr.or.connect.reservation.presentation.dto.PromotionResult;
+import kr.or.connect.reservation.core.dto.PromotionResult;
 import kr.or.connect.reservation.application.service.PromotionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static kr.or.connect.reservation.presentation.dto.response.PromotionApiResponse.createPromotionApiResponse;
+import static kr.or.connect.reservation.core.dto.response.PromotionApiResponse.createPromotionApiResponse;
 
 @Slf4j
 @RestController

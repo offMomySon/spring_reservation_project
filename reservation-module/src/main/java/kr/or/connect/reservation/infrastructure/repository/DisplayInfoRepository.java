@@ -1,7 +1,6 @@
 package kr.or.connect.reservation.infrastructure.repository;
 
-import kr.or.connect.reservation.domain.DisplayInfo;
-import kr.or.connect.reservation.infrastructure.repository.queryDsl.DisplayInfoRepositoryCustom;
+import kr.or.connect.reservation.core.domain.DisplayInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -11,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long>, DisplayInfoRepositoryCustom {
+public interface DisplayInfoRepository extends JpaRepository<DisplayInfo, Long> {
 
     @EntityGraph(attributePaths = {"product", "product.category"}, type = EntityGraph.EntityGraphType.LOAD)
     Optional<DisplayInfo> findOneById(long displayInfoId);

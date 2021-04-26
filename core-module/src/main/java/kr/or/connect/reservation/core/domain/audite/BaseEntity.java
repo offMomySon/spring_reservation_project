@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -14,12 +15,10 @@ import java.util.Date;
 @Getter
 public class BaseEntity {
     @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", updatable = false)
-    private Date createDate;
+    private LocalDateTime createDate;
 
     @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_date")
-    private Date modifyDate;
+    private LocalDateTime modifyDate;
 }

@@ -3,6 +3,7 @@ package kr.or.connect.reservation.core.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -18,10 +19,10 @@ public class ReservationRequestResult {
     @JsonProperty("reservationTelephone")
     private String reservationTel;
     private String reservationEmail;
-    private Date reservationDate;
+    private LocalDateTime reservationDate;
     @JsonProperty("cancelYn")
     private Boolean cancelFlag;
-    private Date createDate;
-    private Date modifyDate;
+    private LocalDateTime createDate;
+    private LocalDateTime modifyDate;
     private List<Price> prices;
 }

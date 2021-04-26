@@ -1,13 +1,13 @@
 package kr.or.connect.reservation.application.service.impl;
 
-import kr.or.connect.reservation.domain.DisplayInfo;
-import kr.or.connect.reservation.domain.FileInfo;
-import kr.or.connect.reservation.domain.Product;
-import kr.or.connect.reservation.domain.ProductImage;
+import kr.or.connect.reservation.core.domain.DisplayInfo;
+import kr.or.connect.reservation.core.domain.FileInfo;
+import kr.or.connect.reservation.core.domain.Product;
+import kr.or.connect.reservation.core.domain.ProductImage;
 import kr.or.connect.reservation.infrastructure.repository.DisplayInfoRepository;
 import kr.or.connect.reservation.infrastructure.repository.ProductImageRepository;
-import kr.or.connect.reservation.presentation.dto.ProductDisplayInfo;
-import kr.or.connect.reservation.presentation.dto.ProductDisplayInfoResult;
+import kr.or.connect.reservation.core.dto.ProductDisplayInfo;
+import kr.or.connect.reservation.core.dto.ProductDisplayInfoResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static kr.or.connect.reservation.domain.DisplayInfo.makeDummyDisplayInfo;
-import static kr.or.connect.reservation.presentation.dto.ProductDisplayInfo.makeProductResult;
-import static kr.or.connect.reservation.presentation.dto.ProductDisplayInfoResult.craeteProductDisplayInfoResult;
+import static kr.or.connect.reservation.core.domain.DisplayInfo.makeDummyDisplayInfo;
+import static kr.or.connect.reservation.core.dto.ProductDisplayInfo.makeProductResult;
+import static kr.or.connect.reservation.core.dto.ProductDisplayInfoResult.craeteProductDisplayInfoResult;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
