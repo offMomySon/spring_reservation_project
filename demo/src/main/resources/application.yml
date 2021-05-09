@@ -1,11 +1,8 @@
-kafka:
-  bootstrap-servers: "35.239.160.14:9092"
-  topic-name: "reservation"
-  group-id: "reservation-alarm"
 
 spring:
   batch:
     initialize-schema: always
+
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
@@ -29,8 +26,6 @@ spring:
     jdbcUrl: jdbc:mysql://35.232.22.234:3306/connectdb?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&characterEncoding=utf8
     maximumPoolSize: 100
     minimumIdle: 100
-server:
-  port: 8975
 
 logging:
   level:
