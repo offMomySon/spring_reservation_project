@@ -1,7 +1,7 @@
 package kr.or.connect.reservation.application.service.impl;
 
-import kr.or.connect.reservation.core.dto.CategoryResult;
-import kr.or.connect.reservation.core.domain.Category;
+import kr.or.connect.reservation.core.presentation.dto.CategoryResult;
+import kr.or.connect.reservation.core.presentation.domain.Category;
 import kr.or.connect.reservation.infrastructure.repository.CategoryRepository;
 import kr.or.connect.reservation.application.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static kr.or.connect.reservation.core.dto.CategoryResult.createCategoryResult;
+import static kr.or.connect.reservation.core.presentation.dto.CategoryResult.createCategoryResult;
 
 @Service
 @Transactional(readOnly = true)

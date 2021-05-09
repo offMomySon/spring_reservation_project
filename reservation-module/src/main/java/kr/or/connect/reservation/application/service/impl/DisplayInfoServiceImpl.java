@@ -1,8 +1,8 @@
 package kr.or.connect.reservation.application.service.impl;
 
-import kr.or.connect.reservation.core.domain.*;
-import kr.or.connect.reservation.core.dto.*;
-import kr.or.connect.reservation.core.dto.response.ProductsApiAtDisplayInfoIdResponse;
+import kr.or.connect.reservation.core.presentation.domain.*;
+import kr.or.connect.reservation.core.presentation.dto.*;
+import kr.or.connect.reservation.core.presentation.dto.response.ProductsApiAtDisplayInfoIdResponse;
 import kr.or.connect.reservation.infrastructure.repository.*;
 import kr.or.connect.reservation.application.service.DisplayInfoService;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static kr.or.connect.reservation.core.dto.CommentImageResult.makeCommentImageResult;
-import static kr.or.connect.reservation.core.dto.CommentResult.makeCommentResult;
-import static kr.or.connect.reservation.core.dto.DisplayInfoImageResult.makeDisplayInfoImageResult;
-import static kr.or.connect.reservation.core.dto.DisplayInfoResult.makeDisplayInfoResult;
-import static kr.or.connect.reservation.core.dto.ProductImageResult.makeProductImageResult;
-import static kr.or.connect.reservation.core.dto.ProductPriceResult.makeProductPriceResult;
-import static kr.or.connect.reservation.core.dto.response.ProductsApiAtDisplayInfoIdResponse.makeDummyProductsApiAtDisplayInfoIdResponse;
-import static kr.or.connect.reservation.core.dto.response.ProductsApiAtDisplayInfoIdResponse.makeProductsApiAtDisplayInfoIdResponse;
-import static kr.or.connect.reservation.core.domain.DisplayInfo.makeDummyDisplayInfo;
+import static kr.or.connect.reservation.core.presentation.dto.CommentImageResult.makeCommentImageResult;
+import static kr.or.connect.reservation.core.presentation.dto.CommentResult.makeCommentResult;
+import static kr.or.connect.reservation.core.presentation.dto.DisplayInfoImageResult.makeDisplayInfoImageResult;
+import static kr.or.connect.reservation.core.presentation.dto.DisplayInfoResult.makeDisplayInfoResult;
+import static kr.or.connect.reservation.core.presentation.dto.ProductImageResult.makeProductImageResult;
+import static kr.or.connect.reservation.core.presentation.dto.ProductPriceResult.makeProductPriceResult;
+import static kr.or.connect.reservation.core.presentation.dto.response.ProductsApiAtDisplayInfoIdResponse.makeDummyProductsApiAtDisplayInfoIdResponse;
+import static kr.or.connect.reservation.core.presentation.dto.response.ProductsApiAtDisplayInfoIdResponse.makeProductsApiAtDisplayInfoIdResponse;
+import static kr.or.connect.reservation.core.presentation.domain.DisplayInfo.makeDummyDisplayInfo;
 
 @Slf4j
 @Service

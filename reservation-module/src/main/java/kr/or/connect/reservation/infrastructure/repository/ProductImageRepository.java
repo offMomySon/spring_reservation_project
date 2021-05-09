@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.infrastructure.repository;
 
-import kr.or.connect.reservation.core.domain.ProductImage;
+import kr.or.connect.reservation.core.presentation.domain.ProductImage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

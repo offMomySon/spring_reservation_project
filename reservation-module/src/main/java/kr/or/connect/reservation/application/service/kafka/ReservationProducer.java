@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.application.service.kafka;
 
-import kr.or.connect.reservation.core.dto.ReservationRequestResult;
+import kr.or.connect.reservation.core.presentation.dto.ReservationRequestResult;
 import kr.or.connect.reservation.infrastructure.config.kafka.KafkaConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.infrastructure.config.kafka;
 
-import kr.or.connect.reservation.core.dto.ReservationRequestResult;
+import kr.or.connect.reservation.core.presentation.dto.ReservationRequestResult;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;

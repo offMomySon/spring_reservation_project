@@ -1,6 +1,6 @@
 package kr.or.connect.reservation.application.service;
 
-import kr.or.connect.reservation.core.dto.PromotionResult;
+import kr.or.connect.reservation.core.presentation.dto.PromotionResult;
 
 import java.util.List;
 

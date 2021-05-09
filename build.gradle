@@ -108,6 +108,9 @@ project(":core-module") {
         //query queryDsl
         implementation 'com.querydsl:querydsl-jpa'
         implementation 'com.querydsl:querydsl-apt'
+
+        //sms
+        compile group: 'net.nurigo', name: 'javaSDK', version: '2.2'
     }
 
     def querydslSrcDir = 'src/main/generated' // QClass 생성 위치
@@ -193,8 +196,6 @@ project(':alarm-module') {
     dependencies {
         compileOnly "org.springframework.boot:spring-boot-configuration-processor"
 
-        compile group: 'net.nurigo', name: 'javaSDK', version: '2.2'
-
         testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
         testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
         testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
@@ -217,7 +218,7 @@ project(':reflectPromotion-module') {
 }
 
 
-project(':demo') {
+project(':batch') {
     springBoot {
         mainClassName = 'com.example.demo.DemoApplicationTests'
     }

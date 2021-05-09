@@ -1,7 +1,7 @@
 package kr.or.connect.reservation.infrastructure.aop;
 
 import kr.or.connect.reservation.application.service.kafka.ReservationProducer;
-import kr.or.connect.reservation.core.dto.ReservationRequestResult;
+import kr.or.connect.reservation.core.presentation.dto.ReservationRequestResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
