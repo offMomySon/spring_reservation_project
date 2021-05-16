@@ -31,6 +31,9 @@ subprojects {
 
     // 서브 모듈에 공통으로 의존성을 추가 시킬 디펜던시를 정의합니다.
     dependencies {
+        compileOnly "org.projectlombok:lombok"
+        annotationProcessor "org.projectlombok:lombok"
+
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-tomcat'
         implementation 'org.springframework.boot:spring-boot-starter-cache'
@@ -97,16 +100,50 @@ subprojects {
     }
 }
 
-project(':module-reservation') {
+project(":core-module") {
+    bootJar.enabled = false
+    jar.enabled = true
+
+    dependencies {
+        //query queryDsl
+        implementation 'com.querydsl:querydsl-jpa'
+        implementation 'com.querydsl:querydsl-apt'
+
+        //sms
+        compile group: 'net.nurigo', name: 'javaSDK', version: '2.2'
+    }
+
+    def querydslSrcDir = 'src/main/generated' // QClass 생성 위치
+    apply plugin: "com.ewerk.gradle.plugins.querydsl" // Plugin 적용
+
+    querydsl {
+        library = "com.querydsl:querydsl-apt"
+        jpa = true
+        querydslSourcesDir = querydslSrcDir
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['src/main/java', querydslSrcDir]
+            }
+        }
+    }
+
+    compileQuerydsl {
+        options.annotationProcessorPath = configurations.querydsl
+    }
+    configurations {
+        querydsl.extendsFrom compileClasspath
+    }
+}
+
+project(':reservation-module') {
     apply plugin: 'war'
     springBoot {
         mainClassName = 'kr.or.connect.reservation.Application'
     }
-
     dependencies {
-        compileOnly "org.projectlombok:lombok"
-        annotationProcessor "org.projectlombok:lombok"
-
         //query queryDsl
         implementation 'com.querydsl:querydsl-jpa'
         implementation 'com.querydsl:querydsl-apt'
@@ -117,6 +154,8 @@ project(':module-reservation') {
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
+
+        compile project(path: ':core-module', configuration: 'default')
     }
 
     test {
@@ -148,10 +187,14 @@ project(':module-reservation') {
     }
 }
 
-project(':module-alarm') {
+project(':alarm-module') {
+    springBoot {
+        mainClassName = 'com.module.count.AlarmApplication'
+    }
+//    com.module.count
+
     dependencies {
-        compileOnly "org.projectlombok:lombok"
-        annotationProcessor "org.projectlombok:lombok"
+        compileOnly "org.springframework.boot:spring-boot-configuration-processor"
 
         testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
         testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
@@ -159,6 +202,7 @@ project(':module-alarm') {
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
+        compile project(path: ':core-module', configuration: 'default')
     }
 
     test {
@@ -167,9 +211,36 @@ project(':module-alarm') {
 
 }
 
-project(':module-reflectPromotion') {
+project(':reflectPromotion-module') {
     dependencies {
-        compileOnly "org.projectlombok:lombok"
-        annotationProcessor "org.projectlombok:lombok"
+        compile project(':core-module')
     }
+}
+
+
+project(':batch') {
+    springBoot {
+        mainClassName = 'com.example.demo.DemoApplicationTests'
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-batch'
+        compileOnly 'org.projectlombok:lombok'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+        compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+
+        testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
+        testCompile('org.junit.jupiter:junit-jupiter-params:5.2.0')
+        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+        compile project(path: ':core-module', configuration: 'default')
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
 }

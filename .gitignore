@@ -19,6 +19,7 @@ tmp/
 local.properties
 .settings/
 .idea/
+**/.idea/
 .loadpath
 .recommenders
 
