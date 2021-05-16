@@ -3,14 +3,14 @@ package kr.or.connect.reservation.presentation.controller;
 import kr.or.connect.reservation.application.service.DisplayInfoService;
 import kr.or.connect.reservation.application.service.ProductService;
 import kr.or.connect.reservation.infrastructure.exception.list.ParamNotValidException;
-import kr.or.connect.reservation.core.dto.ProductDisplayInfoResult;
-import kr.or.connect.reservation.core.dto.response.ProductsApiAtDisplayInfoIdResponse;
+import kr.or.connect.reservation.core.presentation.dto.ProductDisplayInfoResult;
+import kr.or.connect.reservation.core.presentation.dto.response.ProductsApiAtDisplayInfoIdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static kr.or.connect.reservation.core.dto.response.ProductsApiResponse.createProductsApiResponse;
+import static kr.or.connect.reservation.core.presentation.dto.response.ProductsApiResponse.createProductsApiResponse;
 
 @RestController
 @RequiredArgsConstructor

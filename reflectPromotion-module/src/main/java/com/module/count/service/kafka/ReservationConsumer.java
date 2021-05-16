@@ -2,7 +2,7 @@ package com.module.count.service.kafka;
 
 import com.module.count.domain.Product;
 import com.module.count.infrastructure.config.repository.ProductRepository;
-import kr.or.connect.reservation.core.dto.ReservationRequestResult;
+import kr.or.connect.reservation.core.presentation.dto.ReservationRequestResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;

@@ -1,8 +1,8 @@
 package kr.or.connect.reservation.application.service.impl;
 
-import kr.or.connect.reservation.core.domain.Category;
+import kr.or.connect.reservation.core.presentation.domain.Category;
 import kr.or.connect.reservation.infrastructure.repository.CategoryRepository;
-import kr.or.connect.reservation.core.dto.CategoryResult;
+import kr.or.connect.reservation.core.presentation.dto.CategoryResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static kr.or.connect.reservation.core.dto.CategoryResult.createCategoryResult;
+import static kr.or.connect.reservation.core.presentation.dto.CategoryResult.createCategoryResult;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.BDDMockito.given;

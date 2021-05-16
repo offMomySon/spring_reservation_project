@@ -1,17 +1,17 @@
 package kr.or.connect.reservation.application.service.impl;
 
 import kr.or.connect.reservation.application.service.ReservationService;
-import kr.or.connect.reservation.core.domain.*;
-import kr.or.connect.reservation.core.dto.Price;
-import kr.or.connect.reservation.core.dto.ReservationRequestResult;
+import kr.or.connect.reservation.core.presentation.domain.*;
+import kr.or.connect.reservation.core.presentation.dto.Price;
+import kr.or.connect.reservation.core.presentation.dto.ReservationRequestResult;
 import kr.or.connect.reservation.infrastructure.exception.list.DisplayInfoIdNotExistException;
 import kr.or.connect.reservation.infrastructure.exception.list.ProductIdNotExistException;
 import kr.or.connect.reservation.infrastructure.exception.list.ProductPriceIdNotExistException;
 import kr.or.connect.reservation.infrastructure.repository.*;
-import kr.or.connect.reservation.core.dto.DisplayInfoResult;
-import kr.or.connect.reservation.core.dto.ReservationCancleResult;
-import kr.or.connect.reservation.core.dto.ReservationResponseResult;
-import kr.or.connect.reservation.core.dto.request.ReservationRequest;
+import kr.or.connect.reservation.core.presentation.dto.DisplayInfoResult;
+import kr.or.connect.reservation.core.presentation.dto.ReservationCancleResult;
+import kr.or.connect.reservation.core.presentation.dto.ReservationResponseResult;
+import kr.or.connect.reservation.core.presentation.dto.request.ReservationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static kr.or.connect.reservation.core.domain.ReservationInfo.makeDummyReservationInfo;
-import static kr.or.connect.reservation.core.domain.ReservationInfo.makeReservationInfo;
-import static kr.or.connect.reservation.core.domain.ReservationInfoPrice.createReservationInfoPrice;
-import static kr.or.connect.reservation.core.dto.ReservationCancleResult.createDummyReservationCancleResult;
-import static kr.or.connect.reservation.core.dto.ReservationCancleResult.createReservationCancleResult;
-import static kr.or.connect.reservation.core.dto.ReservationResponseResult.makeReservationResponseResult;
+import static kr.or.connect.reservation.core.presentation.domain.ReservationInfo.makeDummyReservationInfo;
+import static kr.or.connect.reservation.core.presentation.domain.ReservationInfo.makeReservationInfo;
+import static kr.or.connect.reservation.core.presentation.domain.ReservationInfoPrice.createReservationInfoPrice;
+import static kr.or.connect.reservation.core.presentation.dto.ReservationCancleResult.createDummyReservationCancleResult;
+import static kr.or.connect.reservation.core.presentation.dto.ReservationCancleResult.createReservationCancleResult;
+import static kr.or.connect.reservation.core.presentation.dto.ReservationResponseResult.makeReservationResponseResult;
 
 @Slf4j
 @Service

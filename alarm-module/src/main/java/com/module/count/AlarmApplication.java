@@ -10,9 +10,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
-@SpringBootApplication
 @EnableScheduling
-@EntityScan("kr.or.connect.reservation.core.domain")
+@EntityScan("kr.or.connect.reservation.core")
+@SpringBootApplication(scanBasePackages = {"kr.or.connect.reservation.core","com.module.count" })
 @Slf4j
 public class AlarmApplication {
 
